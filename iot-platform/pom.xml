@@ -14,7 +14,26 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
     
-    <dependencies>
+    <dependencies>             
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>iot-platform-api</artifactId>
+            <version>${project.version}</version>
+        </dependency>        
+        
+        <dependency>
+            <groupId>org.primefaces</groupId>
+            <artifactId>primefaces</artifactId>
+            <version>4.0</version>
+        </dependency>
+        
+        <dependency>
+            <groupId>org.eclipse.persistence</groupId>
+            <artifactId>org.eclipse.persistence.jpa.modelgen.processor</artifactId>
+            <version>2.5.1</version>
+            <scope>provided</scope>
+        </dependency>
+        
         <dependency>
             <groupId>javax</groupId>
             <artifactId>javaee-web-api</artifactId>
@@ -23,15 +42,16 @@
         </dependency>
         
         <dependency>
-           <groupId>org.mongodb</groupId>
-           <artifactId>mongo-java-driver</artifactId>
-           <version>2.11.1</version>
+            <groupId>org.mongodb</groupId>
+            <artifactId>mongo-java-driver</artifactId>
+            <version>2.11.1</version>
         </dependency>
         
         <dependency>
             <groupId>org.eclipse.persistence</groupId>
             <artifactId>eclipselink</artifactId>
             <version>2.5.1</version>
+            <scope>provided</scope>
         </dependency>   
         
         <dependency>
