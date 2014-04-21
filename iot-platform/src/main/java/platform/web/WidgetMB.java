@@ -25,7 +25,7 @@ public class WidgetMB implements Serializable {
 
     @Inject
     private WidgetService service;
-    
+
     private Widget widget;
     private List<Widget> widgetLit;
 
@@ -34,7 +34,7 @@ public class WidgetMB implements Serializable {
         widget = new Widget();
         widgetLit = new ArrayList<>();
     }
-    
+
     public Widget getWidget() {
         return widget;
     }
@@ -50,33 +50,33 @@ public class WidgetMB implements Serializable {
     public void setWidgetLit(List<Widget> widgetLit) {
         this.widgetLit = widgetLit;
     }
-    
+
     public void handleFileUpload(FileUploadEvent event) {
         UploadedFile file = event.getFile();
         widget.setIconContentType(file.getContentType());
         widget.setIconFile(file.getContents());
     }
-    
+
     public StreamedContent getIconFile() {
         byte[] bytes = widget.getIconFile();
         return new DefaultStreamedContent(
                 new ByteArrayInputStream(bytes), widget.getIconContentType());
     }
-    
+
     public void delete(Widget widget) {
         service.delete(widget.getId());
     }
-    
+
     public void edit(Widget widget) {
         this.widget = service.load(widget.getId());
     }
-    
+
     public void save() {
         service.save(widget);
     }
-    
+
     public void createNew() {
         widget = new Widget();
     }
-    
+
 }

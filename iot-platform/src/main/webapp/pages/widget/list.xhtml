@@ -8,7 +8,7 @@
                 template="./../../resources/templates/main2.xhtml">
 
     <ui:define name="content">
-        <h:form id="form">
+        <h:form id="form" enctype="multipart/form-data" prependId="false">
             <p:panelGrid id="panel" columns="2">
                 <f:facet name="header">
                     Widget Form
@@ -20,11 +20,8 @@
                 
                 <p:outputLabel value="Icon"/>
                 <p:fileUpload fileUploadListener="#{widgetMB.handleFileUpload}" 
-                              mode="advanced" auto="true" 
-                              allowTypes="/(\.|\/)(gif|jpe?g|png)$/"
-                              rendered="#{widgetMB.widget.iconContentType eq null}"/> 
-                <p:graphicImage value="#{widgetMB.iconFile}" 
-                                rendered="#{!widgetMB.widget.iconContentType eq null}"/>
+                              mode="advanced"
+                              allowTypes="/(\.|\/)(gif|jpe?g|png)$/"/> 
 
                 <f:facet name="footer">
                     <p:commandButton value="Submit" action="#{widgetMB.save()}" update=":form:table"/>
