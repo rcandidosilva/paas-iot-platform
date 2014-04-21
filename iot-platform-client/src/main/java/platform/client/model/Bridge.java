@@ -1,4 +1,4 @@
-package client.model;
+package platform.client.model;
 
 /**
  * Created by rodrigo on 3/30/14.

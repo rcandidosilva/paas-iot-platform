@@ -1,13 +1,13 @@
-package platform.api.impl;
+package platform.api;
 
-import api.Device;
-import api.Location;
+import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -17,15 +17,16 @@ import org.eclipse.persistence.nosql.annotations.NoSql;
 
 /**
  *
- * @author rodrigo
+ * @author Rodrigo Cândido da Silva
  */
 @Entity
 @NoSql(dataFormat = DataFormatType.MAPPED)
-public class DeviceImpl implements Device {
+public class Device implements Serializable {
     
     @Id @GeneratedValue
     @Field(name = "_id")
     private String id;
+    private String key;
     private String name;
     private String description;
     @Temporal(TemporalType.TIMESTAMP)
@@ -33,77 +34,93 @@ public class DeviceImpl implements Device {
     @Temporal(TemporalType.TIMESTAMP)
     private Date updatedAt;
     @OneToOne(cascade = CascadeType.ALL)
-    private LocationImpl location;
+    private Location location;
+    @OneToMany
+    private List<Property> properties;
+    @OneToMany
+    private List<Action> actions;
+    
+    public Device() {
+        super();
+    }
+    
+    public Device(String key, String name, 
+            String description, Location location) {
+        this.name = name;
+        this.description = description;
+        this.location = location;
+    }
 
-
-    @Override
     public String getId() {
         return id;
     }
 
-    @Override
     public void setId(String id) {
         this.id = id;
     }
 
-    @Override
+    public String getKey() {
+        return key;
+    }
+
+    public void setKey(String key) {
+        this.key = key;
+    }    
+    
     public String getName() {
         return name;
     }
 
-    @Override
     public void setName(String name) {
         this.name = name;
     }
 
-    @Override
     public String getDescription() {
         return description;
     }
 
-    @Override
     public void setDescription(String description) {
         this.description = description;
     }
 
-    @Override
     public Date getCreatedAt() {
         return createdAt;
     }
 
-    @Override
     public void setCreatedAt(Date createdAt) {
         this.createdAt = createdAt;
     }
-
-    @Override
+    
     public Date getUpdatedAt() {
         return updatedAt;
     }
 
-    @Override
     public void setUpdatedAt(Date updatedAt) {
         this.updatedAt = updatedAt;
     }
 
-    @Override
     public Location getLocation() {
         return location;
     }
 
-    @Override
     public void setLocation(Location location) {
-        this.location = (LocationImpl) location;
+        this.location = location;
     }
 
-    @Override
-    public List getProperties() {
-        return null;
+    public List<Property> getProperties() {
+        return properties;
     }
 
-    @Override
-    public void setProperties(List properties) {
-        // TODO
+    public void setProperties(List<Property> properties) {
+        this.properties = properties;
     }
+
+    public List<Action> getActions() {
+        return actions;
+    }
+
+    public void setActions(List<Action> actions) {
+        this.actions = actions;
+    }    
     
 }

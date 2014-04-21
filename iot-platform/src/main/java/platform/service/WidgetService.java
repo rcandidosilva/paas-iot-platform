@@ -1,6 +1,6 @@
 package platform.service;
 
-import api.Device;
+import platform.api.Device;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;

@@ -1,6 +1,6 @@
-package platform.api.impl;
+package platform.api;
 
-import api.Property;
+import java.io.Serializable;
 import java.util.Date;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -13,45 +13,48 @@ import org.eclipse.persistence.nosql.annotations.NoSql;
 
 /**
  *
- * @author rodrigo
+ * @author Rodrigo Cândido da Silva
  */
 @Entity
 @NoSql(dataFormat = DataFormatType.MAPPED)
-public class PropertyImpl implements Property {
+public class Property implements Serializable {
     
     @Id @GeneratedValue
     @Field(name = "_id")
     private String key;
     private String value;
+    private String description;
     @Temporal(TemporalType.TIMESTAMP)
     private Date timestamp;
 
-    @Override
     public String getKey() {
         return key;
     }
 
-    @Override
     public void setKey(String key) {
         this.key = key;
     }
 
-    @Override
     public String getValue() {
         return value;
     }
 
-    @Override
     public void setValue(String value) {
         this.value = value;
     }
 
-    @Override
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }    
+    
     public Date getTimestamp() {
         return timestamp;
     }
 
-    @Override
     public void setTimestamp(Date timestamp) {
         this.timestamp = timestamp;
     }

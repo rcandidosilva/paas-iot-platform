@@ -1,14 +1,11 @@
 package platform.service;
 
 import java.util.ArrayList;
-import platform.api.Device;
-import platform.api.Property;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.criteria.CriteriaQuery;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -18,14 +15,16 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+import platform.api.Action;
+import platform.api.Device;
 
 /**
  *
  * @author rodrigo
  */
-@Path("/device/{deviceKey}/properties")
+@Path("/device/{deviceKey}/actions")
 @Stateless
-public class PropertyService {
+public class ActionService {
   
     @PersistenceContext
     private EntityManager manager;
@@ -36,19 +35,19 @@ public class PropertyService {
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     public void create(@PathParam("deviceKey") String deviceKey, 
-            Property property) {
+            Action action) {
         Device device = deviceService.get(deviceKey);
         if (device == null) {
             throw new RuntimeException("Device key not found");
         }
-        device.getProperties().add(property);
+        device.getActions().add(action);
         deviceService.update(device);
     }
     
     @PUT
     @Consumes(MediaType.APPLICATION_JSON)
     public void update(@PathParam("deviceKey") String deviceKey, 
-            Property property) {
+            Action property) {
         // TODO getDevice
         manager.merge(property);
     }
@@ -56,28 +55,26 @@ public class PropertyService {
     @GET
     @Path("{id}")
     @Produces(MediaType.APPLICATION_JSON)
-    @Consumes(MediaType.TEXT_PLAIN)
-    public Property get(@PathParam("deviceKey") String deviceKey, 
-            @PathParam("key") String key) {
+    public Action get(@PathParam("deviceKey") String deviceKey, 
+            @PathParam("name") String name) {
         // TODO getDevice
-        return manager.find(Property.class, key);
+        return manager.find(Action.class, name);
     } 
     
     @DELETE
     @Path("{id}")
-    @Consumes(MediaType.TEXT_PLAIN)
     public void delete(@PathParam("deviceKey") String deviceKey,
-            @PathParam("key") String key) {
+            @PathParam("name") String name) {
         // getDevice
-        manager.remove(get(deviceKey, key));
+        manager.remove(get(deviceKey, name));
     }
     
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public List<Property> list(@PathParam("deviceKey") String deviceKey) {
+    public List<Action> list(@PathParam("deviceKey") String deviceKey) {
         Device device = deviceService.get(deviceKey);
         if (device != null) {
-            return device.getProperties();
+            return device.getActions();
         }
         return new ArrayList<>();
     }
