@@ -16,9 +16,9 @@ import java.util.List;
  */
 public interface Device extends Serializable {
 
-    public int getId();
+    public String getId();
 
-    public void setId(int id);
+    public void setId(String id);
 
     public String getName();
 
@@ -40,7 +40,7 @@ public interface Device extends Serializable {
 
     public void setLocation(Location location);
 
-    public List<? extends Property> getProperties();
+    public List getProperties();
 
     public void setProperties(List properties);
         

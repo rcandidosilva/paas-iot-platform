@@ -1,0 +1,58 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"                
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                template="./../../resources/templates/main2.xhtml">
+
+    <ui:define name="content">
+        <h:form id="form">
+            <p:panelGrid id="panel" columns="2">
+                <f:facet name="header">
+                    Widget Form
+                </f:facet>
+                <p:outputLabel value="Name"/>
+                <p:inputText value="#{widgetMB.widget.name}"/>
+                <p:outputLabel value="Description"/>
+                <p:inputTextarea value="#{widgetMB.widget.description}"/>
+                
+                <p:outputLabel value="Icon"/>
+                <p:fileUpload fileUploadListener="#{widgetMB.handleFileUpload}" 
+                              mode="advanced" auto="true" 
+                              allowTypes="/(\.|\/)(gif|jpe?g|png)$/"
+                              rendered="#{widgetMB.widget.iconContentType eq null}"/> 
+                <p:graphicImage value="#{widgetMB.iconFile}" 
+                                rendered="#{!widgetMB.widget.iconContentType eq null}"/>
+
+                <f:facet name="footer">
+                    <p:commandButton value="Submit" action="#{widgetMB.save()}" update=":form:table"/>
+                    <p:commandButton value="New" action="#{widgetMB.createNew()}" update=":form:panel"/>
+                </f:facet>
+            </p:panelGrid>
+
+            <p:dataTable id="table" value="#{widgetMB.widgetLit}" var="widget">
+                <f:facet name="header">
+                    #{bundle['widget.list']}
+                </f:facet>
+                <p:column headerText="#{bundle['widget.id']}">
+                    <h:outputText value="#{widget.id}"/>
+                </p:column>
+                <p:column headerText="#{bundle['widget.name']}">
+                    <h:outputText value="#{widget.name}"/>
+                </p:column>
+                <p:column headerText="#{bundle['widget.description']}">
+                    <h:outputText value="#{widget.description}"/>
+                </p:column>
+                <p:column style="width: 4%;">
+                    <h:panelGrid columns="2">
+                        <p:commandButton icon="ui-icon-search" action="#{widgetMB.edit(widget)}" update=":form:panel"/> 
+                        <p:commandButton icon="ui-icon-close" action="#{widgetMB.delete(widget)}" update=":form:table"/> 
+                    </h:panelGrid>
+                </p:column>
+            </p:dataTable>
+        </h:form>
+    </ui:define>
+
+</ui:composition>

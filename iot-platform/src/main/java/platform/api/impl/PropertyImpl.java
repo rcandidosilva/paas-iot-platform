@@ -1,10 +1,12 @@
-package platform.model;
+package platform.api.impl;
 
 import api.Property;
 import java.util.Date;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import org.eclipse.persistence.nosql.annotations.DataFormatType;
 import org.eclipse.persistence.nosql.annotations.Field;
 import org.eclipse.persistence.nosql.annotations.NoSql;
@@ -21,6 +23,7 @@ public class PropertyImpl implements Property {
     @Field(name = "_id")
     private String key;
     private String value;
+    @Temporal(TemporalType.TIMESTAMP)
     private Date timestamp;
 
     @Override

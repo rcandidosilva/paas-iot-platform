@@ -16,9 +16,9 @@ import java.util.List;
  */
 public interface Product extends Serializable {
 
-    public int getId();
+    public String getId();
 
-    public void setId(int id);
+    public void setId(String id);
 
     public Date getCreatedAt();
 

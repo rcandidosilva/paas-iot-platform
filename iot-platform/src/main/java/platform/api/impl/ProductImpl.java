@@ -1,4 +1,4 @@
-package platform.model;
+package platform.api.impl;
 
 import api.Device;
 import api.Product;
@@ -8,7 +8,9 @@ import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 import org.eclipse.persistence.nosql.annotations.DataFormatType;
 import org.eclipse.persistence.nosql.annotations.Field;
 import org.eclipse.persistence.nosql.annotations.NoSql;
@@ -23,22 +25,26 @@ public class ProductImpl implements Product {
     
     @Id @GeneratedValue
     @Field(name = "_id")
-    private int id;
+    private String id;
+    @Temporal(TemporalType.TIMESTAMP)
     private Date createdAt;
+    @Temporal(TemporalType.TIMESTAMP)
     private Date updatedAt;
     private String name;
     private String description;
-    private String brand;    
-    @ElementCollection
+    private String brand;
+    
+    //@ElementCollection
+    @Transient
     private List<Device> devices;
 
     @Override
-    public int getId() {
+    public String getId() {
         return id;
     }
 
     @Override
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 

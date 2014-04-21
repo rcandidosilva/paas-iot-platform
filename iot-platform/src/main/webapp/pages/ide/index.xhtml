@@ -1,0 +1,51 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                template="./../../resources/templates/main2.xhtml">
+
+    <ui:define name="top">
+        IDE - Integrate Development Environment (IOT Platform)
+    </ui:define>
+
+    <ui:define name="left">
+        <h:form id="form1">
+            <p:fieldset legend="Widgets" toggleable="true">
+                <p:dataGrid id="widgetsList" value="#{dashboardMB.widgetList}" 
+                            var="widget" columns="1">                        
+                    <p:panel id="widgetPanel" header="#{widget.name}">
+                        #{widget.description}
+                        <p:draggable for="widgetPanel" revert="true"/>
+                    </p:panel>
+                </p:dataGrid>
+            </p:fieldset>   
+        </h:form>
+    </ui:define>
+
+    <ui:define name="content">
+        <h:form id="form2">
+            <h:panelGrid columns="4">
+                <p:commandButton value="#{bundle['ide.save']}"/>
+                <p:commandButton value="#{bundle['ide.view']}"/>
+                <p:commandButton value="#{bundle['ide.publish']}"/>
+                <p:commandButton value="#{bundle['ide.delete']}"/>
+            </h:panelGrid>
+
+            <p:droppable for="dashboardArea" tolerance="touch" activeStyleClass="ui-state-highlight" 
+                         datasource=":form1:widgetsList" onDrop="handleDrop">
+                <p:ajax listener="#{dashboardMB.dropWidget}" update="dropArea dashboard" />
+            </p:droppable>            
+
+            <p:fieldset id="dashboardArea">
+                <p:outputPanel id="dropArea">
+
+                </p:outputPanel>
+                <p:dashboard id="dashboard" binding="#{dashboardMB.dashboard}" 
+                             model="#{dashboardMB.model}"/>
+            </p:fieldset>
+        </h:form>
+    </ui:define>
+
+</ui:composition>
