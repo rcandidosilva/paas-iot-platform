@@ -1,32 +1,48 @@
 <?xml version='1.0' encoding='UTF-8' ?>
 <!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-                xmlns:h="http://java.sun.com/jsf/html"
-                xmlns:p="http://primefaces.org/ui"
-                template="./../../resources/templates/main.xhtml">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
 
-    <ui:define name="content">
-        <h:form>            
-            <p:panelGrid>
-                <p:outputLabel value="Name"/>
-                <p:inputText value="#{applicationMB.application.name}"/>
-                <p:outputLabel value="Description"/>
-                <p:inputTextarea value="#{applicationMB.application.description}"/>
-            </p:panelGrid>
-            
-            <p:dataTable value="#{applicationMB.applications}" var="app">                
-                <p:column headerText="ID">
-                    <h:outputText value="#{app.id}"/>
-                </p:column>
-                <p:column headerText="Name">
-                    <h:outputText value="#{app.name}"/>
-                </p:column>
-                <p:column headerText="Deployed">
-                    <h:outputText value="#{app.deployed}"/>
-                </p:column>
-            </p:dataTable>            
-        </h:form>
-    </ui:define>
+    <ui:composition template="./../../resources/templates/main.xhtml">
 
-</ui:composition>
+        <ui:define name="content">
+            <h:form>            
+                <div align="center">
+                    <h1>#{bundle['application.list']}</h1>
+                </div>
+
+                <p:dataTable value="#{applicationMB.applications}" var="app">
+                    <p:column headerText="ID" style="width: 10%;">
+                        <h:outputText value="#{app.id}"/>
+                    </p:column>
+                    <p:column headerText="#{bundle['application.name']}">
+                        <h:outputText value="#{app.name}"/>
+                    </p:column>
+                    <p:column headerText="Data Criação" style="width: 20%;">
+
+                    </p:column>
+                    <p:column headerText="Deployed" style="width: 10%;">
+                        <h:outputText value="#{app.deployed}"/>
+                    </p:column>
+                    <p:column style="width: 4%;">
+                        <h:panelGrid columns="2">
+                            <p:commandButton icon="ui-icon-search" /> 
+                            <p:commandButton icon="ui-icon-close" /> 
+                        </h:panelGrid>
+                    </p:column>                    
+                </p:dataTable>    
+
+                <div align="right">
+                    <p:commandButton value="Nova Aplicação"/>
+                    <p:commandButton value="Novo Workflow"/>
+                </div>
+            </h:form>
+        </ui:define>
+
+    </ui:composition>
+
+</html>

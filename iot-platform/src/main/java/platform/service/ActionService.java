@@ -22,7 +22,7 @@ import platform.api.Device;
  *
  * @author rodrigo
  */
-@Path("/device/{deviceKey}/actions")
+@Path("/device/{deviceKey}/action")
 @Stateless
 public class ActionService {
   

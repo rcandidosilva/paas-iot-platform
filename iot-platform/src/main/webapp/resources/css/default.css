@@ -10,13 +10,11 @@
 .ui-widget select,
 .ui-widget textarea,
 .ui-widget button,
-.ui-button-text,
 .ui-panel-titlebar,
 .ui-state-default {
     font-size: 90% !important;
 }
 
-.ui-button-text,
 .ui-panel-titlebar {
     font-size: 80% !important;
 }

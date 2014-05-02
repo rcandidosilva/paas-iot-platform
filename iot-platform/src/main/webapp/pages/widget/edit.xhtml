@@ -1,0 +1,40 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:composition template="./../../resources/templates/main.xhtml">
+
+        <ui:define name="content">
+            <h:form id="form" prependId="false">
+                <div align="center">
+                    <div style="width: 600px;">
+                        <p:panel header="Cadastro de Widget" style="">
+                            <h:panelGrid columns="2" >
+                                <p:outputLabel value="Name"/>
+                                <p:inputText value="#{widgetMB.widget.name}"/>
+                                <p:outputLabel value="Description"/>
+                                <p:inputTextarea value="#{widgetMB.widget.description}"/>
+                                <p:outputLabel value="Icon"/>
+                                <p:fileUpload fileUploadListener="#{widgetMB.handleFileUpload}" 
+                                              mode="advanced"
+                                              allowTypes="/(\.|\/)(gif|jpe?g|png)$/"/> 
+                            </h:panelGrid>
+                        </p:panel>
+
+                        <div align="right">
+                            <p:commandButton value="#{bundle['global.save']}" action="#{widgetMB.save()}"/>
+                            <p:commandButton value="#{bundle['global.back']}" action="list" immediate="true"/>
+                        </div>
+                    </div>
+                </div>
+            </h:form>
+        </ui:define>
+
+    </ui:composition>
+
+</html>

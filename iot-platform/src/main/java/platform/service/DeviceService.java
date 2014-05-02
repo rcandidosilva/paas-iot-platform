@@ -1,5 +1,6 @@
 package platform.service;
 
+import java.util.Date;
 import platform.api.Device;
 import java.util.List;
 import javax.ejb.Stateless;
@@ -43,6 +44,8 @@ public class DeviceService {
     @Consumes(MediaType.APPLICATION_JSON)
     public void create(Device device) {
         validateUniqueKey(device);
+        device.setCreatedAt(new Date());
+        device.setUpdatedAt(new Date());
         manager.persist(device);
     }
     
@@ -50,6 +53,7 @@ public class DeviceService {
     @Consumes(MediaType.APPLICATION_JSON)
     public void update(Device device) {
         validateUniqueKey(device);
+        device.setUpdatedAt(new Date());
         manager.merge(device);
     }
     

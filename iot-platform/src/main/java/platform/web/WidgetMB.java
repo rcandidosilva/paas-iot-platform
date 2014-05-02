@@ -75,8 +75,9 @@ public class WidgetMB implements Serializable {
         service.save(widget);
     }
 
-    public void createNew() {
+    public String createNew() {
         widget = new Widget();
+        return "edit";
     }
 
 }

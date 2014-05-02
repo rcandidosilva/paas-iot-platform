@@ -10,8 +10,8 @@
             <supported-locale>en_US</supported-locale>
         </locale-config>
         <resource-bundle>
-            <var>bundle</var>
             <base-name>application</base-name>
+            <var>bundle</var>
         </resource-bundle>
     </application>
     

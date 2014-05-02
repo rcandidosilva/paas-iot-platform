@@ -7,6 +7,7 @@ import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Temporal;
@@ -29,12 +30,15 @@ public class Device implements Serializable {
     private String key;
     private String name;
     private String description;
+    private Boolean enabled;
     @Temporal(TemporalType.TIMESTAMP)
     private Date createdAt;
     @Temporal(TemporalType.TIMESTAMP)
     private Date updatedAt;
     @OneToOne(cascade = CascadeType.ALL)
     private Location location;
+    @ManyToOne
+    private Device parent;
     @OneToMany
     private List<Property> properties;
     @OneToMany
@@ -121,6 +125,22 @@ public class Device implements Serializable {
 
     public void setActions(List<Action> actions) {
         this.actions = actions;
+    }
+
+    public Device getParent() {
+        return parent;
+    }
+
+    public void setParent(Device parent) {
+        this.parent = parent;
     }    
+
+    public Boolean getEnabled() {
+        return enabled;
+    }
+
+    public void setEnabled(Boolean enabled) {
+        this.enabled = enabled;
+    }
     
 }
