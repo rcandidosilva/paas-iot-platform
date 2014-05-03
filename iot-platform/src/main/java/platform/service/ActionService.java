@@ -25,50 +25,67 @@ import platform.api.Device;
 @Path("/device/{deviceKey}/action")
 @Stateless
 public class ActionService {
-  
+
     @PersistenceContext
     private EntityManager manager;
-    
+
     @Inject
     private DeviceService deviceService;
-    
+
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
-    public void create(@PathParam("deviceKey") String deviceKey, 
+    public void create(@PathParam("deviceKey") String deviceKey,
             Action action) {
-        Device device = deviceService.get(deviceKey);
-        if (device == null) {
-            throw new RuntimeException("Device key not found");
-        }
+        Device device = getDevice(deviceKey);
+        for (Action a : device.getActions()) {
+            if (a.getName().equals(action.getName())) {
+                throw new PlatformException("Action name is already been used for this device");
+            }
+        }         
         device.getActions().add(action);
         deviceService.update(device);
     }
-    
+
     @PUT
     @Consumes(MediaType.APPLICATION_JSON)
-    public void update(@PathParam("deviceKey") String deviceKey, 
-            Action property) {
-        // TODO getDevice
-        manager.merge(property);
+    public void update(@PathParam("deviceKey") String deviceKey,
+            Action action) {
+        Device device = getDevice(deviceKey);
+        Action actual = get(deviceKey, action.getName());
+        if (actual != null) {
+            device.getActions().remove(actual);    
+            deviceService.update(device);
+        }
     }
-    
+
     @GET
-    @Path("{id}")
+    @Path("{name}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Action get(@PathParam("deviceKey") String deviceKey, 
+    public Action get(@PathParam("deviceKey") String deviceKey,
             @PathParam("name") String name) {
-        // TODO getDevice
-        return manager.find(Action.class, name);
-    } 
-    
+        Device device = getDevice(deviceKey);
+        Action action = null;
+        for (Action a : device.getActions()) {
+            if (a.getName().equals(name)) {
+                action = a;
+            }
+        }
+        if (action == null) {
+            throw new PlatformException("Action name not found");
+        }
+        return action;
+    }
+
     @DELETE
-    @Path("{id}")
+    @Path("{name}")
     public void delete(@PathParam("deviceKey") String deviceKey,
             @PathParam("name") String name) {
-        // getDevice
-        manager.remove(get(deviceKey, name));
+        Action action = get(deviceKey, name);
+        if (action != null) {
+            manager.remove(action);
+        }
     }
-    
+
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public List<Action> list(@PathParam("deviceKey") String deviceKey) {
@@ -78,12 +95,20 @@ public class ActionService {
         }
         return new ArrayList<>();
     }
-    
+
     @GET
     @Path("count")
     @Produces(MediaType.TEXT_PLAIN)
     public String count(@PathParam("deviceKey") String deviceKey) {
         return String.valueOf(list(deviceKey).size());
     }
-    
+
+    private Device getDevice(String deviceKey) {
+        Device device = deviceService.get(deviceKey);
+        if (device == null) {
+            throw new PlatformException("Device key not found");
+        }
+        return device;
+    }
+
 }

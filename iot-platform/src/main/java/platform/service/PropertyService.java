@@ -40,7 +40,7 @@ public class PropertyService {
         Device device = getDevice(deviceKey);
         for (Property p : device.getProperties()) {
             if (p.getKey().equals(property.getKey())) {
-                throw new RuntimeException("Property key is already been used for this device");
+                throw new PlatformException("Property key is already been used for this device");
             }
         }        
         device.getProperties().add(property);
@@ -76,7 +76,7 @@ public class PropertyService {
             }
         }
         if (property == null) {
-            throw new RuntimeException("Property key not found");
+            throw new PlatformException("Property key not found");
         }
         return property;
     } 
@@ -88,7 +88,7 @@ public class PropertyService {
             @PathParam("key") String key) {
         Property property = get(deviceKey, key);
         if (property != null) {
-            manager.remove(get(deviceKey, key));
+            manager.remove(property);
         }
     }
     
@@ -112,7 +112,7 @@ public class PropertyService {
     private Device getDevice(String deviceKey) {
         Device device = deviceService.get(deviceKey);
         if (device == null) {
-            throw new RuntimeException("Device key not found");
+            throw new PlatformException("Device key not found");
         }
         return device;
     }    

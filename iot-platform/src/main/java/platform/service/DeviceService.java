@@ -25,7 +25,7 @@ public class DeviceService {
 
     @PersistenceContext
     private EntityManager manager;
-    
+
     private void validateUniqueKey(Device device) {
         CriteriaBuilder builder = manager.getCriteriaBuilder();
         CriteriaQuery query = builder.createQuery();
@@ -36,10 +36,10 @@ public class DeviceService {
             query.where(builder.notEqual(root.get("id"), device.getId()));
         }
         if (!manager.createQuery(query).getResultList().isEmpty()) {
-            throw new RuntimeException("Device key is already been used");
+            throw new PlatformException("Device key is already been used");
         }
     }
-    
+
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     public void create(Device device) {
@@ -48,7 +48,7 @@ public class DeviceService {
         device.setUpdatedAt(new Date());
         manager.persist(device);
     }
-    
+
     @PUT
     @Consumes(MediaType.APPLICATION_JSON)
     public void update(Device device) {
@@ -56,21 +56,30 @@ public class DeviceService {
         device.setUpdatedAt(new Date());
         manager.merge(device);
     }
-    
+
     @GET
     @Path("{key}")
     @Produces(MediaType.APPLICATION_JSON)
     public Device get(@PathParam("key") String key) {
-        return manager.find(Device.class, key);
-    } 
-    
+        CriteriaBuilder builder = manager.getCriteriaBuilder();
+        CriteriaQuery query = builder.createQuery();
+        Root<Device> root = query.from(Device.class);
+        query.select(root);
+        query.where(builder.equal(root.get("key"), key));
+        List<Device> result = manager.createQuery(query).getResultList();
+        if (result.isEmpty()) {
+            throw new PlatformException("Device key not found");
+        }
+        return result.get(0);
+    }
+
     @DELETE
-    @Path("{id}")
+    @Path("{key}")
     @Consumes(MediaType.TEXT_PLAIN)
-    public void delete(@PathParam("id") String key) {
+    public void delete(@PathParam("key") String key) {
         manager.remove(get(key));
     }
-    
+
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public List<Device> list() {
@@ -78,12 +87,12 @@ public class DeviceService {
         query.select(query.from(Device.class));
         return manager.createQuery(query).getResultList();
     }
-    
+
     @GET
     @Path("count")
     @Produces(MediaType.TEXT_PLAIN)
     public String count() {
         return String.valueOf(list().size());
     }
-    
+
 }

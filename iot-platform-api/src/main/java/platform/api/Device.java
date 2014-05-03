@@ -30,7 +30,7 @@ public class Device implements Serializable {
     private String key;
     private String name;
     private String description;
-    private Boolean enabled;
+    private Boolean enabled = false;
     @Temporal(TemporalType.TIMESTAMP)
     private Date createdAt;
     @Temporal(TemporalType.TIMESTAMP)
@@ -50,6 +50,7 @@ public class Device implements Serializable {
     
     public Device(String key, String name, 
             String description, Location location) {
+        this.key = key;
         this.name = name;
         this.description = description;
         this.location = location;
