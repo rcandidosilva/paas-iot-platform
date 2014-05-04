@@ -16,6 +16,7 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
 import platform.api.Device;
 import platform.api.Product;
 
@@ -41,7 +42,7 @@ public class ProductService {
     }
 
     @POST
-    @Consumes("text/json")
+    @Consumes(MediaType.APPLICATION_JSON)
     public void create(Product product) {
         validateUniqueKey(product);
         product.setCreatedAt(new Date());
@@ -50,7 +51,7 @@ public class ProductService {
     }
 
     @PUT
-    @Consumes("text/json")
+    @Consumes(MediaType.APPLICATION_JSON)
     public void update(Product product) {
         validateUniqueKey(product);
         product.setUpdatedAt(new Date());
@@ -59,7 +60,7 @@ public class ProductService {
 
     @GET
     @Path("{key}")
-    @Produces("text/json")
+    @Produces(MediaType.APPLICATION_JSON)
     public Product get(@PathParam("key") String key) {
         CriteriaBuilder builder = manager.getCriteriaBuilder();
         CriteriaQuery query = builder.createQuery();
@@ -80,7 +81,7 @@ public class ProductService {
     }
 
     @GET
-    @Produces("text/json")
+    @Produces(MediaType.APPLICATION_JSON)
     public List<Product> list() {
         CriteriaQuery query = manager.getCriteriaBuilder().createQuery();
         query.select(query.from(Product.class));
@@ -89,7 +90,7 @@ public class ProductService {
 
     @GET
     @Path("count")
-    @Produces("text/plain")
+    @Produces(MediaType.TEXT_PLAIN)
     public String count() {
         return String.valueOf(list().size());
     }

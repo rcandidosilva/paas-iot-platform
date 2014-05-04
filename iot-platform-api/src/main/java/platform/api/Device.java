@@ -2,13 +2,11 @@ package platform.api;
 
 import java.io.Serializable;
 import java.util.Date;
-import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -17,7 +15,9 @@ import org.eclipse.persistence.nosql.annotations.Field;
 import org.eclipse.persistence.nosql.annotations.NoSql;
 
 /**
- *
+ * 
+ * Represents a smart device to be managed by the Cloud platform
+ * 
  * @author Rodrigo Cândido da Silva
  */
 @Entity
@@ -39,13 +39,13 @@ public class Device implements Serializable {
     private Location location;
     @ManyToOne
     private Device parent;
-    @OneToMany
-    private List<Property> properties;
-    @OneToMany
-    private List<Action> actions;
     
     public Device() {
         super();
+    }
+    
+    public Device(String key) {
+        this.key = key;
     }
     
     public Device(String key, String name, 
@@ -112,20 +112,12 @@ public class Device implements Serializable {
         this.location = location;
     }
 
-    public List<Property> getProperties() {
-        return properties;
+    public Boolean getEnabled() {
+        return enabled;
     }
 
-    public void setProperties(List<Property> properties) {
-        this.properties = properties;
-    }
-
-    public List<Action> getActions() {
-        return actions;
-    }
-
-    public void setActions(List<Action> actions) {
-        this.actions = actions;
+    public void setEnabled(Boolean enabled) {
+        this.enabled = enabled;
     }
 
     public Device getParent() {
@@ -134,14 +126,6 @@ public class Device implements Serializable {
 
     public void setParent(Device parent) {
         this.parent = parent;
-    }    
-
-    public Boolean getEnabled() {
-        return enabled;
     }
-
-    public void setEnabled(Boolean enabled) {
-        this.enabled = enabled;
-    }
-    
+        
 }

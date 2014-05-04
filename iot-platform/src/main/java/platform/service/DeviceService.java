@@ -32,11 +32,25 @@ public class DeviceService {
         Root<Device> root = query.from(Device.class);
         query.select(root);
         query.where(builder.equal(root.get("key"), device.getKey()));
-        if (device.getId() != null && !"".equals(device.getId())) {
-            query.where(builder.notEqual(root.get("id"), device.getId()));
+        List<Device> result = manager.createQuery(query).getResultList();
+        if (!result.isEmpty()) {
+            for (Device d : result) {
+                if (!d.getId().endsWith(device.getId())) {
+                    throw new PlatformException("Device key is already been used");
+                }
+            }
         }
-        if (!manager.createQuery(query).getResultList().isEmpty()) {
-            throw new PlatformException("Device key is already been used");
+    }
+
+    private void validateUniqueKey2(Device device) {
+        List<Device> list = list();
+        if (!list.isEmpty()) {
+            for (Device d : list) {
+                if (d.getKey().equals(device.getKey())
+                        && !d.getId().equals(device.getId())) {
+                    throw new PlatformException("Device key is already been used");
+                }
+            }
         }
     }
 
@@ -52,7 +66,7 @@ public class DeviceService {
     @PUT
     @Consumes(MediaType.APPLICATION_JSON)
     public void update(Device device) {
-        validateUniqueKey(device);
+        validateUniqueKey2(device);
         device.setUpdatedAt(new Date());
         manager.merge(device);
     }

@@ -14,13 +14,16 @@ import org.eclipse.persistence.nosql.annotations.NoSql;
 
 /**
  *
- * @author rodrigo
+ * Represents the property tracking history for a property of smart device
+ * 
+ * @author Rodrigo Cândido da Silva
  */
 @Entity
 @NoSql(dataFormat = DataFormatType.MAPPED)
 public class PropertyTracking implements Serializable {
-    
-    @Id @GeneratedValue
+
+    @Id
+    @GeneratedValue
     @Field(name = "_id")
     private String id;
     private String key;
@@ -31,8 +34,9 @@ public class PropertyTracking implements Serializable {
     private Property property;
 
     public PropertyTracking() {
+        super();
     }
-    
+
     public PropertyTracking(Property property) {
         this.key = property.getKey();
         this.value = property.getValue();
@@ -79,7 +83,5 @@ public class PropertyTracking implements Serializable {
     public void setProperty(Property property) {
         this.property = property;
     }
-    
-    
-    
+       
 }

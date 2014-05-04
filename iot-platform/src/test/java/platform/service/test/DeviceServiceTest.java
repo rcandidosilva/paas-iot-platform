@@ -12,6 +12,8 @@ import platform.api.Location;
 
 /**
  *
+ * Unit test class for the REST DeviceService
+ * 
  * @author Rodrigo Cândido da Silva
  */
 public class DeviceServiceTest {
@@ -54,7 +56,7 @@ public class DeviceServiceTest {
     }
 
     @Test
-    public void testCreateNewDeviceNoResources() {
+    public void testCreateNewDeviceSuccessful() {
         String key = "test-device-" + System.currentTimeMillis();
         Device device = new Device(key,
                 "testDevice", "testDevice", new Location(1.0, 2.0));

@@ -6,6 +6,9 @@ import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -37,13 +40,14 @@ public class ActionService {
     public void create(@PathParam("deviceKey") String deviceKey,
             Action action) {
         Device device = getDevice(deviceKey);
-        for (Action a : device.getActions()) {
+        List<Action> list = list(deviceKey);
+        for (Action a : list) {
             if (a.getName().equals(action.getName())) {
                 throw new PlatformException("Action name is already been used for this device");
             }
-        }         
-        device.getActions().add(action);
-        deviceService.update(device);
+        }
+        action.setDevice(device);
+        manager.persist(action);
     }
 
     @PUT
@@ -53,8 +57,9 @@ public class ActionService {
         Device device = getDevice(deviceKey);
         Action actual = get(deviceKey, action.getName());
         if (actual != null) {
-            device.getActions().remove(actual);    
-            deviceService.update(device);
+            manager.remove(actual);
+            action.setDevice(device);
+            manager.persist(action);
         }
     }
 
@@ -63,17 +68,13 @@ public class ActionService {
     @Produces(MediaType.APPLICATION_JSON)
     public Action get(@PathParam("deviceKey") String deviceKey,
             @PathParam("name") String name) {
-        Device device = getDevice(deviceKey);
-        Action action = null;
-        for (Action a : device.getActions()) {
-            if (a.getName().equals(name)) {
-                action = a;
+        List<Action> list = list(deviceKey);
+        for (Action action : list) {
+            if (action.getName().equals(name)) {
+                return action;
             }
         }
-        if (action == null) {
-            throw new PlatformException("Action name not found");
-        }
-        return action;
+        return null;        
     }
 
     @DELETE
@@ -89,9 +90,21 @@ public class ActionService {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public List<Action> list(@PathParam("deviceKey") String deviceKey) {
-        Device device = deviceService.get(deviceKey);
+        Device device = getDevice(deviceKey);
         if (device != null) {
-            return device.getActions();
+            CriteriaBuilder builder = manager.getCriteriaBuilder();
+            CriteriaQuery query = builder.createQuery();
+            Root<Action> root = query.from(Action.class);
+            query.select(root);
+            //query.where(builder.equal(root.get("device").get("id"), device));
+            List<Action> list = manager.createQuery(query).getResultList();
+            List<Action> result = new ArrayList<>();
+            for (Action action : list) {
+                if (action.getDevice().getKey().endsWith(deviceKey)) {
+                    result.add(action);
+                }
+            }
+            return result;
         }
         return new ArrayList<>();
     }

@@ -11,6 +11,8 @@ import platform.service.test.client.ProductServiceClient;
 
 /**
  *
+ * Unit test class for the REST ProductService
+ * 
  * @author Rodrigo Cândido da Silva
  */
 public class ProductServiceTest {
@@ -53,7 +55,7 @@ public class ProductServiceTest {
     }
 
     @Test
-    public void testCreateNewProductNoResources() {
+    public void testCreateNewProductSuccessful() {
         String key = "test-product-" + System.currentTimeMillis();
         Product product = new Product(key,
                 "testProduct", "testProduct");
