@@ -18,7 +18,7 @@ import platform.service.test.client.ProductServiceClient;
 public class ProductServiceTest {
 
     private static final String SERVICE_URL
-            = "http://127.0.0.1:8080/iot-platform/rest/";
+            = "http://127.0.0.1:8081/iot-platform/rest/";
 
     private static ProductServiceClient service;
 
