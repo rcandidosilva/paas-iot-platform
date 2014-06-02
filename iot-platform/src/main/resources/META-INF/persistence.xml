@@ -14,12 +14,12 @@
         <class>platform.api.PropertyTracking</class>
         <exclude-unlisted-classes>true</exclude-unlisted-classes>
         <properties>
-            <property name="eclipselink.target-server" value="JBoss"/>
+<!--            <property name="eclipselink.target-server" value="JBoss"/>-->
             <property name="eclipselink.target-database" value="org.eclipse.persistence.nosql.adapters.mongo.MongoPlatform"/>
             <property name="eclipselink.nosql.connection-spec" value="org.eclipse.persistence.nosql.adapters.mongo.MongoConnectionSpec"/>
-            <property name="eclipselink.nosql.property.mongo.port" value="27017"/>
-            <property name="eclipselink.nosql.property.mongo.host" value="127.7.140.2"/>
-            <property name="eclipselink.nosql.property.mongo.db" value="iot-platform"/>
+            <property name="eclipselink.nosql.property.mongo.port" value="10095"/>
+            <property name="eclipselink.nosql.property.mongo.host" value="kahana.mongohq.com"/>
+            <property name="eclipselink.nosql.property.mongo.db" value="E1vlMmcZ3FbLHMH8LURFw"/>
             <property name="eclipselink.nosql.property.user" value="iot-platform"/>
             <property name="eclipselink.nosql.property.password" value="iot-platform"/>
 <!--            <property name="eclipselink.logging.level" value="FINEST"/>-->

@@ -1,5 +1,6 @@
 package platform.service;
 
+import java.util.Date;
 import platform.api.Device;
 import java.util.List;
 import javax.ejb.Stateless;
@@ -19,10 +20,12 @@ public class WidgetService {
     private EntityManager manager;
     
     public void save(Widget widget) {
+        widget.setCreatedAt(new Date());
         manager.persist(widget);
     }
     
     public void update(Widget widget) {
+        widget.setUpdatedAt(new Date());
         manager.merge(widget);
     }
     

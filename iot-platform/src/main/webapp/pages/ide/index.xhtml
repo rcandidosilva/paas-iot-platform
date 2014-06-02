@@ -16,7 +16,7 @@
                 <p:dataGrid id="widgetsList" value="#{dashboardMB.widgetList}" 
                             var="widget" columns="1">                        
                     <p:panel id="widgetPanel" header="#{widget.name}">
-                        #{widget.description}
+                        <p:graphicImage value="#{dashboardMB.toIconFile(widget)}" width="100" height="100"/>
                         <p:draggable for="widgetPanel" revert="true"/>
                     </p:panel>
                 </p:dataGrid>

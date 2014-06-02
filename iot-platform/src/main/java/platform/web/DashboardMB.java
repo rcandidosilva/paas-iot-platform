@@ -1,5 +1,6 @@
 package platform.web;
 
+import java.io.ByteArrayInputStream;
 import javax.inject.Named;
 import javax.enterprise.context.SessionScoped;
 import java.io.Serializable;
@@ -16,6 +17,8 @@ import org.primefaces.model.DashboardColumn;
 import org.primefaces.model.DashboardModel;
 import org.primefaces.model.DefaultDashboardColumn;
 import org.primefaces.model.DefaultDashboardModel;
+import org.primefaces.model.DefaultStreamedContent;
+import org.primefaces.model.StreamedContent;
 import platform.model.Widget;
 import platform.service.WidgetService;
 
@@ -88,5 +91,11 @@ public class DashboardMB implements Serializable {
     public void setModel(DashboardModel model) {
         this.model = model;
     }    
+    
+    public StreamedContent toIconFile(Widget widget) {
+        byte[] bytes = widget.getIconFile();
+        return new DefaultStreamedContent(
+                new ByteArrayInputStream(bytes), widget.getIconContentType());
+    } 
 
 }

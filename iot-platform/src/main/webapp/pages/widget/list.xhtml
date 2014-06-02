@@ -19,14 +19,14 @@
                     <div  style="width: 80%;">
                         <p:dataTable id="table" value="#{widgetMB.widgetLit}" var="widget" 
                                      rows="10" paginator="true">
+                            <p:column headerText="Key">
+                                <h:outputText value="#{widget.key}"/>
+                            </p:column>
                             <p:column headerText="#{bundle['widget.name']}">
                                 <h:outputText value="#{widget.name}"/>
                             </p:column>
                             <p:column headerText="#{bundle['widget.description']}">
                                 <h:outputText value="#{widget.description}"/>
-                            </p:column>
-                            <p:column headerText="Data Criação">
-
                             </p:column>
                             <p:column style="width: 4%;">
                                 <p:commandLink value="Editar" action="#{widgetMB.edit(widget)}"/>
