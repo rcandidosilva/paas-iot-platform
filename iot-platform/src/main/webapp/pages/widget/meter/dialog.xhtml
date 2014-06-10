@@ -1,0 +1,44 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+        <h:form>
+            <p:dialog widgetVar="meterDialog" modal="true" header="Gauge Meter Widget" height="200" width="500">
+                <h:panelGrid columns="2">
+                    <p:outputLabel value="Title"/>
+                    <p:inputText value="#{gaugeMeterMB.title}"/>
+
+                    <p:outputLabel value="Label"/>
+                    <p:inputText value="#{gaugeMeterMB.label}"/>
+                    
+                    <p:outputLabel value="New Interval"/>
+                    <h:panelGroup>
+                        <p:inputText value="#{gaugeMeterMB.interval}"/>
+                        <p:commandButton value="Add Interval" action="#{gaugeMeterMB.newInterval()}" update="dataTable"/>
+                    </h:panelGroup>
+                </h:panelGrid>
+
+                <p:dataTable id="dataTable" value="#{gaugeMeterMB.intervalsModel}" var="interval">
+                    <p:column headerText="Interval">
+                        <h:outputText value="#{interval}"/>
+                    </p:column>
+                    <p:column>
+                        <p:commandLink value="Delete" action="#{gaugeMeterMB.deleteInterval()}" update="dataTable"/>
+                    </p:column>
+                </p:dataTable>
+
+                <div align="right">
+                    <p:commandButton value="Add" action="#{gaugeMeterMB.addAction()}" oncomplete="PF('meterDialog').hide();"/> 
+                    <p:commandButton value="Cancel" oncomplete="PF('meterDialog').hide();"/>
+                </div>
+            </p:dialog>
+        </h:form>
+
+    </ui:composition>
+
+</html>

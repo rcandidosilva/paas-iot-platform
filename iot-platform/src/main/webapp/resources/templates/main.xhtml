@@ -11,9 +11,9 @@
         <h:outputStylesheet library="css" name="cssLayout.css"/>       
         <script type="text/javascript">
             function handleDrop(event, ui) {
-                var droppedCar = ui.draggable;
-
-                droppedCar.fadeOut('fast');
+                var dropped = ui.draggable;
+                dropped.fadeOut('fast');
+                PF('meterDialog').show();
             }
         </script> 
     </h:head>

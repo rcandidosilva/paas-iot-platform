@@ -1,0 +1,20 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                template="./../../resources/templates/leftSide.xhtml">
+
+    <ui:define name="top">
+        Gauge Meter
+    </ui:define>
+
+    <ui:define name="center">
+        <h:form id="form">
+            <p:poll interval="3" listener="#{chartMB.updateGaugeChart()}" update="gauge-meter" />
+            <p:meterGaugeChart id="gauge-meter" value="#{chartMB.gaugeChartModel}" title="TEST" label="TESTE" showTickLabels="false"/>
+        </h:form>
+    </ui:define>
+
+</ui:composition>

@@ -7,6 +7,7 @@ import java.io.Serializable;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.faces.application.Application;
+import javax.faces.component.UIComponent;
 import javax.faces.component.html.HtmlOutputText;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
@@ -20,6 +21,7 @@ import org.primefaces.model.DefaultDashboardModel;
 import org.primefaces.model.DefaultStreamedContent;
 import org.primefaces.model.StreamedContent;
 import platform.model.Widget;
+import platform.model.WidgetType;
 import platform.service.WidgetService;
 
 /**
@@ -48,12 +50,29 @@ public class DashboardMB implements Serializable {
     }
     
     public void dropWidget(DragDropEvent event) {
-        createWidget();
+        Object data = event.getData();
+        if (data instanceof Widget) {
+            Widget widget = (Widget) data;
+            String name = widget.getName();
+            if (WidgetType.METER_GAUGE.equals(name)) {
+                // TODO create meter-gauge
+            } else if (WidgetType.BAR_CHART.equals(name)) {
+                // TODO create bar-char
+            } else if (WidgetType.GEO_LOCATION.equals(name)) {
+                // TODO create geo-location
+            } else if (WidgetType.PIE_CHART.equals(name)) {
+                // TODO create pie-chart
+            } else if (WidgetType.OHLC_CHART.equals(name)) {
+                // TODO create ohlc-chart
+            }
+            
+        }
     }
 
-    private void createWidget() {
+    public void createWidget(UIComponent component) {
         FacesContext fc = FacesContext.getCurrentInstance();
         Application application = fc.getApplication();
+
         Panel panel = (Panel) application.createComponent(fc, 
                 "org.primefaces.component.Panel", 
                 "org.primefaces.component.PanelRenderer");
@@ -61,6 +80,7 @@ public class DashboardMB implements Serializable {
         panel.setHeader("Dashboard Component for " + widgetCount);
         panel.setClosable(true);
         panel.setToggleable(true);
+        panel.getChildren().add(component);
 
         getDashboard().getChildren().add(panel);
         
