@@ -11,4 +11,6 @@ public interface WidgetComponent extends Serializable {
  
     public Panel create(String widgetId);
     
+    public void update();
+    
 }

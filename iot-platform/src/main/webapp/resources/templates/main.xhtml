@@ -11,9 +11,16 @@
         <h:outputStylesheet library="css" name="cssLayout.css"/>       
         <script type="text/javascript">
             function handleDrop(event, ui) {
-                var dropped = ui.draggable;
-                dropped.fadeOut('fast');
-                PF('meterDialog').show();
+                if (ui != null) {
+                    var dropped = ui.draggable;
+
+                    var widgetKey = $(ui.draggable).find("input:hidden").val();
+                    var dialogId = widgetKey + "Dialog";
+
+                    PF(dialogId).show();
+
+                    dropped.fadeOut('fast');
+                }
             }
         </script> 
     </h:head>

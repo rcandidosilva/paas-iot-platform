@@ -16,8 +16,9 @@
                 <p:dataGrid id="widgetsList" value="#{dashboardController.widgetList}" 
                             var="widget" columns="1">                        
                     <p:panel id="widgetPanel" header="#{widget.name}">
+                        <h:inputHidden id="widgetKey" value="#{widget.key}"/>
                         <!--<p:graphicImage value="dashboardMB.toIconFile(widget)" width="100" height="100"/>-->
-                        <p:draggable for="widgetPanel" revert="true" />
+                        <p:draggable for="widgetPanel" revert="true" helper="clone"/>
                     </p:panel>
                 </p:dataGrid>
             </p:fieldset>   
@@ -48,6 +49,7 @@
         </h:form>
         
         <ui:include src="/pages/widget/meter/dialog.xhtml"/>
+        <ui:include src="/pages/widget/location/dialog.xhtml"/>
     </ui:define>
 
 </ui:composition>

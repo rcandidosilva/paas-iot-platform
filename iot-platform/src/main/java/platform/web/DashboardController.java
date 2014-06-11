@@ -4,7 +4,9 @@ import java.io.ByteArrayInputStream;
 import javax.inject.Named;
 import javax.enterprise.context.SessionScoped;
 import java.io.Serializable;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import org.primefaces.component.dashboard.Dashboard;
@@ -35,6 +37,8 @@ public class DashboardController implements Serializable {
     private Dashboard dashboard;
     private DashboardModel model;
     
+    private Map<String, WidgetComponent> widgets;
+    
     private int widgetCount;
     
     @PostConstruct
@@ -43,7 +47,7 @@ public class DashboardController implements Serializable {
         model.addColumn(new DefaultDashboardColumn());
         model.addColumn(new DefaultDashboardColumn());
         model.addColumn(new DefaultDashboardColumn());
-        model.addColumn(new DefaultDashboardColumn());
+        widgets = new HashMap<>();
     }
     
     public void dropWidget(DragDropEvent event) {
@@ -67,12 +71,15 @@ public class DashboardController implements Serializable {
     }
 
     public void addWidget(WidgetComponent widget) {
-        Panel panel = widget.create("widget" + ++widgetCount);
+        String widgetId = "widget" + ++widgetCount;
+        Panel panel = widget.create(widgetId);
         
         getDashboard().getChildren().add(panel);
         
         DashboardColumn column = model.getColumn(0);
         column.addWidget(panel.getId());
+        
+        widgets.put(widgetId, widget);
     }
     
     public List<Widget> getWidgetList() {
@@ -99,6 +106,15 @@ public class DashboardController implements Serializable {
         byte[] bytes = widget.getIconFile();
         return new DefaultStreamedContent(
                 new ByteArrayInputStream(bytes), widget.getIconContentType());
-    } 
+    }
+    
+    public void updateWidget(String widgetId) {
+        if (widgets != null) {
+            WidgetComponent widget = widgets.get(widgetId);
+            if (widget != null) {
+                widget.update();
+            }
+        }
+    }
 
 }

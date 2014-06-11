@@ -1,0 +1,39 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:composition>
+        <h:form>
+            <p:dialog widgetVar="pieDialog" modal="true" header="Pie Chart Widget" height="400" width="550">
+                <h:panelGrid columns="2">
+                    <p:outputLabel value="Title"/>
+                    <p:inputText value="#{pieChartController.title}" required="true"/>
+
+                    <p:outputLabel value="Device"/>
+                    <p:selectOneMenu value="#{pieChartController.selectedDeviceKey}" required="true">
+                        <f:ajax event="change" render="property"/>
+                        <f:selectItem itemLabel="-- Selecione --" itemValue=""/>
+                        <f:selectItems value="#{pieChartController.devices}" var="device" itemLabel="#{device.key}" itemValue="#{device.key}"/>
+                    </p:selectOneMenu>
+
+                    <p:outputLabel value="Property"/>
+                    <p:selectOneMenu id="property" value="#{pieChartController.selectedPropertyKey}" required="true">
+                        <f:selectItem itemLabel="-- Selecione --" itemValue=""/>
+                        <f:selectItems value="#{pieChartController.properties}" var="property" itemLabel="#{property.key}" itemValue="#{property.key}"/>
+                    </p:selectOneMenu>
+                </h:panelGrid>
+
+                <div align="right">
+                    <p:commandButton value="Add" action="#{pieChartController.addAction()}" oncomplete="PF('pieDialog').hide();" update=":dashboardForm"/> 
+                    <p:commandButton value="Cancel" oncomplete="PF('pieDialog').hide();"/>
+                </div>
+            </p:dialog>
+        </h:form>
+    </ui:composition>
+
+</html>
