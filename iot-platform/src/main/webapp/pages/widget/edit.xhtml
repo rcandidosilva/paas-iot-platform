@@ -16,21 +16,21 @@
                         <p:panel header="Cadastro de Widget">
                             <h:panelGrid columns="2" >
                                 <p:outputLabel value="Key"/>
-                                <p:inputText value="#{widgetMB.widget.key}"/>                                
+                                <p:inputText value="#{widgetController.widget.key}"/>                                
                                 <p:outputLabel value="Name"/>
-                                <p:inputText value="#{widgetMB.widget.name}"/>
+                                <p:inputText value="#{widgetController.widget.name}"/>
                                 <p:outputLabel value="Description"/>
-                                <p:inputTextarea value="#{widgetMB.widget.description}"/>
+                                <p:inputTextarea value="#{widgetController.widget.description}"/>
                                 <p:outputLabel value="Icon"/>
                                 <h:panelGrid id="filePanel">
-                                    <p:fileUpload id="upload" fileUploadListener="#{widgetMB.handleFileUpload}" 
+                                    <p:fileUpload id="upload" fileUploadListener="#{widgetController.handleFileUpload}" 
                                                   mode="advanced" dragDropSupport="false" update="filePanel"
                                                   allowTypes="/(\.|\/)(gif|jpe?g|png)$/"
-                                                  rendered="#{widgetMB.widget.iconFile == null}"/>
+                                                  rendered="#{widgetController.widget.iconFile == null}"/>
                                     <p:graphicImage value="#{widgetMB.iconFile}" width="150"
-                                                    rendered="#{widgetMB.widget.iconFile != null}"/>
+                                                    rendered="#{widgetController.widget.iconFile != null}"/>
                                     <p:commandLink value="Remover" action="#{widgetMB.removeIconFile()}"
-                                                   rendered="#{widgetMB.widget.iconFile != null}"
+                                                   rendered="#{widgetController.widget.iconFile != null}"
                                                    update="filePanel"/>
                                 </h:panelGrid>
                             </h:panelGrid>
@@ -38,7 +38,7 @@
                         </p:panel>
 
                         <div align="right">
-                            <p:commandButton value="#{bundle['global.save']}" action="#{widgetMB.save()}" ajax="false">
+                            <p:commandButton value="#{bundle['global.save']}" action="#{widgetController.save()}" ajax="false">
                                 <f:ajax execute="@all" render="form"/>
                             </p:commandButton> 
                             <p:commandButton value="#{bundle['global.back']}" action="list" immediate="true"/>

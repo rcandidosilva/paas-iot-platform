@@ -15,7 +15,7 @@ import org.primefaces.model.chart.MeterGaugeChartModel;
 
 @Named
 @SessionScoped
-public class ChartMB implements Serializable {
+public class ChartController implements Serializable {
 
     private MeterGaugeChartModel gaugeChartModel;
 

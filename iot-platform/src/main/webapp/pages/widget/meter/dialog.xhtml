@@ -4,36 +4,50 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:h="http://java.sun.com/jsf/html"
-      xmlns:p="http://primefaces.org/ui">
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
 
     <ui:composition>
         <h:form>
-            <p:dialog widgetVar="meterDialog" modal="true" header="Gauge Meter Widget" height="200" width="500">
+            <p:dialog widgetVar="meterDialog" modal="true" header="Gauge Meter Widget" height="400" width="550">
                 <h:panelGrid columns="2">
                     <p:outputLabel value="Title"/>
-                    <p:inputText value="#{gaugeMeterMB.title}"/>
+                    <p:inputText value="#{gaugeMeterController.title}" required="true"/>
 
                     <p:outputLabel value="Label"/>
-                    <p:inputText value="#{gaugeMeterMB.label}"/>
+                    <p:inputText value="#{gaugeMeterController.label}" required="true"/>
+                    
+                    <p:outputLabel value="Device"/>
+                    <p:selectOneMenu value="#{gaugeMeterController.selectedDeviceKey}" required="true">
+                        <f:ajax event="change" render="property"/>
+                        <f:selectItem itemLabel="-- Selecione --" itemValue=""/>
+                        <f:selectItems value="#{gaugeMeterController.devices}" var="device" itemLabel="#{device.key}" itemValue="#{device.key}"/>
+                    </p:selectOneMenu>
+                    
+                    <p:outputLabel value="Property"/>
+                    <p:selectOneMenu id="property" value="#{gaugeMeterController.selectedPropertyKey}" required="true">
+                        <f:selectItem itemLabel="-- Selecione --" itemValue=""/>
+                        <f:selectItems value="#{gaugeMeterController.properties}" var="property" itemLabel="#{property.key}" itemValue="#{property.key}"/>
+                    </p:selectOneMenu>
                     
                     <p:outputLabel value="New Interval"/>
                     <h:panelGroup>
-                        <p:inputText value="#{gaugeMeterMB.interval}"/>
-                        <p:commandButton value="Add Interval" action="#{gaugeMeterMB.newInterval()}" update="dataTable"/>
+                        <p:inputText id="interval" value="#{gaugeMeterController.interval}"/>
+                        <p:commandButton value="Add Interval" action="#{gaugeMeterController.newInterval()}" update="dataTable" process="@this,interval" />
                     </h:panelGroup>
                 </h:panelGrid>
 
-                <p:dataTable id="dataTable" value="#{gaugeMeterMB.intervalsModel}" var="interval">
+                <p:dataTable id="dataTable" value="#{gaugeMeterController.intervalsModel}" var="interval" rows="5" paginator="true">
                     <p:column headerText="Interval">
                         <h:outputText value="#{interval}"/>
                     </p:column>
                     <p:column>
-                        <p:commandLink value="Delete" action="#{gaugeMeterMB.deleteInterval()}" update="dataTable"/>
+                        <p:commandLink value="Delete" action="#{gaugeMeterController.deleteInterval()}" update="dataTable"/>
                     </p:column>
                 </p:dataTable>
 
                 <div align="right">
-                    <p:commandButton value="Add" action="#{gaugeMeterMB.addAction()}" oncomplete="PF('meterDialog').hide();"/> 
+                    <p:commandButton value="Add" action="#{gaugeMeterController.addAction()}" oncomplete="PF('meterDialog').hide();" update=":dashboardForm"/> 
                     <p:commandButton value="Cancel" oncomplete="PF('meterDialog').hide();"/>
                 </div>
             </p:dialog>

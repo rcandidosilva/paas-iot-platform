@@ -13,10 +13,10 @@
     <ui:define name="left">
         <h:form id="form1">
             <p:fieldset legend="Widgets" toggleable="true">
-                <p:dataGrid id="widgetsList" value="#{dashboardMB.widgetList}" 
+                <p:dataGrid id="widgetsList" value="#{dashboardController.widgetList}" 
                             var="widget" columns="1">                        
                     <p:panel id="widgetPanel" header="#{widget.name}">
-                        <p:graphicImage value="#{dashboardMB.toIconFile(widget)}" width="100" height="100"/>
+                        <!--<p:graphicImage value="dashboardMB.toIconFile(widget)" width="100" height="100"/>-->
                         <p:draggable for="widgetPanel" revert="true" />
                     </p:panel>
                 </p:dataGrid>
@@ -25,7 +25,7 @@
     </ui:define>
 
     <ui:define name="center">
-        <h:form id="form2">
+        <h:form id="dashboardForm">
             <h:panelGrid columns="4">
                 <p:commandButton value="#{bundle['ide.save']}"/>
                 <p:commandButton value="#{bundle['ide.view']}"/>
@@ -35,15 +35,15 @@
 
             <p:droppable for="dashboardArea" tolerance="touch" activeStyleClass="ui-state-highlight" 
                          datasource=":form1:widgetsList" onDrop="handleDrop" >
-                <p:ajax listener="#{dashboardMB.dropWidget}" update="dropArea dashboard" />
+                <p:ajax listener="#{dashboardController.dropWidget}" update="dropArea dashboard" />
             </p:droppable>            
 
             <p:fieldset id="dashboardArea">
                 <p:outputPanel id="dropArea">
 
                 </p:outputPanel>
-                <p:dashboard id="dashboard" binding="#{dashboardMB.dashboard}" 
-                             model="#{dashboardMB.model}"/>
+                <p:dashboard id="dashboard" binding="#{dashboardController.dashboard}" 
+                             model="#{dashboardController.model}"/>
             </p:fieldset>
         </h:form>
         

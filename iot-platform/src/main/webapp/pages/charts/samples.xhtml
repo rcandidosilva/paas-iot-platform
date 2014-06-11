@@ -12,8 +12,11 @@
 
     <ui:define name="center">
         <h:form id="form">
-            <p:poll interval="3" listener="#{chartMB.updateGaugeChart()}" update="gauge-meter" />
-            <p:meterGaugeChart id="gauge-meter" value="#{chartMB.gaugeChartModel}" title="TEST" label="TESTE" showTickLabels="false"/>
+            <p:poll interval="3" listener="#{chartController.updateGaugeChart()}" update="gauge-meter" />
+            <p:meterGaugeChart id="gauge-meter" value="#{chartController.gaugeChartModel}" title="TEST" label="TESTE" showTickLabels="false"/>
+            
+            
+            
         </h:form>
     </ui:define>
 

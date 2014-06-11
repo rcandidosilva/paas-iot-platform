@@ -21,9 +21,9 @@ import platform.service.WidgetService;
  *
  * @author rodrigo
  */
-@Named(value = "widgetMB")
+@Named
 @SessionScoped
-public class WidgetMB implements Serializable {
+public class WidgetController implements Serializable {
 
     @Inject
     private WidgetService service;

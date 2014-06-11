@@ -6,10 +6,6 @@ import javax.enterprise.context.SessionScoped;
 import java.io.Serializable;
 import java.util.List;
 import javax.annotation.PostConstruct;
-import javax.faces.application.Application;
-import javax.faces.component.UIComponent;
-import javax.faces.component.html.HtmlOutputText;
-import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import org.primefaces.component.dashboard.Dashboard;
 import org.primefaces.component.panel.Panel;
@@ -23,14 +19,15 @@ import org.primefaces.model.StreamedContent;
 import platform.model.Widget;
 import platform.model.WidgetType;
 import platform.service.WidgetService;
+import platform.web.widget.WidgetComponent;
 
 /**
  *
  * @author rodrigo
  */
-@Named(value = "dashboardMB")
+@Named 
 @SessionScoped
-public class DashboardMB implements Serializable {
+public class DashboardController implements Serializable {
 
     @Inject
     private WidgetService widgetService;
@@ -69,27 +66,13 @@ public class DashboardMB implements Serializable {
         }
     }
 
-    public void createWidget(UIComponent component) {
-        FacesContext fc = FacesContext.getCurrentInstance();
-        Application application = fc.getApplication();
-
-        Panel panel = (Panel) application.createComponent(fc, 
-                "org.primefaces.component.Panel", 
-                "org.primefaces.component.PanelRenderer");
-        panel.setId("widget" + ++widgetCount);
-        panel.setHeader("Dashboard Component for " + widgetCount);
-        panel.setClosable(true);
-        panel.setToggleable(true);
-        panel.getChildren().add(component);
-
+    public void addWidget(WidgetComponent widget) {
+        Panel panel = widget.create("widget" + ++widgetCount);
+        
         getDashboard().getChildren().add(panel);
         
         DashboardColumn column = model.getColumn(0);
         column.addWidget(panel.getId());
-        HtmlOutputText text = new HtmlOutputText();
-        text.setValue("Dashboard widget bits!");
-
-        panel.getChildren().add(text);
     }
     
     public List<Widget> getWidgetList() {

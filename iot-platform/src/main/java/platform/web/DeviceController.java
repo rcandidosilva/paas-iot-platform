@@ -1,13 +1,12 @@
 package platform.web;
 
-import javax.inject.Named;
-import javax.enterprise.context.SessionScoped;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.PostConstruct;
-import javax.faces.context.FacesContext;
+import javax.enterprise.context.SessionScoped;
 import javax.inject.Inject;
+import javax.inject.Named;
 import platform.api.Device;
 import platform.service.DeviceService;
 
@@ -15,9 +14,9 @@ import platform.service.DeviceService;
  *
  * @author rodrigo
  */
-@Named(value = "deviceMB")
+@Named
 @SessionScoped
-public class DeviceMB implements Serializable {
+public class DeviceController implements Serializable {
     
     @Inject
     private DeviceService service;

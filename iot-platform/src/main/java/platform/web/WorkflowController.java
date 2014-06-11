@@ -8,9 +8,9 @@ import java.io.Serializable;
  *
  * @author rodrigo
  */
-@Named(value = "workflowMB")
+@Named
 @SessionScoped
-public class WorkflowMB implements Serializable {
+public class WorkflowController implements Serializable {
     
     // TODO
 

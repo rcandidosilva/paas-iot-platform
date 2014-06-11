@@ -17,7 +17,7 @@
 
                 <div align="center"> 
                     <div  style="width: 80%;">
-                        <p:dataTable id="table" value="#{widgetMB.widgetLit}" var="widget" 
+                        <p:dataTable id="table" value="#{widgetController.widgetLit}" var="widget" 
                                      rows="10" paginator="true">
                             <p:column headerText="Key">
                                 <h:outputText value="#{widget.key}"/>
@@ -29,14 +29,14 @@
                                 <h:outputText value="#{widget.description}"/>
                             </p:column>
                             <p:column style="width: 4%;">
-                                <p:commandLink value="Editar" action="#{widgetMB.edit(widget)}"/>
+                                <p:commandLink value="Editar" action="#{widgetController.edit(widget)}"/>
                             </p:column>
                             <p:column style="width: 4%;">
-                                <p:commandLink value="Deletar" action="#{widgetMB.delete(widget)}"/>
+                                <p:commandLink value="Deletar" action="#{widgetController.delete(widget)}"/>
                             </p:column>                            
                         </p:dataTable>
                         <div align="right">
-                            <p:commandButton value="Novo Widget" action="#{widgetMB.createNew()}"/>
+                            <p:commandButton value="Novo Widget" action="#{widgetController.createNew()}"/>
                         </div>
                     </div>
                 </div>

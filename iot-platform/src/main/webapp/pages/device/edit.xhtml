@@ -16,18 +16,18 @@
                         <p:panel header="#{bundle['device.form']}">
                             <h:panelGrid columns="2" >
                                 <p:outputLabel value="#{bundle['device.key']}"/>
-                                <p:inputText value="#{deviceMB.device.key}"/>
+                                <p:inputText value="#{deviceController.device.key}"/>
                                 <p:outputLabel value="#{bundle['device.name']}"/>
-                                <p:inputText value="#{deviceMB.device.name}"/>
+                                <p:inputText value="#{deviceController.device.name}"/>
                                 <p:outputLabel value="#{bundle['device.description']}"/>
-                                <p:inputTextarea value="#{deviceMB.device.description}"/>
+                                <p:inputTextarea value="#{deviceController.device.description}"/>
                                 <p:outputLabel for="enabled" value="#{bundle['device.enabled']}"/>
-                                <p:selectBooleanCheckbox id="enabled" value="#{deviceMB.device.enabled}"/>
+                                <p:selectBooleanCheckbox id="enabled" value="#{deviceController.device.enabled}"/>
                             </h:panelGrid>
                         </p:panel>
 
                         <div align="right">
-                            <p:commandButton value="#{bundle['global.save']}" action="#{deviceMB.save()}"/>
+                            <p:commandButton value="#{bundle['global.save']}" action="#{deviceController.save()}"/>
                             <p:commandButton value="#{bundle['global.back']}" action="list" immediate="true"/>
                         </div>
                     </div>

@@ -11,9 +11,9 @@ import platform.model.Application;
  *
  * @author rodrigo
  */
-@Named(value = "applicationMB")
+@Named
 @SessionScoped
-public class ApplicationMB implements Serializable {
+public class ApplicationController implements Serializable {
 
     private Application application = new Application();    
 

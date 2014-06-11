@@ -15,7 +15,7 @@
                     <h1>#{bundle['application.list']}</h1>
                 </div>
 
-                <p:dataTable value="#{applicationMB.applications}" var="app">
+                <p:dataTable value="#{applicationController.applications}" var="app">
                     <p:column headerText="ID" style="width: 10%;">
                         <h:outputText value="#{app.id}"/>
                     </p:column>
