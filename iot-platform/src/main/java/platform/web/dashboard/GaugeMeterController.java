@@ -1,10 +1,4 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
-package platform.web.widget.controller;
+package platform.web.dashboard;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -19,37 +13,44 @@ import platform.api.Property;
 import platform.service.DeviceService;
 import platform.service.PropertyService;
 import platform.web.DashboardController;
+import platform.web.widget.MeterWidget;
 
 /**
- *
+ * GaugeMeter Widget controller
+ * 
  * @author rodrigo
  */
 @Named
 @ViewScoped
-public class PieChartController implements Serializable {
+public class GaugeMeterController implements Serializable {
     
     private String title;
+    private String label;
+    private Double interval;
     private String selectedDeviceKey;
     private String selectedPropertyKey;
     
     private List<Device> devices;
-    private List<Property> properties;
-    
-    private ListDataModel<Property> propertiesModel;
+    private ListDataModel<Double> intervalsModel;
     
     @Inject
     private DeviceService deviceService;
+
     @Inject
     private PropertyService propertyService;
     
     @Inject
     private DashboardController dashboard;
+
+    @Inject
+    private MeterWidget widget;
     
     @PostConstruct
     public void init() {
-        devices = deviceService.list();
+        intervalsModel = new ListDataModel<>(new ArrayList<Double>());
+        devices = deviceService.list();        
     }
-    
+
     public String getTitle() {
         return title;
     }
@@ -58,13 +59,33 @@ public class PieChartController implements Serializable {
         this.title = title;
     }
 
+    public String getLabel() {
+        return label;
+    }
+
+    public void setLabel(String label) {
+        this.label = label;
+    }
+
+    public Double getInterval() {
+        return interval;
+    }
+
+    public void setInterval(Double interval) {
+        this.interval = interval;
+    }
+
+    public ListDataModel<Double> getIntervalsModel() {
+        return intervalsModel;
+    }
+
     public String getSelectedDeviceKey() {
         return selectedDeviceKey;
     }
 
     public void setSelectedDeviceKey(String selectedDeviceKey) {
         this.selectedDeviceKey = selectedDeviceKey;
-    }
+    }   
 
     public String getSelectedPropertyKey() {
         return selectedPropertyKey;
@@ -77,27 +98,30 @@ public class PieChartController implements Serializable {
     public List<Device> getDevices() {
         return devices;
     }
-    
+
     public List<Property> getProperties() {
         if (selectedDeviceKey != null && !"".equals(selectedDeviceKey)) {
             return propertyService.list(selectedDeviceKey);
         }
         return new ArrayList<>();
     }
-
-    public ListDataModel<Property> getPropertiesModel() {
-        return propertiesModel;
-    }
-
-    public void setPropertiesModel(ListDataModel<Property> propertiesModel) {
-        this.propertiesModel = propertiesModel;
-    }
-                
-    public void addAction() {
-//        GaugeMeterWidget widget = 
-//                new GaugeMeterWidget((List) getIntervalsModel().getWrappedData(), 
-//                        label, title, selectedDeviceKey, selectedPropertyKey);        
-//        dashboard.addWidget(widget);
+    
+    public void newInterval() {
+        ((List<Double>) intervalsModel.getWrappedData()).add(interval);
     }
     
+    public void deleteInterval() {
+        ((List<Double>) intervalsModel.getWrappedData()).remove(
+                intervalsModel.getRowData());        
+    }
+    
+    public void addAction() {
+        widget.setIntervals((List) getIntervalsModel().getWrappedData());
+        widget.setLabel(label);
+        widget.setTitle(title);
+        widget.setDeviceKey(selectedDeviceKey);
+        widget.setPropertyKey(selectedPropertyKey);       
+        dashboard.addWidget(widget);
+    }
+             
 }

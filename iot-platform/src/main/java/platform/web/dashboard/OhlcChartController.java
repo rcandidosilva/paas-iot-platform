@@ -4,10 +4,9 @@
  * and open the template in the editor.
  */
 
-package platform.web.widget.controller;
+package platform.web.dashboard;
 
 import java.io.Serializable;
-import javax.enterprise.context.SessionScoped;
 import javax.faces.view.ViewScoped;
 import javax.inject.Named;
 

@@ -8,9 +8,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import javax.annotation.PostConstruct;
+import javax.el.ExpressionFactory;
+import javax.el.MethodExpression;
+import javax.faces.application.Application;
+import javax.faces.component.UIComponent;
+import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import org.primefaces.component.dashboard.Dashboard;
 import org.primefaces.component.panel.Panel;
+import org.primefaces.component.poll.Poll;
 import org.primefaces.event.DragDropEvent;
 import org.primefaces.model.DashboardColumn;
 import org.primefaces.model.DashboardModel;
@@ -72,7 +78,31 @@ public class DashboardController implements Serializable {
 
     public void addWidget(WidgetComponent widget) {
         String widgetId = "widget" + ++widgetCount;
-        Panel panel = widget.create(widgetId);
+        
+        FacesContext context = FacesContext.getCurrentInstance();
+        Application application = context.getApplication();
+
+        Object component = widget.create(widgetId);
+        
+        Panel panel = (Panel) application.createComponent(Panel.COMPONENT_TYPE);
+        panel.setId(widgetId);
+        panel.setHeader(widget.getTitle());
+        panel.setClosable(true);
+        panel.setToggleable(true);
+        panel.setStyle("width: 400px; height: 330px;");
+        
+        Poll ajaxPoll = new Poll();
+        ajaxPoll.setInterval(3);
+        ajaxPoll.setGlobal(false);
+        ajaxPoll.setUpdate(widgetId);
+        String el = "#{dashboardController.updateWidget('" + widgetId + "')}";
+        ExpressionFactory factory = ExpressionFactory.newInstance();
+        MethodExpression expression = factory.createMethodExpression(context.getELContext(),
+                el, null, new Class[]{String.class});
+        ajaxPoll.setListener(expression);
+
+        panel.getChildren().add((UIComponent) component);
+        panel.getChildren().add(ajaxPoll);
         
         getDashboard().getChildren().add(panel);
         

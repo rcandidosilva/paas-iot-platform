@@ -1,7 +1,6 @@
 package platform.web.widget;
 
 import java.io.Serializable;
-import org.primefaces.component.panel.Panel;
 
 /**
  *
@@ -9,7 +8,9 @@ import org.primefaces.component.panel.Panel;
  */
 public interface WidgetComponent extends Serializable {
  
-    public Panel create(String widgetId);
+    public String getTitle();
+    
+    public Object create(String widgetId);
     
     public void update();
     

@@ -4,7 +4,7 @@
 <ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
                 xmlns:h="http://java.sun.com/jsf/html"
                 xmlns:p="http://primefaces.org/ui"
-                template="./../../resources/templates/leftSide.xhtml">
+                template="./../resources/templates/leftSide.xhtml">
 
     <ui:define name="top">
         Gauge Meter
@@ -12,8 +12,9 @@
 
     <ui:define name="center">
         <h:form id="form">
-            <p:poll interval="3" listener="#{chartController.updateGaugeChart()}" update="gauge-meter" />
-            <p:meterGaugeChart id="gauge-meter" value="#{chartController.gaugeChartModel}" title="TEST" label="TESTE" showTickLabels="false"/>
+                  
+           <p:gmap center="41.381542, 2.122893" zoom="15" type="HYBRID" style="width:600px;height:400px" />
+        
         </h:form>
     </ui:define>
 

@@ -1,55 +1,63 @@
 <?xml version='1.0' encoding='UTF-8' ?>
 <!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-                xmlns:h="http://java.sun.com/jsf/html"
-                xmlns:p="http://primefaces.org/ui"
-                template="./../../resources/templates/leftSide.xhtml">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
 
-    <ui:define name="top">
-        #{bundle['widget.title']}
-    </ui:define>
+    <ui:composition template="/resources/templates/leftSide.xhtml">
 
-    <ui:define name="left">
-        <h:form id="form1">
-            <p:fieldset legend="Widgets" toggleable="true">
-                <p:dataGrid id="widgetsList" value="#{dashboardController.widgetList}" 
-                            var="widget" columns="1">                        
-                    <p:panel id="widgetPanel" header="#{widget.name}">
-                        <h:inputHidden id="widgetKey" value="#{widget.key}"/>
-                        <!--<p:graphicImage value="dashboardMB.toIconFile(widget)" width="100" height="100"/>-->
-                        <p:draggable for="widgetPanel" revert="true" helper="clone"/>
-                    </p:panel>
-                </p:dataGrid>
-            </p:fieldset>   
-        </h:form>
-    </ui:define>
+        <ui:define name="top">
+            <div align="center">
+                <h1>#{bundle['ide.title']}</h1>
+            </div>
+        </ui:define>    
 
-    <ui:define name="center">
-        <h:form id="dashboardForm">
-            <h:panelGrid columns="4">
-                <p:commandButton value="#{bundle['ide.save']}"/>
-                <p:commandButton value="#{bundle['ide.view']}"/>
-                <p:commandButton value="#{bundle['ide.publish']}"/>
-                <p:commandButton value="#{bundle['ide.delete']}"/>
-            </h:panelGrid>
+        <ui:define name="left">
+            <h:form id="form1">
+                <p:fieldset legend="Widgets" toggleable="true">
+                    <p:dataGrid id="widgetsList" value="#{dashboardController.widgetList}" 
+                                var="widget" columns="1">                        
+                        <p:panel id="widgetPanel" header="#{widget.name}">
+                            <h:inputHidden id="widgetKey" value="#{widget.key}"/>
+                            <!--<p:graphicImage value="dashboardMB.toIconFile(widget)" width="100" height="100"/>-->
+                            <p:draggable for="widgetPanel" revert="true" helper="clone"/>
+                        </p:panel>
+                    </p:dataGrid>
+                </p:fieldset>   
+            </h:form>
+        </ui:define>
 
-            <p:droppable for="dashboardArea" tolerance="touch" activeStyleClass="ui-state-highlight" 
-                         datasource=":form1:widgetsList" onDrop="handleDrop" >
-                <p:ajax listener="#{dashboardController.dropWidget}" update="dropArea dashboard" />
-            </p:droppable>            
+        <ui:define name="center">
+            <h:form id="dashboardForm">
+                <h:panelGrid columns="4">
+                    <p:commandButton value="#{bundle['ide.save']}"/>
+                    <p:commandButton value="#{bundle['ide.view']}"/>
+                    <p:commandButton value="#{bundle['ide.publish']}"/>
+                    <p:commandButton value="#{bundle['ide.delete']}"/>
+                </h:panelGrid>
 
-            <p:fieldset id="dashboardArea">
-                <p:outputPanel id="dropArea">
+                <p:droppable for="dashboardArea" tolerance="touch" activeStyleClass="ui-state-highlight" 
+                             datasource=":form1:widgetsList" onDrop="handleDrop" >
+                    <p:ajax listener="#{dashboardController.dropWidget}" update="dropArea dashboard" />
+                </p:droppable>            
 
-                </p:outputPanel>
-                <p:dashboard id="dashboard" binding="#{dashboardController.dashboard}" 
-                             model="#{dashboardController.model}"/>
-            </p:fieldset>
-        </h:form>
-        
-        <ui:include src="/pages/widget/meter/dialog.xhtml"/>
-        <ui:include src="/pages/widget/location/dialog.xhtml"/>
-    </ui:define>
+                <p:fieldset id="dashboardArea">
+                    <p:outputPanel id="dropArea">
 
-</ui:composition>
+                    </p:outputPanel>
+                    <p:dashboard id="dashboard" binding="#{dashboardController.dashboard}" 
+                                 model="#{dashboardController.model}"/>
+                </p:fieldset>
+            </h:form>
+
+            <ui:include src="/pages/widget/meter/dialog.xhtml"/>
+            <ui:include src="/pages/widget/location/dialog.xhtml"/>
+            <ui:include src="/pages/widget/pie/dialog.xhtml"/>
+            <ui:include src="/pages/widget/line/dialog.xhtml"/>
+        </ui:define>
+
+    </ui:composition>
+
+</html>

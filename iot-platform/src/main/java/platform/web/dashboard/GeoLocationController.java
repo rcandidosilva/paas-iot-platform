@@ -1,4 +1,4 @@
-package platform.web.widget.controller;
+package platform.web.dashboard;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -11,7 +11,7 @@ import org.primefaces.model.map.LatLng;
 import platform.api.Device;
 import platform.service.DeviceService;
 import platform.web.DashboardController;
-import platform.web.widget.GeoLocationWidget;
+import platform.web.widget.LocationWidget;
 
 @Named
 @ViewScoped
@@ -59,8 +59,8 @@ public class GeoLocationController implements Serializable {
         double lng = device.getLocation().getLongitude();
         LatLng coord = new LatLng(lat, lng);
         
-        GeoLocationWidget widget
-                = new GeoLocationWidget(title, coord, new ArrayList<LatLng>());
+        LocationWidget widget
+                = new LocationWidget(title, coord, new ArrayList<LatLng>());
         dashboard.addWidget(widget);
     }
 
