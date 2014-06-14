@@ -12,42 +12,42 @@
             <p:dialog widgetVar="meterDialog" modal="true" header="Gauge Meter Widget" height="400" width="550">
                 <h:panelGrid columns="2">
                     <p:outputLabel value="Title"/>
-                    <p:inputText value="#{gaugeMeterController.title}" required="true"/>
+                    <p:inputText value="#{meterWidgetController.title}" required="true"/>
 
                     <p:outputLabel value="Label"/>
-                    <p:inputText value="#{gaugeMeterController.label}" required="true"/>
+                    <p:inputText value="#{meterWidgetController.label}" required="true"/>
                     
                     <p:outputLabel value="Device"/>
-                    <p:selectOneMenu value="#{gaugeMeterController.selectedDeviceKey}" required="true">
+                    <p:selectOneMenu value="#{meterWidgetController.selectedDeviceKey}" required="true">
                         <f:ajax event="change" render="property"/>
                         <f:selectItem itemLabel="-- Selecione --" itemValue=""/>
-                        <f:selectItems value="#{gaugeMeterController.devices}" var="device" itemLabel="#{device.key}" itemValue="#{device.key}"/>
+                        <f:selectItems value="#{meterWidgetController.devices}" var="device" itemLabel="#{device.key}" itemValue="#{device.key}"/>
                     </p:selectOneMenu>
                     
                     <p:outputLabel value="Property"/>
-                    <p:selectOneMenu id="property" value="#{gaugeMeterController.selectedPropertyKey}" required="true">
+                    <p:selectOneMenu id="property" value="#{meterWidgetController.selectedPropertyKey}" required="true">
                         <f:selectItem itemLabel="-- Selecione --" itemValue=""/>
-                        <f:selectItems value="#{gaugeMeterController.properties}" var="property" itemLabel="#{property.key}" itemValue="#{property.key}"/>
+                        <f:selectItems value="#{meterWidgetController.properties}" var="property" itemLabel="#{property.key}" itemValue="#{property.key}"/>
                     </p:selectOneMenu>
                     
                     <p:outputLabel value="New Interval"/>
                     <h:panelGroup>
-                        <p:inputText id="interval" value="#{gaugeMeterController.interval}"/>
-                        <p:commandButton value="Add Interval" action="#{gaugeMeterController.newInterval()}" update="dataTable" process="@this,interval" />
+                        <p:inputText id="interval" value="#{meterWidgetController.interval}"/>
+                        <p:commandButton value="Add Interval" action="#{meterWidgetController.newInterval()}" update="dataTable" process="@this,interval" />
                     </h:panelGroup>
                 </h:panelGrid>
 
-                <p:dataTable id="dataTable" value="#{gaugeMeterController.intervalsModel}" var="interval" rows="5" paginator="true">
+                <p:dataTable id="dataTable" value="#{meterWidgetController.intervalsModel}" var="interval" rows="5" paginator="true">
                     <p:column headerText="Interval">
                         <h:outputText value="#{interval}"/>
                     </p:column>
                     <p:column>
-                        <p:commandLink value="Delete" action="#{gaugeMeterController.deleteInterval()}" update="dataTable"/>
+                        <p:commandLink value="Delete" action="#{meterWidgetController.deleteInterval()}" update="dataTable"/>
                     </p:column>
                 </p:dataTable>
 
                 <div align="right">
-                    <p:commandButton value="Add" action="#{gaugeMeterController.addAction()}" oncomplete="PF('meterDialog').hide();" update=":dashboardForm"/> 
+                    <p:commandButton value="Add" action="#{meterWidgetController.addAction()}" oncomplete="PF('meterDialog').hide();" update=":dashboardForm"/> 
                     <p:commandButton value="Cancel" oncomplete="PF('meterDialog').hide();"/>
                 </div>
             </p:dialog>

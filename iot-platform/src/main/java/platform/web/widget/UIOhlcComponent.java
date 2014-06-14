@@ -4,14 +4,13 @@ import javax.enterprise.context.Dependent;
 import javax.inject.Named;
 import org.primefaces.component.chart.ohlc.OhlcChart;
 import org.primefaces.model.chart.OhlcChartModel;
+import platform.model.WidgetType;
 
 /**
  *
  * @author rodrigo
  */
-@Named
-@Dependent
-public class OhlcWidget implements WidgetComponent {
+public class UIOhlcComponent implements WidgetComponent {
     
     private String title;
     
@@ -40,7 +39,10 @@ public class OhlcWidget implements WidgetComponent {
     public void update() {
         // TODO
     }
-    
-    
+
+    @Override
+    public String getType() {
+        return WidgetType.OHLC;
+    }
     
 }

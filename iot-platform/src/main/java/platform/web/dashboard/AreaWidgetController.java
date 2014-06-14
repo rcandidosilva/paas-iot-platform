@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.PostConstruct;
+import javax.faces.model.ListDataModel;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -12,16 +13,16 @@ import platform.api.Property;
 import platform.service.DeviceService;
 import platform.service.PropertyService;
 import platform.web.DashboardController;
-import platform.web.widget.LineWidget;
+import platform.web.widget.UIAreaComponent;
 
 /**
- *
+ * 
  * @author rodrigo
  */
-@Named
+@Named 
 @ViewScoped
-public class LineChartController implements Serializable {
-   
+public class AreaWidgetController implements Serializable {
+    
     private String title;
     private String selectedDeviceKey;
     private String selectedPropertyKey;
@@ -29,22 +30,22 @@ public class LineChartController implements Serializable {
     
     private List<Device> devices;
     private List<Property> properties;
+    
+    private ListDataModel<Property> propertiesModel;
         
     @Inject
     private DeviceService deviceService;
     
     @Inject
-    private PropertyService propertyService;
-    
-    @Inject
-    private LineWidget widget;
-    
+    private PropertyService propertyService;    
+        
     @Inject
     private DashboardController dashboard;
     
     @PostConstruct
     public void init() {
         devices = deviceService.list();
+        propertiesModel = new ListDataModel<>(new ArrayList<Property>());
     }
 
     public String getTitle() {
@@ -78,7 +79,15 @@ public class LineChartController implements Serializable {
     public void setInterval(Integer interval) {
         this.interval = interval;
     }
-    
+
+    public ListDataModel<Property> getPropertiesModel() {
+        return propertiesModel;
+    }
+
+    public void setPropertiesModel(ListDataModel<Property> propertiesModel) {
+        this.propertiesModel = propertiesModel;
+    }
+           
     public List<Device> getDevices() {
         return devices;
     }
@@ -90,8 +99,22 @@ public class LineChartController implements Serializable {
         return new ArrayList<>();
     }
     
+    public void newProperty() {
+        Property property = 
+                propertyService.get(selectedDeviceKey, selectedPropertyKey);        
+        ((List<Property>) propertiesModel.getWrappedData()).add(property);
+    }
+    
+    public void deleteProperty() {
+        ((List<Property>) propertiesModel.getWrappedData()).remove(
+            propertiesModel.getRowData());
+    }    
+    
     public void addAction() {
-        widget.init(title, selectedDeviceKey, selectedPropertyKey, interval);     
+        List<Property> selectedProperties = (List<Property>) 
+                propertiesModel.getWrappedData();
+        UIAreaComponent widget = new UIAreaComponent(title, interval, 
+                selectedProperties, propertyService);     
         dashboard.addWidget(widget);
     }
 }

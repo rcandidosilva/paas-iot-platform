@@ -17,7 +17,7 @@
         <ui:define name="left">
             <h:form id="form1">
                 <p:fieldset legend="Widgets" toggleable="true">
-                    <p:dataGrid id="widgetsList" value="#{dashboardController.widgetList}" 
+                    <p:dataGrid id="widgetsList" value="#{ideController.widgetList}" 
                                 var="widget" columns="1">                        
                         <p:panel id="widgetPanel" header="#{widget.name}">
                             <h:inputHidden id="widgetKey" value="#{widget.key}"/>
@@ -40,15 +40,15 @@
 
                 <p:droppable for="dashboardArea" tolerance="touch" activeStyleClass="ui-state-highlight" 
                              datasource=":form1:widgetsList" onDrop="handleDrop" >
-                    <p:ajax listener="#{dashboardController.dropWidget}" update="dropArea dashboard" />
+                    <p:ajax listener="#{ideController.dropWidget}" update="dropArea dashboard" />
                 </p:droppable>            
 
                 <p:fieldset id="dashboardArea">
                     <p:outputPanel id="dropArea">
 
                     </p:outputPanel>
-                    <p:dashboard id="dashboard" binding="#{dashboardController.dashboard}" 
-                                 model="#{dashboardController.model}"/>
+                    <p:dashboard id="dashboard" binding="#{ideController.dashboard}" 
+                                 model="#{ideController.model}"/>
                 </p:fieldset>
             </h:form>
 
@@ -56,6 +56,9 @@
             <ui:include src="/pages/widget/location/dialog.xhtml"/>
             <ui:include src="/pages/widget/pie/dialog.xhtml"/>
             <ui:include src="/pages/widget/line/dialog.xhtml"/>
+            <ui:include src="/pages/widget/bar/dialog.xhtml"/>
+            <ui:include src="/pages/widget/area/dialog.xhtml"/>
+            
         </ui:define>
 
     </ui:composition>

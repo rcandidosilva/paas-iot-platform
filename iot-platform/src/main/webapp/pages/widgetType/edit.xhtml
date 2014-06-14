@@ -7,7 +7,7 @@
       xmlns:p="http://primefaces.org/ui"
       xmlns:f="http://xmlns.jcp.org/jsf/core">
 
-    <ui:composition template="./../../resources/templates/main.xhtml">
+    <ui:composition template="/resources/templates/main.xhtml">
 
         <ui:define name="content">
             <h:form id="form" enctype="multipart/form-data">
@@ -15,22 +15,22 @@
                     <div style="width: 600px;">
                         <p:panel header="Cadastro de Widget">
                             <h:panelGrid columns="2" >
-                                <p:outputLabel value="Key"/>
-                                <p:inputText value="#{widgetController.widget.key}"/>                                
+                                <p:outputLabel value="Type"/>
+                                <p:inputText value="#{widgetTypeController.widgetType.type}"/>                                
                                 <p:outputLabel value="Name"/>
-                                <p:inputText value="#{widgetController.widget.name}"/>
+                                <p:inputText value="#{widgetTypeController.widgetType.name}"/>
                                 <p:outputLabel value="Description"/>
-                                <p:inputTextarea value="#{widgetController.widget.description}"/>
+                                <p:inputTextarea value="#{widgetTypeController.widgetType.description}"/>
                                 <p:outputLabel value="Icon"/>
                                 <h:panelGrid id="filePanel">
-                                    <p:fileUpload id="upload" fileUploadListener="#{widgetController.handleFileUpload}" 
+                                    <p:fileUpload id="upload" fileUploadListener="#{widgetTypeController.handleFileUpload}" 
                                                   mode="advanced" dragDropSupport="false" update="filePanel"
                                                   allowTypes="/(\.|\/)(gif|jpe?g|png)$/"
-                                                  rendered="#{widgetController.widget.iconFile == null}"/>
+                                                  rendered="#{widgetTypeController.widgetType.iconFile == null}"/>
                                     <p:graphicImage value="#{widgetMB.iconFile}" width="150"
-                                                    rendered="#{widgetController.widget.iconFile != null}"/>
+                                                    rendered="#{widgetTypeController.widgetType.iconFile != null}"/>
                                     <p:commandLink value="Remover" action="#{widgetMB.removeIconFile()}"
-                                                   rendered="#{widgetController.widget.iconFile != null}"
+                                                   rendered="#{widgetTypeController.widgetType.iconFile != null}"
                                                    update="filePanel"/>
                                 </h:panelGrid>
                             </h:panelGrid>
@@ -38,7 +38,7 @@
                         </p:panel>
 
                         <div align="right">
-                            <p:commandButton value="#{bundle['global.save']}" action="#{widgetController.save()}" ajax="false">
+                            <p:commandButton value="#{bundle['global.save']}" action="#{widgetTypeController.save()}" ajax="false">
                                 <f:ajax execute="@all" render="form"/>
                             </p:commandButton> 
                             <p:commandButton value="#{bundle['global.back']}" action="list" immediate="true"/>

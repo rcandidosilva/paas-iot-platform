@@ -1,24 +1,27 @@
 package platform.web.widget;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
 import java.util.Random;
-import javax.inject.Inject;
-import org.primefaces.component.chart.bar.BarChart;
+import org.apache.log4j.Logger;
+import org.primefaces.component.chart.line.LineChart;
 import org.primefaces.model.chart.CartesianChartModel;
 import org.primefaces.model.chart.ChartSeries;
 import platform.api.Property;
+import platform.model.WidgetType;
 import platform.service.PropertyService;
 
 /**
  *
  * @author rodrigo
  */
-public class BarWidget implements WidgetComponent {
+public class UIAreaComponent implements WidgetComponent {
 
-    private BarChart chart;
+    private static final Logger logger = Logger.getLogger(UIAreaComponent.class);
+    
+    private String widgetId;
+    
+    private LineChart chart;
     private CartesianChartModel model;
 
     private String title;
@@ -28,18 +31,14 @@ public class BarWidget implements WidgetComponent {
 
     private Date updatedTime;
 
-    @Inject
     private PropertyService service;
 
-    public void init(String title, Integer interval, Map<String, String> properties) {
+    public UIAreaComponent(String title, Integer interval, 
+            List<Property> properties, PropertyService service) {
         this.title = title;
         this.interval = interval;
-        this.properties = new ArrayList<>();
-        for (String deviceKey : properties.keySet()) {
-            String propertyKey = properties.get(deviceKey);
-            Property property = service.get(deviceKey, propertyKey);
-            this.properties.add(property);
-        }
+        this.properties = properties;
+        this.service = service;
     }
 
     @Override
@@ -49,20 +48,25 @@ public class BarWidget implements WidgetComponent {
 
     @Override
     public Object create(String widgetId) {
-
+        this.widgetId = widgetId;
+        
         updatedTime = new Date();
 
         model = new CartesianChartModel();
 
         for (Property prop : properties) {
             ChartSeries series = new ChartSeries(prop.getDevice().getKey());
+            
             // TODO buscar os valores atualizados da propriedade do device
             Integer randomNum = new Random().nextInt((100 - 0) + 1) + 1;
+            
             series.set(prop.getKey(), randomNum);
             model.addSeries(series);
         }
 
-        chart = new BarChart();
+        chart = new LineChart();
+        chart.setFill(true);
+        chart.setStacked(true);
         chart.setValue(model);
 
         return chart;
@@ -79,13 +83,23 @@ public class BarWidget implements WidgetComponent {
                     String propertyKey = (String) 
                             series.getData().keySet().iterator().next();
                     service.get(deviceKey, propertyKey);
+                    
                     // TODO
                     Integer randomNum = new Random().nextInt((100 - 0) + 1) + 1;
+                    
                     series.set(propertyKey, randomNum);
                 }
+                
+                logger.debug("Updated area widget '" + widgetId + "' at " 
+                        + new Date());
             }
 
         }
     }
+
+    @Override
+    public String getType() {
+        return WidgetType.AREA;
+    }    
     
 }

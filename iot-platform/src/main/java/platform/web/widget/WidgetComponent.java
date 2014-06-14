@@ -1,6 +1,7 @@
 package platform.web.widget;
 
 import java.io.Serializable;
+import platform.model.WidgetType;
 
 /**
  *
@@ -13,5 +14,7 @@ public interface WidgetComponent extends Serializable {
     public Object create(String widgetId);
     
     public void update();
+    
+    public String getType();
     
 }

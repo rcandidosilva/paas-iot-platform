@@ -37,8 +37,9 @@
                 </p:dataTable>    
 
                 <div align="right">
-                    <p:commandButton value="Nova Aplicação"/>
-                    <p:commandButton value="Novo Workflow"/>
+                    <p:commandButton value="#{bundle['application.new']}" 
+                                     action="#{applicationController.newApplication()}"/>
+                    <p:commandButton value="#{bundle['application.workflow']}"/>
                 </div>
             </h:form>
         </ui:define>

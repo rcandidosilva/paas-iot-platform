@@ -7,7 +7,7 @@
       xmlns:p="http://primefaces.org/ui"
       xmlns:f="http://xmlns.jcp.org/jsf/core">
 
-    <ui:composition template="./../../resources/templates/main.xhtml">
+    <ui:composition template="/resources/templates/main.xhtml">
 
         
         <ui:define name="content">
@@ -18,26 +18,26 @@
 
                 <div align="center"> 
                     <div  style="width: 80%;">
-                        <p:dataTable id="table" value="#{widgetController.widgetLit}" var="widget" 
+                        <p:dataTable id="table" value="#{widgetTypeController.typeList}" var="type" 
                                      rows="10" paginator="true">
-                            <p:column headerText="Key">
-                                <h:outputText value="#{widget.key}"/>
+                            <p:column headerText="Type">
+                                <h:outputText value="#{type.type}"/>
                             </p:column>
                             <p:column headerText="#{bundle['widget.name']}">
-                                <h:outputText value="#{widget.name}"/>
+                                <h:outputText value="#{type.name}"/>
                             </p:column>
                             <p:column headerText="#{bundle['widget.description']}">
-                                <h:outputText value="#{widget.description}"/>
+                                <h:outputText value="#{type.description}"/>
                             </p:column>
                             <p:column style="width: 4%;">
-                                <p:commandLink value="Editar" action="#{widgetController.edit(widget)}"/>
+                                <p:commandLink value="Editar" action="#{widgetTypeController.edit(type)}"/>
                             </p:column>
                             <p:column style="width: 4%;">
-                                <p:commandLink value="Deletar" action="#{widgetController.delete(widget)}"/>
+                                <p:commandLink value="Deletar" action="#{widgetTypeController.delete(type)}"/>
                             </p:column>                            
                         </p:dataTable>
                         <div align="right">
-                            <p:commandButton value="Novo Widget" action="#{widgetController.createNew()}"/>
+                            <p:commandButton value="Novo Widget" action="#{widgetTypeController.createNew()}"/>
                         </div>
                     </div>
                 </div>

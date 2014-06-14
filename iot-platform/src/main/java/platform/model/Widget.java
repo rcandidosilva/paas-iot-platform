@@ -2,31 +2,32 @@ package platform.model;
 
 import java.io.Serializable;
 import java.util.Date;
+import javax.persistence.DiscriminatorColumn;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
+import javax.persistence.ManyToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import org.eclipse.persistence.nosql.annotations.DataFormatType;
 import org.eclipse.persistence.nosql.annotations.Field;
-import org.eclipse.persistence.nosql.annotations.NoSql;
 
 /**
  *
  * @author rodrigo
  */
 @Entity
-@NoSql(dataFormat = DataFormatType.MAPPED)
-public class Widget implements Serializable {
+@Inheritance(strategy = InheritanceType.JOINED)
+@DiscriminatorColumn(name = "TYPE")
+public abstract class Widget implements Serializable {
     
     @Id @GeneratedValue
     @Field(name = "_id")
     private String id;
-    private String key;
-    private String name;
-    private String description;
-    private byte[] iconFile;
-    private String iconContentType;
+    private String title;
+    @ManyToOne
+    private WidgetType type;
     @Temporal(TemporalType.TIMESTAMP)
     private Date createdAt;
     @Temporal(TemporalType.TIMESTAMP)
@@ -40,46 +41,22 @@ public class Widget implements Serializable {
         this.id = id;
     }
 
-    public String getKey() {
-        return key;
+    public String getTitle() {
+        return title;
     }
 
-    public void setKey(String key) {
-        this.key = key;
+    public void setTitle(String title) {
+        this.title = title;
     }
 
-    public String getName() {
-        return name;
+    public WidgetType getType() {
+        return type;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setType(WidgetType type) {
+        this.type = type;
     }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public byte[] getIconFile() {
-        return iconFile;
-    }
-
-    public void setIconFile(byte[] iconFile) {
-        this.iconFile = iconFile;
-    }
-
-    public String getIconContentType() {
-        return iconContentType;
-    }
-
-    public void setIconContentType(String iconContentType) {
-        this.iconContentType = iconContentType;
-    }   
-
+    
     public Date getCreatedAt() {
         return createdAt;
     }

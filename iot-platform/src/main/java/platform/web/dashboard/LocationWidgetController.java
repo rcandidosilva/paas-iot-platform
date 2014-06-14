@@ -11,11 +11,11 @@ import org.primefaces.model.map.LatLng;
 import platform.api.Device;
 import platform.service.DeviceService;
 import platform.web.DashboardController;
-import platform.web.widget.LocationWidget;
+import platform.web.widget.UILocationComponent;
 
 @Named
 @ViewScoped
-public class GeoLocationController implements Serializable {
+public class LocationWidgetController implements Serializable {
 
     private String title;
     private String selectedDeviceKey;
@@ -59,8 +59,8 @@ public class GeoLocationController implements Serializable {
         double lng = device.getLocation().getLongitude();
         LatLng coord = new LatLng(lat, lng);
         
-        LocationWidget widget
-                = new LocationWidget(title, coord, new ArrayList<LatLng>());
+        UILocationComponent widget
+                = new UILocationComponent(title, coord, new ArrayList<LatLng>());
         dashboard.addWidget(widget);
     }
 

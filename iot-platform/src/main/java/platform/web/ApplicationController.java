@@ -5,7 +5,10 @@ import javax.enterprise.context.SessionScoped;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import javax.inject.Inject;
+import org.apache.log4j.Logger;
 import platform.model.Application;
+import platform.service.ApplicationService;
 
 /**
  *
@@ -14,8 +17,16 @@ import platform.model.Application;
 @Named
 @SessionScoped
 public class ApplicationController implements Serializable {
+    
+    private static final Logger logger = Logger.getLogger(Application.class);
 
     private Application application = new Application();    
+    
+    @Inject
+    private ApplicationService service;
+    
+    @Inject
+    private IDEController ideController;
 
     public Application getApplication() {
         return application;
@@ -29,4 +40,23 @@ public class ApplicationController implements Serializable {
         return new ArrayList<>();
     }
     
+    public String edit(Application application) {
+        this.application = service.load(application.getId());
+        return ideController.edit(application);
+    }
+    
+    public String newApplication() {
+        application = new Application();
+        return "/pages/ide/index";
+    }
+    
+    public String newWorkflow() {
+        return "/pages/workflow/index";
+    }
+    
+    public void save(Application application) {
+        // TODO
+    }
+    
+   
 }

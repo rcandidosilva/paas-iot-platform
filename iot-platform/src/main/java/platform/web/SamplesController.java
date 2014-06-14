@@ -11,13 +11,19 @@ import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.SessionScoped;
 import javax.inject.Named;
+import org.primefaces.model.chart.CartesianChartModel;
+import org.primefaces.model.chart.ChartSeries;
 import org.primefaces.model.chart.MeterGaugeChartModel;
 
 @Named
 @SessionScoped
-public class ChartController implements Serializable {
+public class SamplesController implements Serializable {
 
     private MeterGaugeChartModel gaugeChartModel;
+    private CartesianChartModel barChartModel;
+    
+    private int count;
+    
 
     @PostConstruct
     public void init() {
@@ -28,20 +34,50 @@ public class ChartController implements Serializable {
                 add(120);
                 add(220);
             }
-        };    
+        };
         gaugeChartModel = new MeterGaugeChartModel(30, intervals);
+        
+        createBarChartModel();
     }
 
     public MeterGaugeChartModel getGaugeChartModel() {
         return gaugeChartModel;
     }
-    
+
     public void updateGaugeChart() {
         Integer number = gaugeChartModel.getValue().intValue();
         number++;
         gaugeChartModel.setValue(number);
     }
+
+    public CartesianChartModel getBarChartModel() {
+        return barChartModel;
+    }
     
     
+
+    private void createBarChartModel() {
+        barChartModel = new CartesianChartModel();
+
+        ChartSeries boys = new ChartSeries();
+        boys.setLabel("Boys");
+        boys.set("2004", 50);
+        boys.set("2005", 96);
+        boys.set("2006", 44);
+        boys.set("2007", 55);
+        boys.set("2008", 25);
+
+        ChartSeries girls = new ChartSeries();
+        girls.setLabel("Girls");
+        girls.set("2004", 52);
+        girls.set("2005", 60);
+        girls.set("2006", 82);
+        girls.set("2007", 35);
+        girls.set("2008", 120);
+
+        barChartModel.addSeries(boys);
+        barChartModel.addSeries(girls);
+
+    }
 
 }

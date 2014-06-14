@@ -4,19 +4,24 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Map;
 import java.util.Random;
-import javax.enterprise.context.Dependent;
-import javax.inject.Inject;
-import javax.inject.Named;
+import org.apache.log4j.Logger;
 import org.primefaces.component.chart.line.LineChart;
 import org.primefaces.model.chart.CartesianChartModel;
 import org.primefaces.model.chart.ChartSeries;
 import platform.api.Property;
+import platform.model.WidgetType;
 import platform.service.PropertyService;
 
-@Named
-@Dependent
-public class LineWidget implements WidgetComponent {
+/**
+ * 
+ * @author rodrigo
+ */
+public class UILineComponent implements WidgetComponent {
 
+    private static final Logger logger = Logger.getLogger(UILineComponent.class);
+    
+    private String widgetId;
+    
     private LineChart chart;
     private CartesianChartModel model;
     
@@ -29,13 +34,13 @@ public class LineWidget implements WidgetComponent {
     
     private SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy hh:mm:ss");
 
-    @Inject
     private PropertyService service;
 
-    public void init(String title, 
-            String deviceKey, String propertyKey, Integer interval) {
+    public UILineComponent(String title, String deviceKey, String propertyKey, 
+            Integer interval, PropertyService service) {
         this.title = title;
         this.interval = interval;
+        this.service = service;
         this.property = service.get(deviceKey, propertyKey);
     } 
 
@@ -46,6 +51,8 @@ public class LineWidget implements WidgetComponent {
 
     @Override
     public Object create(String widgetId) {
+        this.widgetId = widgetId;
+        
         model = new CartesianChartModel();
         
         updatedTime = new Date();
@@ -70,6 +77,7 @@ public class LineWidget implements WidgetComponent {
             if (intervalMilis >= (interval * 1000)) {
                 // TODO buscar os valores atualizados da propriedade do device
                 Integer randomNum = new Random().nextInt((100 - 0) + 1) + 1;
+                
                 ChartSeries series1 = model.getSeries().get(0);
                 Map<Object, Number> data = series1.getData();
                 if (data.size() == 20) {
@@ -77,10 +85,17 @@ public class LineWidget implements WidgetComponent {
                     data.remove(key);
                 }
                 series1.set(++count, randomNum);
-                System.out.println("Updated line using " + randomNum);
+                
+                logger.debug("Updated line at widget '" + widgetId + 
+                        "' using value: " + randomNum);
             }
         }
         
     }
 
+    @Override
+    public String getType() {
+        return WidgetType.LINE;
+    }
+    
 }

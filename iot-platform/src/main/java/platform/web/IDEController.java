@@ -1,19 +1,19 @@
 package platform.web;
 
 import java.io.ByteArrayInputStream;
-import javax.inject.Named;
-import javax.enterprise.context.SessionScoped;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import javax.annotation.PostConstruct;
 import javax.el.ExpressionFactory;
 import javax.el.MethodExpression;
-import javax.faces.application.Application;
+import javax.enterprise.context.SessionScoped;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
+import javax.inject.Named;
 import org.apache.log4j.Logger;
 import org.primefaces.component.dashboard.Dashboard;
 import org.primefaces.component.panel.Panel;
@@ -25,31 +25,37 @@ import org.primefaces.model.DefaultDashboardColumn;
 import org.primefaces.model.DefaultDashboardModel;
 import org.primefaces.model.DefaultStreamedContent;
 import org.primefaces.model.StreamedContent;
+import platform.model.Application;
+import platform.model.ApplicationToWidget;
 import platform.model.Widget;
 import platform.model.WidgetType;
 import platform.service.WidgetService;
+import platform.service.WidgetTypeService;
 import platform.web.widget.WidgetComponent;
 
 /**
  *
  * @author rodrigo
  */
-@Named 
+@Named("ideController")
 @SessionScoped
-public class DashboardController implements Serializable {
-    
-    private static final Logger logger = Logger.getLogger(DashboardController.class);
-    
-    @Inject
-    private WidgetService widgetService;
-    
+public class IDEController implements Serializable {
+
+    private static final Logger logger = Logger.getLogger(IDEController.class);
+
     private Dashboard dashboard;
     private DashboardModel model;
-    
+
     private Map<String, WidgetComponent> widgets;
-    
+
     private int widgetCount;
-    
+
+    @Inject
+    private WidgetTypeService widgetService;
+
+    @Inject
+    private ApplicationController appController;
+
     @PostConstruct
     public void init() {
         model = new DefaultDashboardModel();
@@ -58,7 +64,7 @@ public class DashboardController implements Serializable {
         model.addColumn(new DefaultDashboardColumn());
         widgets = new HashMap<>();
     }
-    
+
     public void dropWidget(DragDropEvent event) {
         Object data = event.getData();
         if (data instanceof WidgetType) {
@@ -75,28 +81,28 @@ public class DashboardController implements Serializable {
             } else if (WidgetType.OHLC.equals(name)) {
                 // TODO create ohlc-chart
             }
-            
+
         }
     }
 
     public void addWidget(WidgetComponent widget) {
-        
-        String widgetId = "widget" + ++widgetCount;        
-       
+
+        String widgetId = "widget" + ++widgetCount;
+
         logger.debug("Adding a new widget '" + widgetId + "' to the dashboard");
-        
+
         FacesContext context = FacesContext.getCurrentInstance();
-        Application application = context.getApplication();
 
         Object component = widget.create(widgetId);
-        
-        Panel panel = (Panel) application.createComponent(Panel.COMPONENT_TYPE);
+
+        Panel panel = (Panel) context.getApplication().createComponent(
+                Panel.COMPONENT_TYPE);
         panel.setId(widgetId);
         panel.setHeader(widget.getTitle());
         panel.setClosable(true);
         panel.setToggleable(true);
         panel.setStyle("width: 400px; height: 330px;");
-        
+
         Poll ajaxPoll = new Poll();
         ajaxPoll.setInterval(3);
         ajaxPoll.setGlobal(false);
@@ -109,16 +115,16 @@ public class DashboardController implements Serializable {
 
         panel.getChildren().add((UIComponent) component);
         panel.getChildren().add(ajaxPoll);
-        
+
         getDashboard().getChildren().add(panel);
-        
+
         DashboardColumn column = model.getColumn(0);
         column.addWidget(panel.getId());
-        
+
         widgets.put(widgetId, widget);
     }
-    
-    public List<Widget> getWidgetList() {
+
+    public List<WidgetType> getWidgetList() {
         return widgetService.list();
     }
 
@@ -136,14 +142,14 @@ public class DashboardController implements Serializable {
 
     public void setModel(DashboardModel model) {
         this.model = model;
-    }    
-    
+    }
+
     public StreamedContent toIconFile(WidgetType widget) {
         byte[] bytes = widget.getIconFile();
         return new DefaultStreamedContent(
                 new ByteArrayInputStream(bytes), widget.getIconContentType());
     }
-    
+
     public void updateWidget(String widgetId) {
         if (widgets != null) {
             WidgetComponent widget = widgets.get(widgetId);
@@ -153,4 +159,59 @@ public class DashboardController implements Serializable {
         }
     }
 
+    public Application getApplication() {
+        return appController.getApplication();
+    }
+
+    public void setApplication(Application application) {
+        appController.setApplication(application);
+    }
+
+    public String edit(Application application) {
+
+        for (ApplicationToWidget widget : application.getWidgets()) {
+            widget.getWidgetId();
+            //Widget  widget.getWidget();
+        }
+
+        return "/pages/ide/index";
+    }
+
+    public void save() {
+        Application application = getApplication();
+
+        List<ApplicationToWidget> appWidgets = new ArrayList<>();
+        for (String widgetId : widgets.keySet()) {
+
+            WidgetComponent component = widgets.get(widgetId);
+
+            WidgetType widget = widgetService.loadByType(component.getType());
+
+            ApplicationToWidget appWidget = new ApplicationToWidget();
+            appWidget.setWidgetId(widgetId);
+            //appWidget.setWidget(widget);
+            appWidget.setApplication(application);
+
+            appWidgets.add(appWidget);
+        }
+
+        application.setWidgets(appWidgets);
+
+        appController.save(application);
+
+        JSFHelper.addSuccessMessage("Application saved successfully");
+
+    }
+
+    public void view() {
+        // TODO
+    }
+
+    public void publish() {
+        // TODO
+    }
+
+    public void delete() {
+        // TODO
+    }
 }

@@ -12,10 +12,20 @@
 
     <ui:define name="center">
         <h:form id="form">
-                  
-           <p:gmap center="41.381542, 2.122893" zoom="15" type="HYBRID" style="width:600px;height:400px" />
-        
+            
+           <p:barChart value="#{samplesController.barChartModel}" orientation="horizontal"
+                       legendPosition="ne" extender="customExtender" />
+           
         </h:form>
+        
+        <script type="text/javascript">
+            function customExtender() {
+                this.cfg.axes.yaxis = {
+                showTicks: false,
+                };
+            }
+            // http://www.jqplot.com/docs/files/jqPlotOptions-txt.html
+        </script>
     </ui:define>
 
 </ui:composition>

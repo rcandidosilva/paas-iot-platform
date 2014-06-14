@@ -26,7 +26,7 @@ import platform.web.DashboardController;
  */
 @Named
 @ViewScoped
-public class PieChartController implements Serializable {
+public class PieWidgetController implements Serializable {
     
     private String title;
     private String selectedDeviceKey;

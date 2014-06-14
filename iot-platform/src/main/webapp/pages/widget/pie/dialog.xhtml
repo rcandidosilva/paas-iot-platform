@@ -12,24 +12,24 @@
             <p:dialog widgetVar="pieDialog" modal="true" header="Pie Chart Widget" height="400" width="550">
                 <h:panelGrid columns="2">
                     <p:outputLabel value="Title"/>
-                    <p:inputText value="#{pieChartController.title}" required="true"/>
+                    <p:inputText value="#{pieWidgetController.title}" required="true"/>
 
                     <p:outputLabel value="Device"/>
-                    <p:selectOneMenu value="#{pieChartController.selectedDeviceKey}" required="true">
+                    <p:selectOneMenu value="#{pieWidgetController.selectedDeviceKey}" required="true">
                         <f:ajax event="change" render="property"/>
                         <f:selectItem itemLabel="-- Selecione --" itemValue=""/>
-                        <f:selectItems value="#{pieChartController.devices}" var="device" itemLabel="#{device.key}" itemValue="#{device.key}"/>
+                        <f:selectItems value="#{pieWidgetController.devices}" var="device" itemLabel="#{device.key}" itemValue="#{device.key}"/>
                     </p:selectOneMenu>
 
                     <p:outputLabel value="Property"/>
-                    <p:selectOneMenu id="property" value="#{pieChartController.selectedPropertyKey}" required="true">
+                    <p:selectOneMenu id="property" value="#{pieWidgetController.selectedPropertyKey}" required="true">
                         <f:selectItem itemLabel="-- Selecione --" itemValue=""/>
-                        <f:selectItems value="#{pieChartController.properties}" var="property" itemLabel="#{property.key}" itemValue="#{property.key}"/>
+                        <f:selectItems value="#{pieWidgetController.properties}" var="property" itemLabel="#{property.key}" itemValue="#{property.key}"/>
                     </p:selectOneMenu>
                 </h:panelGrid>
 
                 <div align="right">
-                    <p:commandButton value="Add" action="#{pieChartController.addAction()}" oncomplete="PF('pieDialog').hide();" update=":dashboardForm"/> 
+                    <p:commandButton value="Add" action="#{pieWidgetController.addAction()}" oncomplete="PF('pieDialog').hide();" update=":dashboardForm"/> 
                     <p:commandButton value="Cancel" oncomplete="PF('pieDialog').hide();"/>
                 </div>
             </p:dialog>
