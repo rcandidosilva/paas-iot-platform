@@ -12,7 +12,7 @@
             <p:dialog widgetVar="barDialog" modal="true" header="Bar Widget" height="400" width="550">
                 <h:panelGrid columns="2">
                     <p:outputLabel value="Title"/>
-                    <p:inputText value="#{barWidgetController.title}" required="true"/>
+                    <p:inputText value="#{barWidgetController.widget.title}" required="true"/>
                     
                     <p:outputLabel value="Interval"/>
                     <p:selectOneMenu value="#{barWidgetController.interval}" required="true">

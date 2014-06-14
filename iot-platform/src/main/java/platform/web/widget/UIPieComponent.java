@@ -2,6 +2,7 @@ package platform.web.widget;
 
 import javax.enterprise.context.Dependent;
 import javax.inject.Named;
+import platform.model.Widget;
 import platform.model.WidgetType;
 
 /**
@@ -13,13 +14,19 @@ import platform.model.WidgetType;
 public class UIPieComponent implements WidgetComponent {
 
     private String widgetId;
-    
+
     private String title;
-    
+
+    private Widget widget;
+
+    public UIPieComponent(Widget widget) {
+        this.widget = widget;
+    }
+
     @Override
-    public Object create(String widgetId) {
+    public Object createComponent(String widgetId) {
         this.widgetId = widgetId;
-        
+
         // TODO
         return null;
     }
@@ -38,5 +45,25 @@ public class UIPieComponent implements WidgetComponent {
     public String getType() {
         return WidgetType.PIE;
     }
-    
+
+    @Override
+    public Widget getWidget() {
+        return widget;
+    }
+
+    @Override
+    public void setService(Object service) {
+        // TODO
+    }
+
+    @Override
+    public void setWidgetId(String widgetId) {
+        this.widgetId = widgetId;
+    }
+
+    @Override
+    public String getWidgetId() {
+        return widgetId;
+    }
+
 }

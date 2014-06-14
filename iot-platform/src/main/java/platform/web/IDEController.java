@@ -7,17 +7,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import javax.annotation.PostConstruct;
-import javax.el.ExpressionFactory;
-import javax.el.MethodExpression;
 import javax.enterprise.context.SessionScoped;
 import javax.faces.component.UIComponent;
-import javax.faces.context.FacesContext;
+import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 import org.apache.log4j.Logger;
 import org.primefaces.component.dashboard.Dashboard;
 import org.primefaces.component.panel.Panel;
-import org.primefaces.component.poll.Poll;
 import org.primefaces.event.DragDropEvent;
 import org.primefaces.model.DashboardColumn;
 import org.primefaces.model.DashboardModel;
@@ -29,9 +26,9 @@ import platform.model.Application;
 import platform.model.ApplicationToWidget;
 import platform.model.Widget;
 import platform.model.WidgetType;
-import platform.service.WidgetService;
 import platform.service.WidgetTypeService;
 import platform.web.widget.WidgetComponent;
+import platform.web.widget.WidgetComponentFactory;
 
 /**
  *
@@ -55,6 +52,9 @@ public class IDEController implements Serializable {
 
     @Inject
     private ApplicationController appController;
+    
+    @Inject
+    private WidgetComponentFactory factory;
 
     @PostConstruct
     public void init() {
@@ -86,42 +86,36 @@ public class IDEController implements Serializable {
     }
 
     public void addWidget(WidgetComponent widget) {
+        
+        String widgetId = widget.getWidgetId();
+        if (widgetId == null) {
+            widgetId = "widget" + ++widgetCount;
+            logger.debug("Generated a new widgetId: " + widgetId);
+        }
+        
+        Object component = widget.createComponent(widgetId);
 
-        String widgetId = "widget" + ++widgetCount;
-
-        logger.debug("Adding a new widget '" + widgetId + "' to the dashboard");
-
-        FacesContext context = FacesContext.getCurrentInstance();
-
-        Object component = widget.create(widgetId);
-
-        Panel panel = (Panel) context.getApplication().createComponent(
-                Panel.COMPONENT_TYPE);
+        Panel panel = (Panel) JSFHelper.createComponent(Panel.COMPONENT_TYPE);
         panel.setId(widgetId);
         panel.setHeader(widget.getTitle());
         panel.setClosable(true);
         panel.setToggleable(true);
         panel.setStyle("width: 400px; height: 330px;");
 
-        Poll ajaxPoll = new Poll();
-        ajaxPoll.setInterval(3);
-        ajaxPoll.setGlobal(false);
-        ajaxPoll.setUpdate(widgetId);
-        String el = "#{dashboardController.updateWidget('" + widgetId + "')}";
-        ExpressionFactory factory = ExpressionFactory.newInstance();
-        MethodExpression expression = factory.createMethodExpression(context.getELContext(),
-                el, null, new Class[]{String.class});
-        ajaxPoll.setListener(expression);
-
         panel.getChildren().add((UIComponent) component);
-        panel.getChildren().add(ajaxPoll);
 
-        getDashboard().getChildren().add(panel);
+        if (dashboard == null) {
+            dashboard = new Dashboard();
+            dashboard.setModel(model);
+        } 
+        dashboard.getChildren().add(panel);
 
         DashboardColumn column = model.getColumn(0);
         column.addWidget(panel.getId());
 
         widgets.put(widgetId, widget);
+        
+        logger.debug("Added a new widget '" + widgetId + "' to the dashboard");
     }
 
     public List<WidgetType> getWidgetList() {
@@ -149,16 +143,7 @@ public class IDEController implements Serializable {
         return new DefaultStreamedContent(
                 new ByteArrayInputStream(bytes), widget.getIconContentType());
     }
-
-    public void updateWidget(String widgetId) {
-        if (widgets != null) {
-            WidgetComponent widget = widgets.get(widgetId);
-            if (widget != null) {
-                widget.update();
-            }
-        }
-    }
-
+    
     public Application getApplication() {
         return appController.getApplication();
     }
@@ -170,33 +155,39 @@ public class IDEController implements Serializable {
     public String edit(Application application) {
 
         for (ApplicationToWidget widget : application.getWidgets()) {
-            widget.getWidgetId();
-            //Widget  widget.getWidget();
+            WidgetComponent component = factory.createComponent(
+                    widget.getWidget(), widget.getWidgetId());
+            addWidget(component);
         }
 
         return "/pages/ide/index";
     }
 
     public void save() {
+
         Application application = getApplication();
 
-        List<ApplicationToWidget> appWidgets = new ArrayList<>();
+        List<ApplicationToWidget> appWidgets = application.getWidgets();
+        if (appWidgets == null) {
+            appWidgets = new ArrayList<>();
+        }
+
         for (String widgetId : widgets.keySet()) {
-
             WidgetComponent component = widgets.get(widgetId);
+            Widget widget = component.getWidget();
 
-            WidgetType widget = widgetService.loadByType(component.getType());
-
-            ApplicationToWidget appWidget = new ApplicationToWidget();
-            appWidget.setWidgetId(widgetId);
-            //appWidget.setWidget(widget);
-            appWidget.setApplication(application);
-
+            ApplicationToWidget appWidget = 
+                    new ApplicationToWidget(widgetId, application);
+            if (appWidgets.contains(appWidget)) {
+                appWidget = appWidgets.remove(appWidgets.indexOf(appWidget));
+            }
+            appWidget.setWidget(widget);
+            
             appWidgets.add(appWidget);
         }
 
         application.setWidgets(appWidgets);
-
+        
         appController.save(application);
 
         JSFHelper.addSuccessMessage("Application saved successfully");

@@ -1,3 +1,7 @@
 /iot-platform-api/target/
 /iot-platform-client/target/
 /iot-platform/target/
+/iot-platform/.settings
+/iot-platform/.idea
+.idea
+.settings

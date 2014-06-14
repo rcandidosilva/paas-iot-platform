@@ -2,6 +2,7 @@ package platform.web.dashboard;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.faces.view.ViewScoped;
@@ -9,9 +10,11 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import platform.api.Device;
 import platform.api.Property;
+import platform.model.Widget;
+import platform.model.WidgetType;
 import platform.service.DeviceService;
 import platform.service.PropertyService;
-import platform.web.DashboardController;
+import platform.web.IDEController;
 import platform.web.widget.UILineComponent;
 
 /**
@@ -22,14 +25,15 @@ import platform.web.widget.UILineComponent;
 @ViewScoped
 public class LineWidgetController implements Serializable {
    
-    private String title;
     private String selectedDeviceKey;
     private String selectedPropertyKey;
-    private Integer interval;
+    private Double interval;
     
     private List<Device> devices;
     private List<Property> properties;
         
+    private Widget widget;
+    
     @Inject
     private DeviceService deviceService;
     
@@ -37,21 +41,22 @@ public class LineWidgetController implements Serializable {
     private PropertyService propertyService;
     
     @Inject
-    private DashboardController dashboard;
+    private IDEController ide;
     
     @PostConstruct
     public void init() {
+        widget = new Widget(WidgetType.LINE);
         devices = deviceService.list();
     }
 
-    public String getTitle() {
-        return title;
+    public Widget getWidget() {
+        return widget;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
+    public void setWidget(Widget widget) {
+        this.widget = widget;
     }
-    
+
     public String getSelectedDeviceKey() {
         return selectedDeviceKey;
     }
@@ -68,11 +73,11 @@ public class LineWidgetController implements Serializable {
         this.selectedPropertyKey = selectedPropertyKey;
     }
 
-    public Integer getInterval() {
+    public Double getInterval() {
         return interval;
     }
 
-    public void setInterval(Integer interval) {
+    public void setInterval(Double interval) {
         this.interval = interval;
     }
     
@@ -88,8 +93,10 @@ public class LineWidgetController implements Serializable {
     }
     
     public void addAction() {
-        UILineComponent widget = new UILineComponent(title, selectedDeviceKey, 
-                selectedPropertyKey, interval, propertyService);     
-        dashboard.addWidget(widget);
+        Property property = propertyService.get(selectedDeviceKey, selectedPropertyKey);
+        widget.setProperties(Arrays.asList(new Property[] {property}));
+        widget.setIntervals(Arrays.asList(new Double[] {interval}));
+        UILineComponent component = new UILineComponent(widget, propertyService);     
+        ide.addWidget(component);
     }
 }

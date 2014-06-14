@@ -88,7 +88,7 @@ public class DashboardController implements Serializable {
         FacesContext context = FacesContext.getCurrentInstance();
         Application application = context.getApplication();
 
-        Object component = widget.create(widgetId);
+        Object component = widget.createComponent(widgetId);
         
         Panel panel = (Panel) application.createComponent(Panel.COMPONENT_TYPE);
         panel.setId(widgetId);

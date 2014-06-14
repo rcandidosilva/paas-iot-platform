@@ -12,10 +12,10 @@
             <p:dialog widgetVar="meterDialog" modal="true" header="Gauge Meter Widget" height="400" width="550">
                 <h:panelGrid columns="2">
                     <p:outputLabel value="Title"/>
-                    <p:inputText value="#{meterWidgetController.title}" required="true"/>
+                    <p:inputText value="#{meterWidgetController.widget.title}" required="true"/>
 
                     <p:outputLabel value="Label"/>
-                    <p:inputText value="#{meterWidgetController.label}" required="true"/>
+                    <p:inputText value="#{meterWidgetController.widget.label}" required="true"/>
                     
                     <p:outputLabel value="Device"/>
                     <p:selectOneMenu value="#{meterWidgetController.selectedDeviceKey}" required="true">

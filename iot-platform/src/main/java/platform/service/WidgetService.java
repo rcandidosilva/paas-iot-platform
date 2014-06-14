@@ -13,26 +13,26 @@ import platform.model.Widget;
  */
 @Stateless
 public class WidgetService {
-    
+
     @PersistenceContext
     private EntityManager manager;
-    
+
     public void save(Widget widget) {
         manager.persist(widget);
     }
-    
+
     public void update(Widget widget) {
         manager.merge(widget);
     }
-    
+
     public void delete(String id) {
         manager.remove(load(id));
     }
-    
+
     public Widget load(String id) {
         return manager.find(Widget.class, id);
     }
-    
+
     public List<Widget> list() {
         CriteriaQuery query = manager.getCriteriaBuilder().createQuery();
         query.select(query.from(Widget.class));

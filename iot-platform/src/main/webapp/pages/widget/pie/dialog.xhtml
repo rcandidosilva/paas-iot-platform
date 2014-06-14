@@ -12,7 +12,7 @@
             <p:dialog widgetVar="pieDialog" modal="true" header="Pie Chart Widget" height="400" width="550">
                 <h:panelGrid columns="2">
                     <p:outputLabel value="Title"/>
-                    <p:inputText value="#{pieWidgetController.title}" required="true"/>
+                    <p:inputText value="#{pieWidgetController.widget.title}" required="true"/>
 
                     <p:outputLabel value="Device"/>
                     <p:selectOneMenu value="#{pieWidgetController.selectedDeviceKey}" required="true">

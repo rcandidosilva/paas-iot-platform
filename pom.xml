@@ -18,7 +18,7 @@
         <version.commons.io>2.4</version.commons.io>
         <version.java.ee>7.0</version.java.ee>
         <version.mongo.driver>2.11.1</version.mongo.driver>
-        <version.eclipselink>2.5.2-M1</version.eclipselink>
+        <version.eclipselink>2.5.1</version.eclipselink>
         <version.junit>4.11</version.junit>
         <version.jersey>2.7</version.jersey>
         <version.log4j>1.2.17</version.log4j>

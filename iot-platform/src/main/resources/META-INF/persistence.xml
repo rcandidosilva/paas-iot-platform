@@ -12,13 +12,6 @@
     <class>platform.api.Action</class>
     <class>platform.api.PropertyTracking</class>
     <class>platform.model.ApplicationToWidget</class>
-    <class>platform.model.MeterWidget</class>
-    <class>platform.model.AreaWidget</class>
-    <class>platform.model.BarWidget</class>
-    <class>platform.model.LineWidget</class>
-    <class>platform.model.LocationWidget</class>
-    <class>platform.model.OhlcWidget</class>
-    <class>platform.model.PieWidget</class>
     <class>platform.model.WidgetType</class>
     <class>platform.model.Widget</class>
     <exclude-unlisted-classes>true</exclude-unlisted-classes>

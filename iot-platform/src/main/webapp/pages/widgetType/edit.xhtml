@@ -16,7 +16,9 @@
                         <p:panel header="Cadastro de Widget">
                             <h:panelGrid columns="2" >
                                 <p:outputLabel value="Type"/>
-                                <p:inputText value="#{widgetTypeController.widgetType.type}"/>                                
+                                <p:selectOneMenu value="#{widgetTypeController.widgetType.type}">
+                                    <f:selectItems value="#{widgetTypeController.types}" var="type" itemLabel="#{type}" itemValue="#{type}"/>
+                                </p:selectOneMenu>
                                 <p:outputLabel value="Name"/>
                                 <p:inputText value="#{widgetTypeController.widgetType.name}"/>
                                 <p:outputLabel value="Description"/>
@@ -41,7 +43,7 @@
                             <p:commandButton value="#{bundle['global.save']}" action="#{widgetTypeController.save()}" ajax="false">
                                 <f:ajax execute="@all" render="form"/>
                             </p:commandButton> 
-                            <p:commandButton value="#{bundle['global.back']}" action="list" immediate="true"/>
+                            <p:commandButton value="#{bundle['global.back']}" action="/pages/widgetType/list" immediate="true"/>
                         </div>
                     </div>
                 </div>

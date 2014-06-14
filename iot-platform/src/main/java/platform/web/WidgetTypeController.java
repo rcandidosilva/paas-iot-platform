@@ -5,7 +5,7 @@ import java.io.IOException;
 import javax.inject.Named;
 import javax.enterprise.context.SessionScoped;
 import java.io.Serializable;
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
@@ -15,7 +15,6 @@ import org.primefaces.event.FileUploadEvent;
 import org.primefaces.model.DefaultStreamedContent;
 import org.primefaces.model.StreamedContent;
 import org.primefaces.model.UploadedFile;
-import platform.model.Widget;
 import platform.model.WidgetType;
 import platform.service.WidgetTypeService;
 
@@ -30,15 +29,20 @@ public class WidgetTypeController implements Serializable {
     private static final Logger logger = Logger.getLogger(WidgetTypeController.class);
     
     private WidgetType widgetType;
-    private List<WidgetType> typeList;    
+    
+    private List<String> types;
     
     @Inject
     private WidgetTypeService service;
 
     @PostConstruct
     public void init() {
+        types = Arrays.asList(new String[] {
+            WidgetType.AREA, WidgetType.BAR, WidgetType.LINE,
+            WidgetType.LOCATION, WidgetType.METER, WidgetType.OHLC,
+            WidgetType.PIE
+        });
         widgetType = new WidgetType();
-        typeList = new ArrayList<>();
     }
 
     public WidgetType getWidgetType() {
@@ -49,12 +53,12 @@ public class WidgetTypeController implements Serializable {
         this.widgetType = widgetType;
     }
 
-    public List<WidgetType> getTypeList() {
-        return typeList;
+    public List<String> getTypes() {
+        return types;
     }
-
-    public void setTypeList(List<WidgetType> typeList) {
-        this.typeList = typeList;
+    
+    public List<WidgetType> getWidgetTypeList() {
+        return service.list();
     }
 
     public void handleFileUpload(FileUploadEvent event) throws IOException {
@@ -84,8 +88,9 @@ public class WidgetTypeController implements Serializable {
         return "/pages/widgetType/edit";
     }
 
-    public void save() {
+    public String save() {
         service.save(widgetType);
+        return "/pages/widgetType/list";
     }
 
     public String createNew() {

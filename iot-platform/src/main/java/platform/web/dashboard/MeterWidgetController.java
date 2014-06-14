@@ -2,6 +2,7 @@ package platform.web.dashboard;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.faces.model.ListDataModel;
@@ -10,10 +11,13 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import platform.api.Device;
 import platform.api.Property;
+import platform.model.Widget;
+import platform.model.WidgetType;
 import platform.service.DeviceService;
 import platform.service.PropertyService;
-import platform.web.DashboardController;
-import platform.web.widget.UIMeterComponent;
+import platform.web.IDEController;
+import platform.web.widget.WidgetComponent;
+import platform.web.widget.WidgetComponentFactory;
 
 /**
  * GaugeMeter Widget controller
@@ -24,8 +28,8 @@ import platform.web.widget.UIMeterComponent;
 @ViewScoped
 public class MeterWidgetController implements Serializable {
     
-    private String title;
-    private String label;
+    private Widget widget;
+    
     private Double interval;
     private String selectedDeviceKey;
     private String selectedPropertyKey;
@@ -40,28 +44,24 @@ public class MeterWidgetController implements Serializable {
     private PropertyService propertyService;
     
     @Inject
-    private DashboardController dashboard;
+    private IDEController ide;
+    
+    @Inject
+    private WidgetComponentFactory factory;
     
     @PostConstruct
     public void init() {
+        widget = new Widget(WidgetType.METER);
         intervalsModel = new ListDataModel<>(new ArrayList<Double>());
         devices = deviceService.list();        
     }
 
-    public String getTitle() {
-        return title;
+    public Widget getWidget() {
+        return widget;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public String getLabel() {
-        return label;
-    }
-
-    public void setLabel(String label) {
-        this.label = label;
+    public void setWidget(Widget widget) {
+        this.widget = widget;
     }
 
     public Double getInterval() {
@@ -113,10 +113,12 @@ public class MeterWidgetController implements Serializable {
     }
     
     public void addAction() {
-        UIMeterComponent widget = new UIMeterComponent(title, label, 
-                (List) getIntervalsModel().getWrappedData(), 
-                selectedDeviceKey, selectedPropertyKey, propertyService);      
-        dashboard.addWidget(widget);
+        List<Double> intervals = (List) getIntervalsModel().getWrappedData();
+        Property property = propertyService.get(selectedDeviceKey, selectedPropertyKey);
+        widget.setIntervals(intervals);
+        widget.setProperties(Arrays.asList(new Property[] {property}));
+        WidgetComponent component = factory.createComponent(widget);
+        ide.addWidget(component);
     }
              
 }

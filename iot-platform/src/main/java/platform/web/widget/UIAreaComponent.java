@@ -1,13 +1,13 @@
 package platform.web.widget;
 
 import java.util.Date;
-import java.util.List;
 import java.util.Random;
 import org.apache.log4j.Logger;
 import org.primefaces.component.chart.line.LineChart;
 import org.primefaces.model.chart.CartesianChartModel;
 import org.primefaces.model.chart.ChartSeries;
 import platform.api.Property;
+import platform.model.Widget;
 import platform.model.WidgetType;
 import platform.service.PropertyService;
 
@@ -24,37 +24,31 @@ public class UIAreaComponent implements WidgetComponent {
     private LineChart chart;
     private CartesianChartModel model;
 
-    private String title;
-    private Integer interval;
-
-    private List<Property> properties;
-
     private Date updatedTime;
+    
+    private Widget widget;
 
     private PropertyService service;
 
-    public UIAreaComponent(String title, Integer interval, 
-            List<Property> properties, PropertyService service) {
-        this.title = title;
-        this.interval = interval;
-        this.properties = properties;
+    public UIAreaComponent(Widget widget, PropertyService service) {
+        this.widget = widget;
         this.service = service;
     }
 
     @Override
     public String getTitle() {
-        return title;
+        return widget.getTitle();
     }
 
     @Override
-    public Object create(String widgetId) {
+    public Object createComponent(String widgetId) {
         this.widgetId = widgetId;
         
         updatedTime = new Date();
 
         model = new CartesianChartModel();
 
-        for (Property prop : properties) {
+        for (Property prop : widget.getProperties()) {
             ChartSeries series = new ChartSeries(prop.getDevice().getKey());
             
             // TODO buscar os valores atualizados da propriedade do device
@@ -77,7 +71,7 @@ public class UIAreaComponent implements WidgetComponent {
         if (updatedTime != null) {
             Date now = new Date();
             long intervalMilis = now.getTime() - updatedTime.getTime();
-            if (intervalMilis >= (interval * 1000)) {
+            if (intervalMilis >= (widget.getIntervals().get(0) * 1000)) {
                 for (ChartSeries series : model.getSeries()) {
                     String deviceKey = series.getLabel();
                     String propertyKey = (String) 
@@ -101,5 +95,25 @@ public class UIAreaComponent implements WidgetComponent {
     public String getType() {
         return WidgetType.AREA;
     }    
+
+    @Override
+    public Widget getWidget() {
+        return widget;
+    }
+
+    @Override
+    public void setService(Object service) {
+        this.service = (PropertyService) service;
+    }
+
+    @Override
+    public void setWidgetId(String widgetId) {
+        this.widgetId = widgetId;
+    }
+
+    @Override
+    public String getWidgetId() {
+        return widgetId;
+    }
     
 }

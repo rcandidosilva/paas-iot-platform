@@ -20,7 +20,7 @@
                     <p:dataGrid id="widgetsList" value="#{ideController.widgetList}" 
                                 var="widget" columns="1">                        
                         <p:panel id="widgetPanel" header="#{widget.name}">
-                            <h:inputHidden id="widgetKey" value="#{widget.key}"/>
+                            <h:inputHidden id="widgetKey" value="#{widget.type}"/>
                             <!--<p:graphicImage value="dashboardMB.toIconFile(widget)" width="100" height="100"/>-->
                             <p:draggable for="widgetPanel" revert="true" helper="clone"/>
                         </p:panel>
@@ -32,7 +32,7 @@
         <ui:define name="center">
             <h:form id="dashboardForm">
                 <h:panelGrid columns="4">
-                    <p:commandButton value="#{bundle['ide.save']}"/>
+                    <p:commandButton value="#{bundle['ide.save']}" oncomplete="PF('saveApplicationDialog').show();"/>
                     <p:commandButton value="#{bundle['ide.view']}"/>
                     <p:commandButton value="#{bundle['ide.publish']}"/>
                     <p:commandButton value="#{bundle['ide.delete']}"/>
@@ -50,14 +50,29 @@
                     <p:dashboard id="dashboard" binding="#{ideController.dashboard}" 
                                  model="#{ideController.model}"/>
                 </p:fieldset>
+                
+                <p:dialog widgetVar="saveApplicationDialog" modal="true" header="Save Application" height="200" width="350">
+                    <h:panelGrid width="100%">
+                        <p:outputLabel value="Name"/>
+                        <p:inputText value="#{ideController.application.name}" required="true"/>
+                        <p:outputLabel value="Description"/>
+                        <p:inputTextarea value="#{ideController.application.description}" rows="5"/>
+                    </h:panelGrid>
+
+                    <div align="right">
+                        <p:commandButton value="Save" action="#{ideController.save()}" oncomplete="PF('saveApplicationDialog').hide();" update=":dashboardForm"/> 
+                        <p:commandButton value="Cancel" oncomplete="PF('saveApplicationDialog').hide();"/>
+                    </div>
+                </p:dialog>                
             </h:form>
 
-            <ui:include src="/pages/widget/meter/dialog.xhtml"/>
-            <ui:include src="/pages/widget/location/dialog.xhtml"/>
-            <ui:include src="/pages/widget/pie/dialog.xhtml"/>
-            <ui:include src="/pages/widget/line/dialog.xhtml"/>
-            <ui:include src="/pages/widget/bar/dialog.xhtml"/>
             <ui:include src="/pages/widget/area/dialog.xhtml"/>
+            <ui:include src="/pages/widget/bar/dialog.xhtml"/>
+            <ui:include src="/pages/widget/line/dialog.xhtml"/>
+            <ui:include src="/pages/widget/location/dialog.xhtml"/>
+            <ui:include src="/pages/widget/meter/dialog.xhtml"/>
+            <ui:include src="/pages/widget/ohlc/dialog.xhtml"/>
+            <ui:include src="/pages/widget/pie/dialog.xhtml"/>
             
         </ui:define>
 

@@ -2,6 +2,8 @@ package platform.model;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.Objects;
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -24,7 +26,7 @@ public class Application implements Serializable {
     private String name;
     private String description;
     private boolean deployed;
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL)
     private List<ApplicationToWidget> widgets;
 
     public String getId() {
@@ -65,6 +67,28 @@ public class Application implements Serializable {
 
     public void setWidgets(List<ApplicationToWidget> widgets) {
         this.widgets = widgets;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 3;
+        hash = 89 * hash + Objects.hashCode(this.id);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Application other = (Application) obj;
+        if (!Objects.equals(this.id, other.id)) {
+            return false;
+        }
+        return true;
     }
     
 }

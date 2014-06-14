@@ -3,7 +3,6 @@ package platform.web;
 import javax.inject.Named;
 import javax.enterprise.context.SessionScoped;
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 import javax.inject.Inject;
 import org.apache.log4j.Logger;
@@ -37,12 +36,16 @@ public class ApplicationController implements Serializable {
     }
     
     public List<Application> getApplications() {
-        return new ArrayList<>();
+        return service.list();
     }
     
     public String edit(Application application) {
         this.application = service.load(application.getId());
         return ideController.edit(application);
+    }
+    
+    public void delete(Application application) {
+        service.delete(application.getId());
     }
     
     public String newApplication() {
@@ -55,7 +58,7 @@ public class ApplicationController implements Serializable {
     }
     
     public void save(Application application) {
-        // TODO
+        service.save(application);
     }
     
    

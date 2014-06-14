@@ -12,7 +12,7 @@
             <p:dialog widgetVar="lineDialog" modal="true" header="Line Chart Widget" height="400" width="550">
                 <h:panelGrid columns="2">
                     <p:outputLabel value="Title"/>
-                    <p:inputText value="#{lineWidgetController.title}" required="true"/>
+                    <p:inputText value="#{lineWidgetController.widget.title}" required="true"/>
 
                     <p:outputLabel value="Device"/>
                     <p:selectOneMenu value="#{lineWidgetController.selectedDeviceKey}" required="true">

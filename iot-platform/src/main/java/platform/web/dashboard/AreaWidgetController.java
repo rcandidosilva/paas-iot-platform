@@ -2,6 +2,7 @@ package platform.web.dashboard;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.faces.model.ListDataModel;
@@ -10,9 +11,11 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import platform.api.Device;
 import platform.api.Property;
+import platform.model.Widget;
+import platform.model.WidgetType;
 import platform.service.DeviceService;
 import platform.service.PropertyService;
-import platform.web.DashboardController;
+import platform.web.IDEController;
 import platform.web.widget.UIAreaComponent;
 
 /**
@@ -23,16 +26,17 @@ import platform.web.widget.UIAreaComponent;
 @ViewScoped
 public class AreaWidgetController implements Serializable {
     
-    private String title;
     private String selectedDeviceKey;
     private String selectedPropertyKey;
-    private Integer interval;
-    
+    private Double interval;
+
     private List<Device> devices;
     private List<Property> properties;
     
     private ListDataModel<Property> propertiesModel;
-        
+          
+    private Widget widget;
+    
     @Inject
     private DeviceService deviceService;
     
@@ -40,22 +44,23 @@ public class AreaWidgetController implements Serializable {
     private PropertyService propertyService;    
         
     @Inject
-    private DashboardController dashboard;
+    private IDEController ide;
     
     @PostConstruct
     public void init() {
+        widget = new Widget(WidgetType.AREA);
         devices = deviceService.list();
         propertiesModel = new ListDataModel<>(new ArrayList<Property>());
     }
 
-    public String getTitle() {
-        return title;
+    public Widget getWidget() {
+        return widget;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
+    public void setWidget(Widget widget) {
+        this.widget = widget;
     }
-    
+
     public String getSelectedDeviceKey() {
         return selectedDeviceKey;
     }
@@ -72,14 +77,14 @@ public class AreaWidgetController implements Serializable {
         this.selectedPropertyKey = selectedPropertyKey;
     }
 
-    public Integer getInterval() {
+    public Double getInterval() {
         return interval;
     }
 
-    public void setInterval(Integer interval) {
+    public void setInterval(Double interval) {
         this.interval = interval;
     }
-
+    
     public ListDataModel<Property> getPropertiesModel() {
         return propertiesModel;
     }
@@ -111,10 +116,11 @@ public class AreaWidgetController implements Serializable {
     }    
     
     public void addAction() {
-        List<Property> selectedProperties = (List<Property>) 
+        List<Property> properties = (List<Property>) 
                 propertiesModel.getWrappedData();
-        UIAreaComponent widget = new UIAreaComponent(title, interval, 
-                selectedProperties, propertyService);     
-        dashboard.addWidget(widget);
+        widget.setProperties(properties);
+        widget.setIntervals(Arrays.asList(new Double[] {interval}));
+        UIAreaComponent component = new UIAreaComponent(widget, propertyService);     
+        ide.addWidget(component);
     }
 }

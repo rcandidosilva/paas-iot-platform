@@ -12,7 +12,7 @@
             <p:dialog widgetVar="locationDialog" modal="true" header="Geo Location Widget" height="400" width="550">
                 <h:panelGrid columns="2">
                     <p:outputLabel value="Title"/>
-                    <p:inputText value="#{locationWidgetController.title}" required="true"/>
+                    <p:inputText value="#{locationWidgetController.widget.title}" required="true"/>
 
                     <p:outputLabel value="Device"/>
                     <p:selectOneMenu value="#{locationWidgetController.selectedDeviceKey}" required="true">
