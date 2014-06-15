@@ -14,31 +14,34 @@
                 <div align="center">
                     <h1>#{bundle['application.list']}</h1>
                 </div>
+                <div align="center"> 
+                    <div  style="width: 80%;">
+                        <p:dataTable value="#{applicationController.applications}" var="app" rows="5" paginator="true">
+                            <p:column headerText="#{bundle['application.name']}" style="width: 20%;">
+                                <h:outputText value="#{app.name}"/>
+                            </p:column>
+                            <p:column headerText="Description" width="30">
+                                <h:outputText value="#{app.description}"/>
+                            </p:column>
+                            <p:column headerText="Deployed" style="width: 10%;">
+                                <h:outputText value="#{app.deployed}"/>
+                            </p:column>
+                            <p:column headerText="Created At" style="width: 10%;">
+                            </p:column>
+                            <p:column style="width: 4%;">
+                                <p:commandLink value="Edit" action="#{applicationController.edit(app)}"/>
+                            </p:column>
+                            <p:column style="width: 4%;">
+                                <p:commandLink value="Delete" action="#{applicationController.delete(app)}"/>
+                            </p:column>                   
+                        </p:dataTable>    
 
-                <p:dataTable value="#{applicationController.applications}" var="app">
-                    <p:column headerText="ID" style="width: 10%;">
-                        <h:outputText value="#{app.id}"/>
-                    </p:column>
-                    <p:column headerText="#{bundle['application.name']}">
-                        <h:outputText value="#{app.name}"/>
-                    </p:column>
-                    <p:column headerText="Data Criação" style="width: 20%;">
-                    </p:column>
-                    <p:column headerText="Deployed" style="width: 10%;">
-                        <h:outputText value="#{app.deployed}"/>
-                    </p:column>
-                    <p:column style="width: 4%;">
-                        <p:commandLink value="Editar" action="#{applicationController.edit(app)}"/>
-                    </p:column>
-                    <p:column style="width: 4%;">
-                        <p:commandLink value="Deletar" action="#{applicationController.delete(app)}"/>
-                    </p:column>                   
-                </p:dataTable>    
-
-                <div align="right">
-                    <p:commandButton value="#{bundle['application.new']}" 
-                                     action="#{applicationController.newApplication()}"/>
-                    <p:commandButton value="#{bundle['application.workflow']}"/>
+                        <div align="right">
+                            <p:commandButton value="#{bundle['application.new']}" 
+                                             action="#{applicationController.newApplication()}"/>
+                            <p:commandButton value="#{bundle['application.workflow']}"/>
+                        </div>
+                    </div>
                 </div>
             </h:form>
         </ui:define>

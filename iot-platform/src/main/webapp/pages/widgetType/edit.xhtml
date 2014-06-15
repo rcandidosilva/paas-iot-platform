@@ -10,31 +10,19 @@
     <ui:composition template="/resources/templates/main.xhtml">
 
         <ui:define name="content">
-            <h:form id="form" enctype="multipart/form-data">
+            <h:form id="form">
                 <div align="center">
                     <div style="width: 600px;">
                         <p:panel header="Cadastro de Widget">
-                            <h:panelGrid columns="2" >
+                            <h:panelGrid>
                                 <p:outputLabel value="Type"/>
                                 <p:selectOneMenu value="#{widgetTypeController.widgetType.type}">
                                     <f:selectItems value="#{widgetTypeController.types}" var="type" itemLabel="#{type}" itemValue="#{type}"/>
                                 </p:selectOneMenu>
                                 <p:outputLabel value="Name"/>
-                                <p:inputText value="#{widgetTypeController.widgetType.name}"/>
+                                <p:inputText value="#{widgetTypeController.widgetType.name}""/>
                                 <p:outputLabel value="Description"/>
                                 <p:inputTextarea value="#{widgetTypeController.widgetType.description}"/>
-                                <p:outputLabel value="Icon"/>
-                                <h:panelGrid id="filePanel">
-                                    <p:fileUpload id="upload" fileUploadListener="#{widgetTypeController.handleFileUpload}" 
-                                                  mode="advanced" dragDropSupport="false" update="filePanel"
-                                                  allowTypes="/(\.|\/)(gif|jpe?g|png)$/"
-                                                  rendered="#{widgetTypeController.widgetType.iconFile == null}"/>
-                                    <p:graphicImage value="#{widgetMB.iconFile}" width="150"
-                                                    rendered="#{widgetTypeController.widgetType.iconFile != null}"/>
-                                    <p:commandLink value="Remover" action="#{widgetMB.removeIconFile()}"
-                                                   rendered="#{widgetTypeController.widgetType.iconFile != null}"
-                                                   update="filePanel"/>
-                                </h:panelGrid>
                             </h:panelGrid>
                             <p:growl id="messages" showDetail="true"/>
                         </p:panel>

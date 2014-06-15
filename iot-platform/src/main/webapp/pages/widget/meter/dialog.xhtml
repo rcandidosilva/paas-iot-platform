@@ -9,35 +9,36 @@
 
     <ui:composition>
         <h:form>
-            <p:dialog widgetVar="meterDialog" modal="true" header="Gauge Meter Widget" height="400" width="550">
-                <h:panelGrid columns="2">
+            <p:dialog widgetVar="meterDialog" modal="true" header="Gauge Meter Widget" height="600" width="700" resizable="false">
+                <h:panelGrid style="width: 100%;">
                     <p:outputLabel value="Title"/>
-                    <p:inputText value="#{meterWidgetController.widget.title}" required="true"/>
-
+                    <p:inputText value="#{meterWidgetController.widget.title}" required="true" size="60"/>
+                    <br/>
                     <p:outputLabel value="Label"/>
-                    <p:inputText value="#{meterWidgetController.widget.label}" required="true"/>
-                    
+                    <p:inputText value="#{meterWidgetController.widget.label}" required="true" size="60"/>
+                    <br/>
                     <p:outputLabel value="Device"/>
                     <p:selectOneMenu value="#{meterWidgetController.selectedDeviceKey}" required="true">
                         <f:ajax event="change" render="property"/>
                         <f:selectItem itemLabel="-- Selecione --" itemValue=""/>
                         <f:selectItems value="#{meterWidgetController.devices}" var="device" itemLabel="#{device.key}" itemValue="#{device.key}"/>
                     </p:selectOneMenu>
-                    
+                    <br/>
                     <p:outputLabel value="Property"/>
                     <p:selectOneMenu id="property" value="#{meterWidgetController.selectedPropertyKey}" required="true">
                         <f:selectItem itemLabel="-- Selecione --" itemValue=""/>
                         <f:selectItems value="#{meterWidgetController.properties}" var="property" itemLabel="#{property.key}" itemValue="#{property.key}"/>
                     </p:selectOneMenu>
-                    
+                    <br/>
                     <p:outputLabel value="New Interval"/>
                     <h:panelGroup>
-                        <p:inputText id="interval" value="#{meterWidgetController.interval}"/>
+                        <p:inputText id="interval" value="#{meterWidgetController.interval}" />
+                        <p:spacer width="20"/>
                         <p:commandButton value="Add Interval" action="#{meterWidgetController.newInterval()}" update="dataTable" process="@this,interval" />
                     </h:panelGroup>
                 </h:panelGrid>
-
-                <p:dataTable id="dataTable" value="#{meterWidgetController.intervalsModel}" var="interval" rows="5" paginator="true">
+                <br/><br/>
+                <p:dataTable id="dataTable" value="#{meterWidgetController.intervalsModel}" var="interval" rows="2" paginator="true">
                     <p:column headerText="Interval">
                         <h:outputText value="#{interval}"/>
                     </p:column>

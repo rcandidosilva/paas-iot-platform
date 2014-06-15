@@ -9,11 +9,11 @@
 
     <ui:composition>
         <h:form>
-            <p:dialog widgetVar="barDialog" modal="true" header="Bar Widget" height="400" width="550">
-                <h:panelGrid columns="2">
+            <p:dialog widgetVar="barDialog" modal="true" header="Bar Widget" height="400" width="700">
+                <h:panelGrid>
                     <p:outputLabel value="Title"/>
                     <p:inputText value="#{barWidgetController.widget.title}" required="true"/>
-                    
+                    <br/>
                     <p:outputLabel value="Interval"/>
                     <p:selectOneMenu value="#{barWidgetController.interval}" required="true">
                         <f:selectItem itemLabel="5 seconds" itemValue="5"/>
@@ -22,23 +22,23 @@
                         <f:selectItem itemLabel="5 minutes" itemValue="300"/>
                         <f:selectItem itemLabel="10 minutes" itemValue="600"/>
                     </p:selectOneMenu>
-                    
+                    <br/>
                     <p:outputLabel value="Device"/>
                     <p:selectOneMenu id="device" value="#{barWidgetController.selectedDeviceKey}" required="true">
                         <f:ajax event="change" render="property"/>
                         <f:selectItem itemLabel="-- Selecione --" itemValue=""/>
                         <f:selectItems value="#{barWidgetController.devices}" var="device" itemLabel="#{device.key}" itemValue="#{device.key}"/>
                     </p:selectOneMenu>
-
+                    <br/>
                     <p:outputLabel value="Property"/>
                     <p:selectOneMenu id="property" value="#{barWidgetController.selectedPropertyKey}" required="true">
                         <f:selectItem itemLabel="-- Selecione --" itemValue=""/>
                         <f:selectItems value="#{barWidgetController.properties}" var="property" itemLabel="#{property.key}" itemValue="#{property.key}"/>
                     </p:selectOneMenu>
-                    
+                    <br/>
                     <p:commandButton value="Add Property" action="#{barWidgetController.newProperty()}" update="dataTable" process="@this,device,property" />                                        
                 </h:panelGrid>
-                
+                <br/><br/>
                 <p:dataTable id="dataTable" value="#{barWidgetController.propertiesModel}" var="prop" rows="5" paginator="true">
                     <p:column headerText="Device">
                         <h:outputText value="#{prop.device.key}"/>
@@ -50,7 +50,7 @@
                         <p:commandLink value="Delete" action="#{barWidgetController.deleteProperty()}" update="dataTable"/>
                     </p:column>
                 </p:dataTable>                
-
+                <br/><br/>
                 <div align="right">
                     <p:commandButton value="Add" action="#{barWidgetController.addAction()}" oncomplete="PF('barDialog').hide();" update=":dashboardForm"/> 
                     <p:commandButton value="Cancel" oncomplete="PF('barDialog').hide();"/>

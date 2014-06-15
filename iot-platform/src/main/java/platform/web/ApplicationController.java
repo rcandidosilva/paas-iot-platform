@@ -1,9 +1,10 @@
 package platform.web;
 
 import javax.inject.Named;
-import javax.enterprise.context.SessionScoped;
 import java.io.Serializable;
 import java.util.List;
+import javax.enterprise.context.SessionScoped;
+import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import org.apache.log4j.Logger;
 import platform.model.Application;
@@ -50,6 +51,7 @@ public class ApplicationController implements Serializable {
     
     public String newApplication() {
         application = new Application();
+        ideController.init();
         return "/pages/ide/index";
     }
     

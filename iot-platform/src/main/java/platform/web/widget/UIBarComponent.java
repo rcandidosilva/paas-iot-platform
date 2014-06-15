@@ -63,10 +63,11 @@ public class UIBarComponent implements WidgetComponent {
 
         chart = new BarChart();
 
-        chart.setOrientation("horizontal");
+        //chart.setOrientation("horizontal");
         chart.setLegendPosition("ne");
-        chart.setYaxisAngle(90);
+        //chart.setYaxisAngle(90);
         chart.setValue(model);
+        chart.setStyle("height: 310px; width: 370px;");
 
         return chart;
     }

@@ -1,0 +1,6 @@
+.pf-dashboard-column {width:400px;}
+.ui-dashboard-column
+{
+    border-style:dotted;
+    border-width:5px;
+}

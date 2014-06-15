@@ -9,15 +9,14 @@
     <ui:composition template="resources/templates/main.xhtml">
 
         <ui:define name="content">
-            <h:form>
-                <h:panelGrid>
-                    <p:commandLink value="Devices" action="/pages/device/list"/>
-                    <p:commandLink value="Applications" action="/pages/application/list"/>
-                    <p:commandLink value="Widgets" action="/pages/widgetType/list"/>
-                    <p:commandLink value="IDE" action="/pages/ide/index"/>
-                    <p:commandLink value="Workflow" action="/pages/workflow/index"/>
-                </h:panelGrid>
-            </h:form>   
+
+            <div class="jumbotron" style="margin:auto; width:800px;">
+                <h1>IoT Platform</h1>
+                <p>Welcome to the IoT Platform</p>
+                <p><a class="btn btn-primary btn-lg" role="button">Learn more</a></p>
+            </div>
+
+
         </ui:define>
 
     </ui:composition>

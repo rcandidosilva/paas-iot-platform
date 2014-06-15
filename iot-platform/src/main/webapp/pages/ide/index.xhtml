@@ -19,9 +19,9 @@
                 <p:fieldset legend="Widgets" toggleable="true">
                     <p:dataGrid id="widgetsList" value="#{ideController.widgetList}" 
                                 var="widget" columns="1">                        
-                        <p:panel id="widgetPanel" header="#{widget.name}">
+                        <p:panel id="widgetPanel" header="#{widget.name}" style="align: center;">
                             <h:inputHidden id="widgetKey" value="#{widget.type}"/>
-                            <!--<p:graphicImage value="dashboardMB.toIconFile(widget)" width="100" height="100"/>-->
+                            <p:graphicImage library="images" name="#{widget.type}.png" width="100" height="100"/>
                             <p:draggable for="widgetPanel" revert="true" helper="clone"/>
                         </p:panel>
                     </p:dataGrid>
@@ -30,18 +30,20 @@
         </ui:define>
 
         <ui:define name="center">
+
             <h:form id="dashboardForm">
                 <h:panelGrid columns="4">
                     <p:commandButton value="#{bundle['ide.save']}" oncomplete="PF('saveApplicationDialog').show();"/>
                     <p:commandButton value="#{bundle['ide.view']}"/>
                     <p:commandButton value="#{bundle['ide.publish']}"/>
-                    <p:commandButton value="#{bundle['ide.delete']}"/>
+                    <p:commandButton value="#{bundle['ide.delete']}" oncomplete="PF('deleteApplicationDialog').show();"/>
+
                 </h:panelGrid>
 
                 <p:droppable for="dashboardArea" tolerance="touch" activeStyleClass="ui-state-highlight" 
                              datasource=":form1:widgetsList" onDrop="handleDrop" >
                     <p:ajax listener="#{ideController.dropWidget}" update="dropArea dashboard" />
-                </p:droppable>            
+                </p:droppable>
 
                 <p:fieldset id="dashboardArea">
                     <p:outputPanel id="dropArea">
@@ -50,20 +52,32 @@
                     <p:dashboard id="dashboard" binding="#{ideController.dashboard}" 
                                  model="#{ideController.model}"/>
                 </p:fieldset>
-                
-                <p:dialog widgetVar="saveApplicationDialog" modal="true" header="Save Application" height="200" width="350">
-                    <h:panelGrid width="100%">
-                        <p:outputLabel value="Name"/>
-                        <p:inputText value="#{ideController.application.name}" required="true"/>
-                        <p:outputLabel value="Description"/>
-                        <p:inputTextarea value="#{ideController.application.description}" rows="5"/>
-                    </h:panelGrid>
 
+                <p:dialog widgetVar="saveApplicationDialog" modal="true" header="Save Application" height="300" width="600">
+                    <h:panelGrid style="width: 100%;">
+                        <p:outputLabel value="Name"/>
+                        <p:inputText value="#{ideController.application.name}" required="true" style="width: 100%;"/>
+                        <br/>
+                        <p:outputLabel value="Description"/>
+                        <p:inputTextarea value="#{ideController.application.description}" rows="5" style="width: 100%;"/>
+                    </h:panelGrid>
+                    <br/><br/>
                     <div align="right">
                         <p:commandButton value="Save" action="#{ideController.save()}" oncomplete="PF('saveApplicationDialog').hide();" update=":dashboardForm"/> 
                         <p:commandButton value="Cancel" oncomplete="PF('saveApplicationDialog').hide();"/>
                     </div>
-                </p:dialog>                
+                </p:dialog> 
+
+                <p:dialog widgetVar="deleteApplicationDialog" modal="true" header="Delete Application" height="300" width="600">
+                    <h:panelGrid style="width: 100%;">
+                        <h:outputText value="Are you sure?"/>
+                    </h:panelGrid>
+                    <div align="center">
+                        <p:commandButton value="Delete" action="#{ideController.delete()}" oncomplete="PF('deleteApplicationDialog').hide();" update=":dashboardForm"/> 
+                        <p:commandButton value="Cancel" oncomplete="PF('deleteApplicationDialog').hide();"/>
+                    </div>
+                </p:dialog>
+
             </h:form>
 
             <ui:include src="/pages/widget/area/dialog.xhtml"/>
@@ -73,7 +87,7 @@
             <ui:include src="/pages/widget/meter/dialog.xhtml"/>
             <ui:include src="/pages/widget/ohlc/dialog.xhtml"/>
             <ui:include src="/pages/widget/pie/dialog.xhtml"/>
-            
+
         </ui:define>
 
     </ui:composition>

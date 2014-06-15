@@ -102,8 +102,8 @@ public class DashboardController implements Serializable {
         ajaxPoll.setGlobal(false);
         ajaxPoll.setUpdate(widgetId);
         String el = "#{dashboardController.updateWidget('" + widgetId + "')}";
-        ExpressionFactory factory = ExpressionFactory.newInstance();
-        MethodExpression expression = factory.createMethodExpression(context.getELContext(),
+
+        MethodExpression expression = JSFHelper.createMethodExpression(
                 el, null, new Class[]{String.class});
         ajaxPoll.setListener(expression);
 
