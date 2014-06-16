@@ -1,0 +1,38 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition template="/resources/templates/main.xhtml">
+
+        <ui:define name="top">
+            <div align="center">
+                <h1>#{previewController.application.name}</h1>
+            </div>
+        </ui:define>    
+
+        <ui:define name="content">
+
+            <h:form id="dashboardForm">
+                <h:panelGrid style="width:100%;">
+                    <p:dashboard id="dashboard" binding="#{previewController.dashboard}" 
+                                 model="#{previewController.model}"/>
+
+                    <p:poll interval="5" listener="#{previewController.updateWidgets()}" 
+                            update="dashboard" global="false"/> 
+                    <h:panelGroup>
+                        <div align="center">
+                            <p:commandButton value="Return"/>
+                        </div>
+                    </h:panelGroup>
+                </h:panelGrid>
+            </h:form>
+
+        </ui:define>
+
+    </ui:composition>
+
+</html>

@@ -32,6 +32,8 @@ public class Widget implements Serializable {
     private String title;
     private String label;
     private String type;
+    private Integer columnIndex;
+    private Integer columnPosition;    
     @Temporal(TemporalType.TIMESTAMP)
     private Date createdAt;
     @Temporal(TemporalType.TIMESTAMP)
@@ -111,6 +113,22 @@ public class Widget implements Serializable {
 
     public void setProperties(List<Property> properties) {
         this.properties = properties;
+    }
+
+    public Integer getColumnIndex() {
+        return columnIndex;
+    }
+
+    public void setColumnIndex(Integer columnIndex) {
+        this.columnIndex = columnIndex;
+    }
+
+    public Integer getColumnPosition() {
+        return columnPosition;
+    }
+
+    public void setColumnPosition(Integer columnPosition) {
+        this.columnPosition = columnPosition;
     }
     
 }

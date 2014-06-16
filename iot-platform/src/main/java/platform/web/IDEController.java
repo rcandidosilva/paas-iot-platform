@@ -15,9 +15,9 @@ import javax.faces.component.html.HtmlPanelGroup;
 import javax.inject.Inject;
 import javax.inject.Named;
 import org.apache.log4j.Logger;
-import org.primefaces.component.behavior.ajax.AjaxBehavior;
 import org.primefaces.component.commandlink.CommandLink;
 import org.primefaces.component.dashboard.Dashboard;
+import org.primefaces.component.menu.Menu;
 import org.primefaces.component.panel.Panel;
 import org.primefaces.event.DragDropEvent;
 import org.primefaces.model.DashboardColumn;
@@ -26,6 +26,8 @@ import org.primefaces.model.DefaultDashboardColumn;
 import org.primefaces.model.DefaultDashboardModel;
 import org.primefaces.model.DefaultStreamedContent;
 import org.primefaces.model.StreamedContent;
+import org.primefaces.model.menu.DefaultMenuItem;
+import org.primefaces.model.menu.DefaultMenuModel;
 import platform.model.Application;
 import platform.model.ApplicationToWidget;
 import platform.model.Widget;
@@ -58,95 +60,120 @@ public class IDEController implements Serializable {
     private ApplicationController appController;
 
     @Inject
+    private PreviewController previewController;
+
+    @Inject
     private WidgetComponentFactory factory;
 
     @PostConstruct
     public void init() {
         dashboard = new Dashboard();
         dashboard.setDisabled(true);
-        
+
         model = new DefaultDashboardModel();
         model.addColumn(new DefaultDashboardColumn());
         model.addColumn(new DefaultDashboardColumn());
         model.addColumn(new DefaultDashboardColumn());
-        
+
         dashboard.setModel(model);
-        
+
         widgets = new HashMap<>();
     }
 
     public void dropWidget(DragDropEvent event) {
-       Object data = event.getData();
-       // TODO
+        Object data = event.getData();
+        // TODO
     }
 
-    public void addWidget(WidgetComponent widget) {
+    private enum LinkType {
+        LEFT, UP, DOWN, RIGHT
+    };
 
-        String widgetId = widget.getWidgetId();
+    public void addWidget(WidgetComponent component) {
+
+        String widgetId = component.getWidgetId();
         if (widgetId == null) {
             widgetId = "widget" + ++widgetCount;
             logger.debug("Generated a new widgetId: " + widgetId);
         }
 
-        Object component = widget.createComponent(widgetId);
+        Object uiComponent = component.createComponent(widgetId);
 
         Panel panel = (Panel) JSFHelper.createComponent(Panel.COMPONENT_TYPE);
         panel.setId(widgetId);
-        panel.setHeader(widget.getTitle());
-        panel.setClosable(true);
+        panel.setHeader(component.getTitle());
+        panel.setClosable(false);
         panel.setToggleable(false);
 
-        HtmlPanelGroup group = (HtmlPanelGroup) JSFHelper.createComponent(HtmlPanelGroup.COMPONENT_TYPE);
+        HtmlPanelGroup group = (HtmlPanelGroup) 
+                JSFHelper.createComponent(HtmlPanelGroup.COMPONENT_TYPE);
 
-        CommandLink rightLink = (CommandLink) JSFHelper.createComponent(CommandLink.COMPONENT_TYPE);
-        rightLink.setStyleClass("ui-panel-titlebar-icon ui-corner-all ui-state-default");
-        HtmlOutputText rightText = (HtmlOutputText) JSFHelper.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        rightText.setStyleClass("ui-icon ui-icon-arrowthick-1-e");
-        rightLink.getChildren().add(rightText);
-        String rightEL = "#{ideController.moveWidgetToRight('" + widgetId + "')}";
-        MethodExpression rightExp
-                = JSFHelper.createMethodExpression(rightEL, null, new Class[]{String.class});
-        rightLink.setActionExpression(rightExp);
-        rightLink.setImmediate(true);
-        rightLink.setUpdate(":dashboardForm");
-        group.getChildren().add(rightLink);
-        
-        CommandLink leftLink = (CommandLink) JSFHelper.createComponent(CommandLink.COMPONENT_TYPE);
-        leftLink.setStyleClass("ui-panel-titlebar-icon ui-corner-all ui-state-default");
-        HtmlOutputText leftText = (HtmlOutputText) JSFHelper.createComponent(HtmlOutputText.COMPONENT_TYPE);
-        leftText.setStyleClass("ui-icon ui-icon-arrowthick-1-w");
-        leftLink.getChildren().add(leftText);
-        String leftEL = "#{ideController.moveWidgetToLeft('" + widgetId + "')}";
-        MethodExpression leftExp
-                = JSFHelper.createMethodExpression(leftEL, null, new Class[]{String.class});
-        leftLink.setActionExpression(leftExp);
-        leftLink.setImmediate(true);
-        leftLink.setUpdate(":dashboardForm");
-        group.getChildren().add(leftLink);        
-
+        group.getChildren().add(createLink(widgetId, LinkType.RIGHT));
+        group.getChildren().add(createLink(widgetId, LinkType.UP));
+        group.getChildren().add(createLink(widgetId, LinkType.DOWN));
+        group.getChildren().add(createLink(widgetId, LinkType.LEFT));
         panel.getFacets().put("actions", group);
 
+        Menu menu = createMenu(widgetId, component.getType());
+        panel.getFacets().put("options", menu);
+
         panel.setStyle("width: 400px; height: 330px;");
-        panel.getChildren().add((UIComponent) component);
-        
-        AjaxBehavior closeAjax = (AjaxBehavior) 
-                JSFHelper.createBehavior(AjaxBehavior.BEHAVIOR_ID);
-        String closeEL = "#{ideController.deleteWidget('" + widgetId + "')}";
-        MethodExpression closeExp
-                = JSFHelper.createMethodExpression(closeEL, null, new Class[]{String.class});        
-        closeAjax.setListener(closeExp);
-        closeAjax.setImmediate(true);
-        
-        panel.addClientBehavior("close", closeAjax);
+        panel.getChildren().add((UIComponent) uiComponent);
 
         dashboard.getChildren().add(panel);
 
-        DashboardColumn column = model.getColumn(1);
-        column.addWidget(panel.getId());
+        Widget widget = component.getWidget();
+        DashboardColumn column = model.getColumn(widget.getColumnIndex());
+        column.addWidget(widget.getColumnPosition(), panel.getId());
 
-        widgets.put(widgetId, widget);
+        widgets.put(widgetId, component);
 
         logger.debug("Added a new widget '" + widgetId + "' to the dashboard");
+    }
+
+    private Menu createMenu(String widgetId, String widgetType) {
+        Menu menu = (Menu) JSFHelper.createComponent(Menu.COMPONENT_TYPE);
+        DefaultMenuModel menuModel = new DefaultMenuModel();
+        DefaultMenuItem editItem = new DefaultMenuItem("Edit");
+        editItem.setCommand("#{ideController.editWidget('" + widgetId + "')}");
+        editItem.setAjax(true);
+        editItem.setImmediate(true);
+        editItem.setOncomplete("PF('" + widgetType + "Dialog').show();");
+        DefaultMenuItem deleteItem = new DefaultMenuItem("Delete");
+        deleteItem.setCommand("#{ideController.deleteWidget('" + widgetId + "')}");
+        deleteItem.setAjax(true);
+        deleteItem.setImmediate(true);
+        menuModel.addElement(editItem);
+        menuModel.addElement(deleteItem);
+        menu.setModel(menuModel);
+        return menu;
+    }
+
+    private CommandLink createLink(String widgetId, LinkType type) {
+        CommandLink link = (CommandLink) JSFHelper.createComponent(CommandLink.COMPONENT_TYPE);
+        link.setStyleClass("ui-panel-titlebar-icon ui-corner-all ui-state-default");
+        HtmlOutputText text = (HtmlOutputText) JSFHelper.createComponent(HtmlOutputText.COMPONENT_TYPE);
+        String el = null;
+        if (type == LinkType.LEFT) {
+            text.setStyleClass("ui-icon ui-icon-arrowthick-1-w");
+            el = "#{ideController.moveWidgetToLeft('" + widgetId + "')}";
+        } else if (type == LinkType.RIGHT) {
+            text.setStyleClass("ui-icon ui-icon-arrowthick-1-e");
+            el = "#{ideController.moveWidgetToRight('" + widgetId + "')}";
+        } else if (type == LinkType.UP) {
+            text.setStyleClass("ui-icon ui-icon-arrowthick-1-n");
+            el = "#{ideController.moveWidgetToUp('" + widgetId + "')}";
+        } else if (type == LinkType.DOWN) {
+            text.setStyleClass("ui-icon ui-icon-arrowthick-1-s");
+            el = "#{ideController.moveWidgetToDown('" + widgetId + "')}";
+        }
+        MethodExpression expression
+                = JSFHelper.createMethodExpression(el, null, new Class[]{String.class});
+        link.getChildren().add(text);
+        link.setActionExpression(expression);
+        link.setImmediate(true);
+        link.setUpdate(":dashboardForm");
+        return link;
     }
 
     private DashboardColumn getDashboardColumn(String widgetId) {
@@ -159,12 +186,69 @@ public class IDEController implements Serializable {
         }
         return null;
     }
-    
+
+    private int getDashboardColumnIndex(String widgetId) {
+        for (int i = 0; i < model.getColumnCount(); i++) {
+            for (String id : model.getColumn(i).getWidgets()) {
+                if (id.equals(widgetId)) {
+                    return i;
+                }
+            }
+        }
+        return -1;
+    }
+
+    private int getDashboardColumnPosition(int columnIndex, String widgetId) {
+        DashboardColumn column = model.getColumn(columnIndex);
+        for (int i = 0; i < column.getWidgetCount(); i++) {
+            if (column.getWidget(i).equals(widgetId)) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    public void editWidget(String widgetId) {
+        WidgetComponent component = widgets.get(widgetId);
+        // TODO
+        logger.debug("Widget '" + widgetId + "' requested to edit at the dashboard");
+    }
+
     public void deleteWidget(String widgetId) {
         DashboardColumn column = getDashboardColumn(widgetId);
         column.removeWidget(widgetId);
         widgets.remove(widgetId);
         logger.debug("Widget '" + widgetId + "' deleted from the dashboard");
+    }
+
+    public void moveWidgetToUp(String widgetId) {
+        DashboardColumn column = getDashboardColumn(widgetId);
+        int index = 0;
+        for (int i = 0; i < column.getWidgetCount(); i++) {
+            if (column.getWidget(i).equals(widgetId)) {
+                index = i;
+                break;
+            }
+        }
+        if (index != 0) {
+            column.reorderWidget(--index, widgetId);
+            logger.debug("Widget '" + widgetId + "' moved to up at column in the dashboard");
+        }
+    }
+
+    public void moveWidgetToDown(String widgetId) {
+        DashboardColumn column = getDashboardColumn(widgetId);
+        int index = 0;
+        for (int i = 0; i < column.getWidgetCount(); i++) {
+            if (column.getWidget(i).equals(widgetId)) {
+                index = i;
+                break;
+            }
+        }
+        if ((index + 1) != column.getWidgetCount()) {
+            column.reorderWidget(++index, widgetId);
+            logger.debug("Widget '" + widgetId + "' moved to down at column in the dashboard");
+        }
     }
 
     public void moveWidgetToLeft(String widgetId) {
@@ -250,8 +334,15 @@ public class IDEController implements Serializable {
             if (appWidgets.contains(appWidget)) {
                 appWidget = appWidgets.remove(appWidgets.indexOf(appWidget));
             }
-            appWidget.setWidget(widget);
+            
+            int columnIndex = getDashboardColumnIndex(widgetId);
+            int columnPosition = getDashboardColumnPosition(columnIndex,
+                    widgetId);
 
+            widget.setColumnIndex(columnIndex);
+            widget.setColumnPosition(columnPosition);
+            appWidget.setWidget(widget);
+            
             appWidgets.add(appWidget);
         }
 
@@ -263,8 +354,9 @@ public class IDEController implements Serializable {
 
     }
 
-    public void view() {
-        // TODO
+    public String preview() {
+        this.previewController.init(widgets);
+        return "/pages/ide/preview";
     }
 
     public void publish() {

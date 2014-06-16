@@ -34,7 +34,7 @@
             <h:form id="dashboardForm">
                 <h:panelGrid columns="4">
                     <p:commandButton value="#{bundle['ide.save']}" oncomplete="PF('saveApplicationDialog').show();"/>
-                    <p:commandButton value="#{bundle['ide.view']}"/>
+                    <p:commandButton value="#{bundle['ide.preview']}" action="#{ideController.preview()}" />
                     <p:commandButton value="#{bundle['ide.publish']}"/>
                     <p:commandButton value="#{bundle['ide.delete']}" oncomplete="PF('deleteApplicationDialog').show();"/>
 

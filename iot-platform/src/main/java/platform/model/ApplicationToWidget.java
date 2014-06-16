@@ -3,7 +3,6 @@ package platform.model;
 import java.io.Serializable;
 import java.util.Objects;
 import javax.persistence.CascadeType;
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -25,15 +24,11 @@ public class ApplicationToWidget implements Serializable {
     @Field(name = "_id")
     private String id;
     private String widgetId;
+
     @ManyToOne(cascade = CascadeType.REFRESH)
     private Application application;
     @ManyToOne(cascade = CascadeType.ALL)
     private Widget widget;
-    
-    @Column(insertable = false, updatable = false, name = "WIDGET__id")
-    private String relatedWidgetId;
-    @Column(insertable = false, updatable = false, name = "APPLICATION__id")
-    private String relatedApplicationId;
 
     public ApplicationToWidget() {
         super();
@@ -75,32 +70,12 @@ public class ApplicationToWidget implements Serializable {
     public void setWidget(Widget widget) {
         this.widget = widget;
     }
-
-    public String getRelatedWidgetId() {
-        return relatedWidgetId;
-    }
-
-    public void setRelatedWidgetId(String relatedWidgetId) {
-        this.relatedWidgetId = relatedWidgetId;
-    }
-
-    public String getRelatedApplicationId() {
-        return relatedApplicationId;
-    }
-
-    public void setRelatedApplicationId(String relatedApplicationId) {
-        this.relatedApplicationId = relatedApplicationId;
-    }
     
     @Override
     public int hashCode() {
         int hash = 5;
         hash = 71 * hash + Objects.hashCode(this.widgetId);
-        if (application != null) {
-            hash = 71 * hash + Objects.hashCode(this.application);
-        } else if (relatedApplicationId != null) {
-            hash = 71 * hash + Objects.hashCode(this.relatedApplicationId);
-        }
+        hash = 71 * hash + Objects.hashCode(this.application);
         return hash;
     }
 
@@ -116,19 +91,10 @@ public class ApplicationToWidget implements Serializable {
         if (!Objects.equals(this.widgetId, other.widgetId)) {
             return false;
         }
-        if (this.application != null) {
-            if (!Objects.equals(this.application, other.application)) {
-                return false;
-            }
-        } else if (this.relatedApplicationId != null) {
-            if (!Objects.equals(this.relatedApplicationId, 
-                    other.relatedApplicationId)) {
-                return false;
-            }
+        if (!Objects.equals(this.application, other.application)) {
+            return false;
         }
         return true;
     }
-    
-    
 
 }

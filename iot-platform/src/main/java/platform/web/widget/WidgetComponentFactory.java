@@ -18,7 +18,7 @@ public class WidgetComponentFactory implements Serializable {
     public WidgetComponent createComponent(Widget widget) {
         return createComponent(widget, null);
     }
-
+    
     public WidgetComponent createComponent(Widget widget, String widgetId) {
         WidgetComponent component = null;
         String type = widget.getType();

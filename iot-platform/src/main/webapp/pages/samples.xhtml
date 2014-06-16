@@ -13,8 +13,10 @@
     <ui:define name="center">
         <h:form id="form">
             
-           <p:barChart value="#{samplesController.barChartModel}" orientation="horizontal"
-                       legendPosition="ne" extender="customExtender" />
+            <p:meterGaugeChart value="#{samplesController.gaugeChartModel}" />
+            
+<!--           <p:barChart value="samplesController.barChartModel" orientation="horizontal"
+                       legendPosition="ne" extender="customExtender" />-->
            
         </h:form>
         
