@@ -48,9 +48,6 @@ public class PropertyRandomProcessor implements Runnable {
             logger.debug("Property updated for product '"
                     + productKey + "', device '" + deviceKey + "', property '"
                     + propertyKey + "' setting value: " + random);
-            System.out.println("Property updated for product '"
-                    + productKey + "', device '" + deviceKey + "', property '"
-                    + propertyKey + "' setting value: " + random);
             try {
                 Thread.sleep(delay);
             } catch (InterruptedException ex) {

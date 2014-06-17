@@ -7,7 +7,7 @@ package platform.client;
 public class Main {
 
     private static final String SERVICE_URL
-            = "http://127.0.0.1:8080/iot-platform/rest/";
+            = "http://ec2-54-88-30-52.compute-1.amazonaws.com/iot-platform/rest/";
 
     public static void main(String[] args) {
         // /product/neocut/device/knife/property/vibration-speed
