@@ -15,7 +15,12 @@ public class JSFHelper {
 
     public static void addSuccessMessage(String message) {
         FacesContext.getCurrentInstance().addMessage(null,
-                new FacesMessage(message));
+                new FacesMessage(FacesMessage.SEVERITY_INFO, message, message));
+    }
+
+    public static void addErrorMessage(String message) {
+        FacesContext.getCurrentInstance().addMessage(null,
+                new FacesMessage(FacesMessage.SEVERITY_ERROR, message, message));
     }
 
     public static UIComponent createComponent(String componentType) {

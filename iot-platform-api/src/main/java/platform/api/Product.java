@@ -2,11 +2,9 @@ package platform.api;
 
 import java.io.Serializable;
 import java.util.Date;
-import java.util.List;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import org.eclipse.persistence.nosql.annotations.DataFormatType;
@@ -33,8 +31,6 @@ public class Product implements Serializable {
     private Date createdAt;
     @Temporal(TemporalType.TIMESTAMP)
     private Date updatedAt;    
-    @OneToMany
-    private List<Device> devices;
     
     public Product() {
         super();
@@ -100,14 +96,6 @@ public class Product implements Serializable {
 
     public void setBrand(String brand) {
         this.brand = brand;
-    }
-
-    public List<Device> getDevices() {
-        return devices;
-    }
-
-    public void setDevices(List<Device> devices) {
-        this.devices = devices;
     }
     
 }

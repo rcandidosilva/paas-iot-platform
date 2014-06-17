@@ -9,37 +9,39 @@
 
     <ui:composition>
         <h:form>
-            <p:dialog widgetVar="lineDialog" modal="true" header="Line Chart Widget" height="400" width="550">
-                <h:panelGrid columns="2">
+            <p:dialog widgetVar="lineDialog" modal="true" header="Line Chart Widget" height="350" width="700">
+                <h:panelGrid style="width: 100%;"> 
                     <p:outputLabel value="Title"/>
-                    <p:inputText value="#{lineWidgetController.widget.title}" required="true"/>
-
+                    <p:inputText value="#{lineWidgetController.widget.title}" required="true" size="60"/>
+                    <br/>
+                    <p:outputLabel value="Product"/>
+                    <p:selectOneMenu value="#{lineWidgetController.selectedProductKey}">
+                        <f:ajax event="change" render="device"/>
+                        <f:selectItem itemLabel="-- Selecione --" itemValue=""/>
+                        <f:selectItems value="#{lineWidgetController.products}" var="product" 
+                                       itemLabel="#{product.name}" itemValue="#{product.key}"/>
+                    </p:selectOneMenu>                    
+                    <br/>
                     <p:outputLabel value="Device"/>
-                    <p:selectOneMenu value="#{lineWidgetController.selectedDeviceKey}" required="true">
+                    <p:selectOneMenu id="device" value="#{lineWidgetController.selectedDeviceKey}" required="true">
                         <f:ajax event="change" render="property"/>
                         <f:selectItem itemLabel="-- Selecione --" itemValue=""/>
-                        <f:selectItems value="#{lineWidgetController.devices}" var="device" itemLabel="#{device.key}" itemValue="#{device.key}"/>
+                        <f:selectItems value="#{lineWidgetController.devices}" var="device" 
+                                       itemLabel="#{device.name}" itemValue="#{device.key}"/>
                     </p:selectOneMenu>
-
+                    <br/>
                     <p:outputLabel value="Property"/>
                     <p:selectOneMenu id="property" value="#{lineWidgetController.selectedPropertyKey}" required="true">
                         <f:selectItem itemLabel="-- Selecione --" itemValue=""/>
-                        <f:selectItems value="#{lineWidgetController.properties}" var="property" itemLabel="#{property.key}" itemValue="#{property.key}"/>
-                    </p:selectOneMenu>
-                    
-                    <p:outputLabel value="Interval"/>
-                    <p:selectOneMenu value="#{lineWidgetController.interval}" required="true">
-                        <f:selectItem itemLabel="5 seconds" itemValue="5"/>
-                        <f:selectItem itemLabel="30 seconds" itemValue="30"/>
-                        <f:selectItem itemLabel="1 minute" itemValue="60"/>
-                        <f:selectItem itemLabel="5 minutes" itemValue="300"/>
-                        <f:selectItem itemLabel="10 minutes" itemValue="600"/>
+                        <f:selectItems value="#{lineWidgetController.properties}" var="property" 
+                                       itemLabel="#{property.name}" itemValue="#{property.key}"/>
                     </p:selectOneMenu>
                 </h:panelGrid>
-
+                <br/>
                 <div align="right">
-                    <p:commandButton value="Add" action="#{lineWidgetController.addAction()}" oncomplete="PF('lineDialog').hide();" update=":dashboardForm"/> 
-                    <p:commandButton value="Cancel" oncomplete="PF('lineDialog').hide();"/>
+                    <p:commandButton styleClass="btn-primary" value="Add" action="#{lineWidgetController.addAction()}" 
+                                     oncomplete="PF('lineDialog').hide();" update=":dashboardForm"/> 
+                    <p:commandButton styleClass="btn-primary" value="Cancel" oncomplete="PF('lineDialog').hide();"/>
                 </div>
             </p:dialog>
         </h:form>

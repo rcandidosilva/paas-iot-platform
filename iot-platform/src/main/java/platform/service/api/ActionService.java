@@ -1,4 +1,4 @@
-package platform.service;
+package platform.service.api;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,6 +20,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import platform.api.Action;
 import platform.api.Device;
+import platform.service.PlatformException;
 
 /**
  *

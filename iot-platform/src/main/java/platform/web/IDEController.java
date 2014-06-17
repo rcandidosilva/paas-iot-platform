@@ -1,6 +1,5 @@
 package platform.web;
 
-import java.io.ByteArrayInputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -24,8 +23,6 @@ import org.primefaces.model.DashboardColumn;
 import org.primefaces.model.DashboardModel;
 import org.primefaces.model.DefaultDashboardColumn;
 import org.primefaces.model.DefaultDashboardModel;
-import org.primefaces.model.DefaultStreamedContent;
-import org.primefaces.model.StreamedContent;
 import org.primefaces.model.menu.DefaultMenuItem;
 import org.primefaces.model.menu.DefaultMenuModel;
 import platform.model.Application;
@@ -51,7 +48,7 @@ public class IDEController implements Serializable {
 
     private Map<String, WidgetComponent> widgets;
 
-    private int widgetCount;
+    private int widgetCount = 1;
 
     @Inject
     private WidgetTypeService widgetService;
@@ -80,11 +77,6 @@ public class IDEController implements Serializable {
         widgets = new HashMap<>();
     }
 
-    public void dropWidget(DragDropEvent event) {
-        Object data = event.getData();
-        // TODO
-    }
-
     private enum LinkType {
         LEFT, UP, DOWN, RIGHT
     };
@@ -93,9 +85,9 @@ public class IDEController implements Serializable {
 
         String widgetId = component.getWidgetId();
         if (widgetId == null) {
-            widgetId = "widget" + ++widgetCount;
+            widgetId = "widget" + widgetCount;
             logger.debug("Generated a new widgetId: " + widgetId);
-        }
+        } 
 
         Object uiComponent = component.createComponent(widgetId);
 
@@ -117,17 +109,22 @@ public class IDEController implements Serializable {
         Menu menu = createMenu(widgetId, component.getType());
         panel.getFacets().put("options", menu);
 
-        panel.setStyle("width: 400px; height: 330px;");
+        panel.setStyle("width: 400px; height: 350px;");
         panel.getChildren().add((UIComponent) uiComponent);
 
         dashboard.getChildren().add(panel);
 
         Widget widget = component.getWidget();
-        DashboardColumn column = model.getColumn(widget.getColumnIndex());
-        column.addWidget(widget.getColumnPosition(), panel.getId());
+        int columnIndex = widget.getColumnIndex() != null ? 
+                widget.getColumnIndex() : 0;
+        int columnPosition = widget.getColumnPosition() != null ?
+                widget.getColumnPosition() : 0;
+        DashboardColumn column = model.getColumn(columnIndex);
+        column.addWidget(columnPosition, panel.getId());
 
         widgets.put(widgetId, component);
-
+        widgetCount++;
+        
         logger.debug("Added a new widget '" + widgetId + "' to the dashboard");
     }
 
@@ -289,12 +286,6 @@ public class IDEController implements Serializable {
 
     public void setModel(DashboardModel model) {
         this.model = model;
-    }
-
-    public StreamedContent toIconFile(WidgetType widget) {
-        byte[] bytes = widget.getIconFile();
-        return new DefaultStreamedContent(
-                new ByteArrayInputStream(bytes), widget.getIconContentType());
     }
 
     public Application getApplication() {

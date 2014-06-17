@@ -5,3 +5,4 @@
 /iot-platform/.idea
 .idea
 .settings
+/iot-platform-api copy/target/

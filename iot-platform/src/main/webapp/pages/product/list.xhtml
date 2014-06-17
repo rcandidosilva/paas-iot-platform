@@ -1,0 +1,59 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:composition template="./../../resources/templates/main.xhtml">
+
+        <ui:define name="content">
+            <h:form>
+                <div align="center">
+                    <h1>Products List</h1>
+                </div>
+                <br/>
+                <div align="center"> 
+                    <div  style="width: 80%;">
+                        <p:dataTable id="table" value="#{productController.productList}" var="product" 
+                                     rows="10" paginator="true">
+                            <p:column headerText="Key" style="width: 10%;">
+                                <h:outputText value="#{product.key}"/>
+                            </p:column>
+                            <p:column headerText="Name" style="width: 10%;">
+                                <h:outputText value="#{product.name}"/>
+                            </p:column>
+                            <p:column headerText="Description" style="width: 40%;">
+                                <h:outputText value="#{product.description}"/>
+                            </p:column>                            
+                            <p:column width="160" headerText="Created At">
+                                <h:outputText value="#{product.createdAt}">
+                                    <f:convertDateTime pattern="dd/MM/yyyy HH:mm:ss"/>
+                                </h:outputText>
+                            </p:column>
+                            <p:column width="160" headerText="Updated At">
+                                <h:outputText value="#{product.updatedAt}">
+                                    <f:convertDateTime pattern="dd/MM/yyyy HH:mm:ss"/>
+                                </h:outputText>
+                            </p:column>
+                            <p:column width="40" style="text-align: center;">
+                                <p:commandLink value="#{bundle['global.edit']}" action="#{productController.edit(product)}"/>
+                            </p:column>
+                            <p:column width="40" style="text-align: center;">
+                                <p:commandLink value="#{bundle['global.delete']}" action="#{productController.delete(product)}" update="table"/>
+                            </p:column>                            
+                        </p:dataTable>
+                        <br/>
+                        <div align="right">
+                            <p:commandButton styleClass="btn-primary" value="New Product" action="#{productController.createNew()}"/>
+                        </div>
+                    </div>
+                </div>
+            </h:form>
+        </ui:define>
+
+    </ui:composition>
+
+</html>

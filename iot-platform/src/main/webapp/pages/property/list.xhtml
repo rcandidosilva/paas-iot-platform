@@ -1,0 +1,58 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:composition template="./../../resources/templates/main.xhtml">
+
+        <ui:define name="content">
+            <h:form>
+                <div align="center">
+                    <h1>Properties List</h1>
+                </div>
+                <br/>
+                <div align="center"> 
+                    <div  style="width: 80%;">
+                        <p:dataTable id="table" value="#{propertyController.propertyList}" var="property" 
+                                     rows="10" paginator="true">
+                            <p:column headerText="Key" style="width: 15%;">
+                                <h:outputText value="#{property.key}"/>
+                            </p:column>
+                            <p:column headerText="Description" style="width: 40%;">
+                                <h:outputText value="#{property.description}"/>
+                            </p:column>
+                            <p:column headerText="Device" style="width: 15%;">
+                                <h:outputText value="#{property.device.name}"/>
+                            </p:column>
+                            <p:column headerText="Product" style="width: 10%;">
+                                <h:outputText value="#{property.device.product.name}"/>
+                            </p:column>                            
+                            <p:column headerText="Updated At">
+                                <h:outputText value="#{property.timestamp}">
+                                    <f:convertDateTime pattern="dd/MM/yyyy HH:mm:ss"/>
+                                </h:outputText>
+                            </p:column>
+                            <p:column width="40" style="text-align:  center;">
+                                <p:commandLink value="#{bundle['global.edit']}" action="#{propertyController.edit(property)}"/>
+                            </p:column>
+                            <p:column width="40" style="text-align:  center;">
+                                <p:commandLink value="#{bundle['global.delete']}" action="#{propertyController.delete(property)}" update="table"/>
+                            </p:column>                            
+                        </p:dataTable>
+                        <br/>
+                        <div align="right">
+                            <p:commandButton styleClass="btn-primary" 
+                                             value="New Property" action="#{propertyController.createNew()}"/>
+                        </div>
+                    </div>
+                </div>
+            </h:form>
+        </ui:define>
+
+    </ui:composition>
+
+</html>

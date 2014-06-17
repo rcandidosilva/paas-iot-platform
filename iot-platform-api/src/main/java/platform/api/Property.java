@@ -25,6 +25,7 @@ public class Property implements Serializable {
     @Field(name = "_id")
     private String id;
     private String key;
+    private String name;
     private String value;
     private String description;
     @Temporal(TemporalType.TIMESTAMP)
@@ -51,7 +52,15 @@ public class Property implements Serializable {
     public void setId(String id) {
         this.id = id;
     }    
-        
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+    
     public String getKey() {
         return key;
     }

@@ -1,0 +1,48 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition template="./../../resources/templates/main.xhtml">
+
+        <ui:define name="content">
+            <h:form>
+                <div align="center">
+                    <h1>Product Form</h1>
+                </div>
+                <br/>                
+                <div align="center">
+                    <div style="width: 600px;">
+                        <p:panel>
+                            <h:panelGrid style="width: 100%;">
+                                <br/>
+                                <p:outputLabel value="Key"/>
+                                <p:inputText value="#{productController.product.key}" size="60"/>
+                                <br/>
+                                <p:outputLabel value="Name"/>
+                                <p:inputText value="#{productController.product.name}" size="60"/>
+                                <br/>
+                                <p:outputLabel value="Brand"/>
+                                <p:inputText value="#{productController.product.brand}" size="60"/>                                
+                                <br/>
+                                <p:outputLabel value="Description"/>
+                                <p:inputTextarea value="#{productController.product.description}" style="width: 100%;"/>
+                                <br/>
+                            </h:panelGrid>
+                        </p:panel>
+                        <br/>
+                        <div align="right">
+                            <p:commandButton styleClass="btn-primary" value="#{bundle['global.save']}" action="#{productController.save()}"/>
+                            <p:commandButton styleClass="btn-primary" value="#{bundle['global.back']}" action="/pages/product/list" immediate="true"/>
+                        </div>
+                    </div>
+                </div>
+            </h:form>
+        </ui:define>
+
+    </ui:composition>
+
+</html>

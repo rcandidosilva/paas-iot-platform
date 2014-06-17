@@ -6,9 +6,10 @@ import org.apache.log4j.Logger;
 import org.primefaces.component.chart.metergauge.MeterGaugeChart;
 import org.primefaces.component.panel.Panel;
 import org.primefaces.model.chart.MeterGaugeChartModel;
+import platform.api.Property;
 import platform.model.Widget;
 import platform.model.WidgetType;
-import platform.service.PropertyService;
+import platform.service.api.PropertyService;
 
 /**
  *
@@ -54,12 +55,21 @@ public class UIMeterComponent implements WidgetComponent {
 
     @Override
     public void update() {
-        // TODO buscar os valores atualizados da propriedade do device
-        Integer randomNum = new Random().nextInt((100 - 0) + 1) + 1;
-        meterModel.setValue(randomNum);
+        //Integer randomNum = new Random().nextInt((100 - 0) + 1) + 1;
 
-        logger.debug("Updated meter at widget '" + widgetId
-                + "' using value: " + randomNum);
+        if (widget.getProperties() != null
+                && !widget.getProperties().isEmpty()) {
+            
+            Property property = widget.getProperties().get(0);
+            property = service.get(property.getDevice().getKey(),
+                    property.getKey());
+
+            Double value = new Double(property.getValue());
+            meterModel.setValue(value);
+
+            logger.debug("Updated meter at widget '" + widgetId
+                    + "' using value: " + value);
+        }
     }
 
     @Override

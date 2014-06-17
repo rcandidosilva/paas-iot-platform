@@ -1,15 +1,15 @@
 package platform.web.widget;
 
-import java.util.Date;
 import java.util.Map;
 import java.util.Random;
 import org.apache.log4j.Logger;
 import org.primefaces.component.chart.line.LineChart;
 import org.primefaces.model.chart.CartesianChartModel;
 import org.primefaces.model.chart.ChartSeries;
+import platform.api.Property;
 import platform.model.Widget;
 import platform.model.WidgetType;
-import platform.service.PropertyService;
+import platform.service.api.PropertyService;
 
 /**
  *
@@ -25,7 +25,6 @@ public class UILineComponent implements WidgetComponent {
     private CartesianChartModel model;
 
     private int count;
-    private Date updatedTime;
 
     private Widget widget;
 
@@ -47,8 +46,6 @@ public class UILineComponent implements WidgetComponent {
 
         model = new CartesianChartModel();
 
-        updatedTime = new Date();
-
         ChartSeries series1 = new ChartSeries(widget.getProperties().get(0).getKey());
         // TODO buscar os valores atualizados da propriedade do device
         Integer randomNum = new Random().nextInt((100 - 0) + 1) + 1;
@@ -63,26 +60,26 @@ public class UILineComponent implements WidgetComponent {
 
     @Override
     public void update() {
-        if (updatedTime != null) {
-            Date now = new Date();
-            long intervalMilis = now.getTime() - updatedTime.getTime();
-            if (intervalMilis >= (widget.getIntervals().get(0) * 1000)) {
-                // TODO buscar os valores atualizados da propriedade do device
-                Integer randomNum = new Random().nextInt((100 - 0) + 1) + 1;
+        //Integer randomNum = new Random().nextInt((100 - 0) + 1) + 1;
 
-                ChartSeries series1 = model.getSeries().get(0);
-                Map<Object, Number> data = series1.getData();
-                if (data.size() == 20) {
-                    Object key = data.keySet().iterator().next();
-                    data.remove(key);
-                }
-                series1.set(++count, randomNum);
+        if (widget.getProperties() != null
+                && !widget.getProperties().isEmpty()) {
+            Property property = widget.getProperties().get(0);
+            property = service.get(property.getDevice().getKey(), 
+                    property.getKey());
 
-                logger.debug("Updated line at widget '" + widgetId
-                        + "' using value: " + randomNum);
+            ChartSeries series1 = model.getSeries().get(0);
+            Map<Object, Number> data = series1.getData();
+            if (data.size() == 20) {
+                Object key = data.keySet().iterator().next();
+                data.remove(key);
             }
+            
+            Double value = new Double(property.getValue());
+            series1.set(++count, value);
+            logger.debug("Updated line at widget '" + widgetId
+                    + "' using value: " + value);
         }
-
     }
 
     @Override

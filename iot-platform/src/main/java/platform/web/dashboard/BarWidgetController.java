@@ -10,11 +10,14 @@ import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 import platform.api.Device;
+import platform.api.Product;
 import platform.api.Property;
 import platform.model.Widget;
 import platform.model.WidgetType;
-import platform.service.DeviceService;
-import platform.service.PropertyService;
+import platform.service.api.DeviceService;
+import platform.service.api.ProductDeviceService;
+import platform.service.api.ProductService;
+import platform.service.api.PropertyService;
 import platform.web.IDEController;
 import platform.web.widget.UIBarComponent;
 
@@ -28,11 +31,9 @@ public class BarWidgetController implements Serializable {
     
     private String selectedDeviceKey;
     private String selectedPropertyKey;
-    private Double interval;
+    private String selectedProductKey;
     
-    private List<Device> devices;
     private List<Property> properties;
-    
     private ListDataModel<Property> propertiesModel;
         
     private Widget widget;
@@ -44,12 +45,17 @@ public class BarWidgetController implements Serializable {
     private PropertyService propertyService;
     
     @Inject
+    private ProductService productService;
+    
+    @Inject
+    private ProductDeviceService productDeviceService;
+    
+    @Inject
     private IDEController ide;
     
     @PostConstruct
     public void init() {
         widget = new Widget(WidgetType.BAR);
-        devices = deviceService.list();
         propertiesModel = new ListDataModel<>(new ArrayList<Property>());
     }
 
@@ -77,12 +83,12 @@ public class BarWidgetController implements Serializable {
         this.selectedPropertyKey = selectedPropertyKey;
     }
 
-    public Double getInterval() {
-        return interval;
+    public String getSelectedProductKey() {
+        return selectedProductKey;
     }
 
-    public void setInterval(Double interval) {
-        this.interval = interval;
+    public void setSelectedProductKey(String selectedProductKey) {
+        this.selectedProductKey = selectedProductKey;
     }
 
     public ListDataModel<Property> getPropertiesModel() {
@@ -92,9 +98,16 @@ public class BarWidgetController implements Serializable {
     public void setPropertiesModel(ListDataModel<Property> propertiesModel) {
         this.propertiesModel = propertiesModel;
     }
+    
+    public List<Product> getProducts() {
+        return productService.list();
+    }
            
     public List<Device> getDevices() {
-        return devices;
+        if (selectedProductKey != null && !"".equals(selectedProductKey)) {
+            return productDeviceService.list(selectedProductKey);
+        }
+        return deviceService.list();
     }
     
     public List<Property> getProperties() {
@@ -119,7 +132,6 @@ public class BarWidgetController implements Serializable {
         List<Property> properties = (List<Property>) 
                 propertiesModel.getWrappedData();
         widget.setProperties(properties);
-        widget.setIntervals(Arrays.asList(new Double[] {interval}));
         UIBarComponent component = new UIBarComponent(widget, propertyService);     
         ide.addWidget(component);
     }

@@ -13,9 +13,9 @@
         <ui:define name="content">
             <h:form>
                 <div align="center">
-                    <h1>Lista de Widgets</h1>
+                    <h1>Widgets List</h1>
                 </div>
-
+                <br/>
                 <div align="center"> 
                     <div  style="width: 80%;">
                         <p:dataTable id="table" value="#{widgetTypeController.widgetTypeList}" var="type" 
@@ -30,14 +30,15 @@
                                 <h:outputText value="#{type.description}"/>
                             </p:column>
                             <p:column style="width: 4%;">
-                                <p:commandLink value="Editar" action="#{widgetTypeController.edit(type)}"/>
+                                <p:commandLink value="Edit" action="#{widgetTypeController.edit(type)}"/>
                             </p:column>
                             <p:column style="width: 4%;">
-                                <p:commandLink value="Deletar" action="#{widgetTypeController.delete(type)}"/>
+                                <p:commandLink value="Delete" action="#{widgetTypeController.delete(type)}"/>
                             </p:column>                            
                         </p:dataTable>
+                        <br/>
                         <div align="right">
-                            <p:commandButton value="Novo Widget" action="#{widgetTypeController.createNew()}"/>
+                            <p:commandButton styleClass="btn-primary" value="New Widget" action="#{widgetTypeController.createNew()}"/>
                         </div>
                     </div>
                 </div>

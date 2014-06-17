@@ -9,36 +9,37 @@
 
     <ui:composition>
         <h:form>
-            <p:dialog widgetVar="areaDialog" modal="true" header="Bar Widget" height="400" width="550">
-                <h:panelGrid columns="2">
+            <p:dialog widgetVar="areaDialog" modal="true" header="Area Widget" height="600" width="700">
+                <h:panelGrid style="width: 100%;">
                     <p:outputLabel value="Title"/>
-                    <p:inputText value="#{areaWidgetController.widget.title}" required="true"/>
-                    
-                    <p:outputLabel value="Interval"/>
-                    <p:selectOneMenu value="#{areaWidgetController.interval}" required="true">
-                        <f:selectItem itemLabel="5 seconds" itemValue="5"/>
-                        <f:selectItem itemLabel="30 seconds" itemValue="30"/>
-                        <f:selectItem itemLabel="1 minute" itemValue="60"/>
-                        <f:selectItem itemLabel="5 minutes" itemValue="300"/>
-                        <f:selectItem itemLabel="10 minutes" itemValue="600"/>
-                    </p:selectOneMenu>
-                    
+                    <p:inputText value="#{areaWidgetController.widget.title}" required="true" size="60"/>
+                    <br/>
+                    <p:outputLabel value="Product"/>
+                    <p:selectOneMenu id="product" value="#{areaWidgetController.selectedProductKey}">
+                        <f:ajax event="change" render="device"/>
+                        <f:selectItem itemLabel="-- Selecione --" itemValue=""/>
+                        <f:selectItems value="#{areaWidgetController.products}" var="product" 
+                                       itemLabel="#{product.name}" itemValue="#{product.key}"/>
+                    </p:selectOneMenu>                     
+                    <br/>
                     <p:outputLabel value="Device"/>
                     <p:selectOneMenu id="device" value="#{areaWidgetController.selectedDeviceKey}" required="true">
                         <f:ajax event="change" render="property"/>
                         <f:selectItem itemLabel="-- Selecione --" itemValue=""/>
-                        <f:selectItems value="#{areaWidgetController.devices}" var="device" itemLabel="#{device.key}" itemValue="#{device.key}"/>
+                        <f:selectItems value="#{areaWidgetController.devices}" var="device" 
+                                       itemLabel="#{device.name}" itemValue="#{device.key}"/>
                     </p:selectOneMenu>
-
+                    <br/>
                     <p:outputLabel value="Property"/>
                     <p:selectOneMenu id="property" value="#{areaWidgetController.selectedPropertyKey}" required="true">
                         <f:selectItem itemLabel="-- Selecione --" itemValue=""/>
-                        <f:selectItems value="#{areaWidgetController.properties}" var="property" itemLabel="#{property.key}" itemValue="#{property.key}"/>
+                        <f:selectItems value="#{areaWidgetController.properties}" var="property" 
+                                       itemLabel="#{property.name}" itemValue="#{property.key}"/>
                     </p:selectOneMenu>
-                    
+                    <br/>
                     <p:commandButton value="Add Property" action="#{areaWidgetController.newProperty()}" update="dataTable" process="@this,device,property" />                                        
                 </h:panelGrid>
-                
+                <br/><br/>
                 <p:dataTable id="dataTable" value="#{areaWidgetController.propertiesModel}" var="prop" rows="5" paginator="true">
                     <p:column headerText="Device">
                         <h:outputText value="#{prop.device.key}"/>
@@ -50,7 +51,7 @@
                         <p:commandLink value="Delete" action="#{areaWidgetController.deleteProperty()}" update="dataTable"/>
                     </p:column>
                 </p:dataTable>                
-
+                <br/>
                 <div align="right">
                     <p:commandButton value="Add" action="#{areaWidgetController.addAction()}" oncomplete="PF('areaDialog').hide();" update=":dashboardForm"/> 
                     <p:commandButton value="Cancel" oncomplete="PF('areaDialog').hide();"/>

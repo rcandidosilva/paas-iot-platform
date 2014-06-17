@@ -9,7 +9,7 @@
 
     <ui:composition>
         <h:form>
-            <p:dialog widgetVar="meterDialog" modal="true" header="Gauge Meter Widget" height="600" width="700" resizable="false">
+            <p:dialog widgetVar="meterDialog" modal="true" header="Gauge Meter Widget" height="650" width="700" resizable="false">
                 <h:panelGrid style="width: 100%;">
                     <p:outputLabel value="Title"/>
                     <p:inputText value="#{meterWidgetController.widget.title}" required="true" size="60"/>
@@ -17,17 +17,27 @@
                     <p:outputLabel value="Label"/>
                     <p:inputText value="#{meterWidgetController.widget.label}" required="true" size="60"/>
                     <br/>
+                    <p:outputLabel value="Product"/>
+                    <p:selectOneMenu value="#{meterWidgetController.selectedProductKey}">
+                        <f:ajax event="change" render="device"/>
+                        <f:selectItem itemLabel="-- Selecione --" itemValue=""/>
+                        <f:selectItems value="#{meterWidgetController.products}" var="product" 
+                                       itemLabel="#{product.name}" itemValue="#{product.key}"/>
+                    </p:selectOneMenu>                    
+                    <br/>
                     <p:outputLabel value="Device"/>
-                    <p:selectOneMenu value="#{meterWidgetController.selectedDeviceKey}" required="true">
+                    <p:selectOneMenu id="device" value="#{meterWidgetController.selectedDeviceKey}" required="true">
                         <f:ajax event="change" render="property"/>
                         <f:selectItem itemLabel="-- Selecione --" itemValue=""/>
-                        <f:selectItems value="#{meterWidgetController.devices}" var="device" itemLabel="#{device.key}" itemValue="#{device.key}"/>
+                        <f:selectItems value="#{meterWidgetController.devices}" var="device" 
+                                       itemLabel="#{device.name}" itemValue="#{device.key}"/>
                     </p:selectOneMenu>
                     <br/>
                     <p:outputLabel value="Property"/>
                     <p:selectOneMenu id="property" value="#{meterWidgetController.selectedPropertyKey}" required="true">
                         <f:selectItem itemLabel="-- Selecione --" itemValue=""/>
-                        <f:selectItems value="#{meterWidgetController.properties}" var="property" itemLabel="#{property.key}" itemValue="#{property.key}"/>
+                        <f:selectItems value="#{meterWidgetController.properties}" var="property" 
+                                       itemLabel="#{property.name}" itemValue="#{property.key}"/>
                     </p:selectOneMenu>
                     <br/>
                     <p:outputLabel value="New Interval"/>
@@ -37,19 +47,19 @@
                         <p:commandButton value="Add Interval" action="#{meterWidgetController.newInterval()}" update="dataTable" process="@this,interval" />
                     </h:panelGroup>
                 </h:panelGrid>
-                <br/><br/>
+                <br/>
                 <p:dataTable id="dataTable" value="#{meterWidgetController.intervalsModel}" var="interval" rows="2" paginator="true">
                     <p:column headerText="Interval">
                         <h:outputText value="#{interval}"/>
                     </p:column>
                     <p:column>
-                        <p:commandLink value="Delete" action="#{meterWidgetController.deleteInterval()}" update="dataTable"/>
+                        <p:commandLink styleClass="btn-primary" value="Delete" action="#{meterWidgetController.deleteInterval()}" update="dataTable"/>
                     </p:column>
                 </p:dataTable>
-
+                <br/>
                 <div align="right">
-                    <p:commandButton value="Add" action="#{meterWidgetController.addAction()}" oncomplete="PF('meterDialog').hide();" update=":dashboardForm"/> 
-                    <p:commandButton value="Cancel" oncomplete="PF('meterDialog').hide();"/>
+                    <p:commandButton styleClass="btn-primary" value="Add" action="#{meterWidgetController.addAction()}" oncomplete="PF('meterDialog').hide();" update=":dashboardForm"/> 
+                    <p:commandButton styleClass="btn-primary" value="Cancel" oncomplete="PF('meterDialog').hide();"/>
                 </div>
             </p:dialog>
         </h:form>

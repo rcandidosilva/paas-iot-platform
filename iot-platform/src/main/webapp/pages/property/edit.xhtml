@@ -1,0 +1,62 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:composition template="./../../resources/templates/main.xhtml">
+
+        <ui:define name="content">
+            <h:form>
+                <div align="center">
+                    <h1>Property Form</h1>
+                </div>
+                <br/>                
+                <div align="center">
+                    <div style="width: 600px;">
+                        <p:panel>
+                            <h:panelGrid style="width: 100%;">
+                                <br/>
+                                <p:outputLabel value="Product"/>
+                                <p:selectOneMenu value="#{propertyController.selectedProductKey}">
+                                    <f:ajax event="change" render="device"/>
+                                    <f:selectItem itemLabel="-- Select --" itemValue=""/>
+                                    <f:selectItems value="#{propertyController.productList}" var="product" 
+                                                   itemLabel="#{product.name}" itemValue="#{product.key}"/>
+                                </p:selectOneMenu>   
+                                <br/>
+                                <p:outputLabel value="Device"/>
+                                <p:selectOneMenu id="device" value="#{propertyController.selectedDeviceKey}" required="true">
+                                    <f:selectItems value="#{propertyController.deviceList}" var="device" 
+                                                   itemLabel="#{device.name}" itemValue="#{device.key}"/>
+                                </p:selectOneMenu>                                  
+                                <br/>
+                                <p:outputLabel value="Key"/>
+                                <p:inputText value="#{propertyController.property.key}" size="60" required="true"/>                              
+                                <br/>
+                                <p:outputLabel value="Name"/>
+                                <p:inputText value="#{propertyController.property.name}" size="60" required="true"/>                                     
+                                <br/>
+                                <p:outputLabel value="Description"/>
+                                <p:inputTextarea value="#{propertyController.property.description}" style="width: 100%;"/>
+                                <br/>
+                            </h:panelGrid>
+                        </p:panel>
+                        <br/>
+                        <div align="right">
+                            <p:commandButton styleClass="btn-primary" 
+                                             value="#{bundle['global.save']}" action="#{propertyController.save()}"/>
+                            <p:commandButton styleClass="btn-primary" 
+                                             value="#{bundle['global.back']}" action="/pages/property/list" immediate="true"/>
+                        </div>
+                    </div>
+                </div>
+            </h:form>
+        </ui:define>
+
+    </ui:composition>
+
+</html>

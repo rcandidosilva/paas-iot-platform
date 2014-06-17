@@ -10,7 +10,7 @@ import org.primefaces.model.map.LatLng;
 import platform.api.Device;
 import platform.model.Widget;
 import platform.model.WidgetType;
-import platform.service.DeviceService;
+import platform.service.api.DeviceService;
 import platform.web.IDEController;
 import platform.web.widget.UILocationComponent;
 

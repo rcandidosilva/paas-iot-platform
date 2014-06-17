@@ -9,11 +9,14 @@ import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 import platform.api.Device;
+import platform.api.Product;
 import platform.api.Property;
 import platform.model.Widget;
 import platform.model.WidgetType;
-import platform.service.DeviceService;
-import platform.service.PropertyService;
+import platform.service.api.DeviceService;
+import platform.service.api.ProductDeviceService;
+import platform.service.api.ProductService;
+import platform.service.api.PropertyService;
 import platform.web.IDEController;
 import platform.web.widget.UILineComponent;
 
@@ -27,9 +30,8 @@ public class LineWidgetController implements Serializable {
    
     private String selectedDeviceKey;
     private String selectedPropertyKey;
-    private Double interval;
-    
-    private List<Device> devices;
+    private String selectedProductKey;
+
     private List<Property> properties;
         
     private Widget widget;
@@ -41,12 +43,17 @@ public class LineWidgetController implements Serializable {
     private PropertyService propertyService;
     
     @Inject
+    private ProductService productService;
+    
+    @Inject
+    private ProductDeviceService productDeviceService;
+    
+    @Inject
     private IDEController ide;
     
     @PostConstruct
     public void init() {
         widget = new Widget(WidgetType.LINE);
-        devices = deviceService.list();
     }
 
     public Widget getWidget() {
@@ -73,16 +80,23 @@ public class LineWidgetController implements Serializable {
         this.selectedPropertyKey = selectedPropertyKey;
     }
 
-    public Double getInterval() {
-        return interval;
+    public String getSelectedProductKey() {
+        return selectedProductKey;
     }
 
-    public void setInterval(Double interval) {
-        this.interval = interval;
+    public void setSelectedProductKey(String selectedProductKey) {
+        this.selectedProductKey = selectedProductKey;
+    }
+    
+    public List<Product> getProducts() {
+        return productService.list();
     }
     
     public List<Device> getDevices() {
-        return devices;
+        if (selectedProductKey != null && !"".equals(selectedProductKey)) {
+            return productDeviceService.list(selectedProductKey);
+        }
+        return deviceService.list();
     }
     
     public List<Property> getProperties() {
@@ -95,7 +109,6 @@ public class LineWidgetController implements Serializable {
     public void addAction() {
         Property property = propertyService.get(selectedDeviceKey, selectedPropertyKey);
         widget.setProperties(Arrays.asList(new Property[] {property}));
-        widget.setIntervals(Arrays.asList(new Double[] {interval}));
         UILineComponent component = new UILineComponent(widget, propertyService);     
         ide.addWidget(component);
     }

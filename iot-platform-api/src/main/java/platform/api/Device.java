@@ -15,16 +15,17 @@ import org.eclipse.persistence.nosql.annotations.Field;
 import org.eclipse.persistence.nosql.annotations.NoSql;
 
 /**
- * 
+ *
  * Represents a smart device to be managed by the Cloud platform
- * 
+ *
  * @author Rodrigo Cândido da Silva
  */
 @Entity
 @NoSql(dataFormat = DataFormatType.MAPPED)
 public class Device implements Serializable {
-    
-    @Id @GeneratedValue
+
+    @Id
+    @GeneratedValue
     @Field(name = "_id")
     private String id;
     private String key;
@@ -38,17 +39,19 @@ public class Device implements Serializable {
     @OneToOne(cascade = CascadeType.ALL)
     private Location location;
     @ManyToOne
+    private Product product;
+    @ManyToOne
     private Device parent;
-    
+
     public Device() {
         super();
     }
-    
+
     public Device(String key) {
         this.key = key;
     }
-    
-    public Device(String key, String name, 
+
+    public Device(String key, String name,
             String description, Location location) {
         this.key = key;
         this.name = name;
@@ -70,8 +73,8 @@ public class Device implements Serializable {
 
     public void setKey(String key) {
         this.key = key;
-    }    
-    
+    }
+
     public String getName() {
         return name;
     }
@@ -95,7 +98,7 @@ public class Device implements Serializable {
     public void setCreatedAt(Date createdAt) {
         this.createdAt = createdAt;
     }
-    
+
     public Date getUpdatedAt() {
         return updatedAt;
     }
@@ -127,5 +130,13 @@ public class Device implements Serializable {
     public void setParent(Device parent) {
         this.parent = parent;
     }
-        
+
+    public Product getProduct() {
+        return product;
+    }
+
+    public void setProduct(Product product) {
+        this.product = product;
+    }
+    
 }

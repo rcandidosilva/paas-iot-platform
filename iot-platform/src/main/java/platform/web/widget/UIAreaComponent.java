@@ -9,7 +9,7 @@ import org.primefaces.model.chart.ChartSeries;
 import platform.api.Property;
 import platform.model.Widget;
 import platform.model.WidgetType;
-import platform.service.PropertyService;
+import platform.service.api.PropertyService;
 
 /**
  *
@@ -18,14 +18,12 @@ import platform.service.PropertyService;
 public class UIAreaComponent implements WidgetComponent {
 
     private static final Logger logger = Logger.getLogger(UIAreaComponent.class);
-    
+
     private String widgetId;
-    
+
     private LineChart chart;
     private CartesianChartModel model;
 
-    private Date updatedTime;
-    
     private Widget widget;
 
     private PropertyService service;
@@ -43,18 +41,14 @@ public class UIAreaComponent implements WidgetComponent {
     @Override
     public Object createComponent(String widgetId) {
         this.widgetId = widgetId;
-        
-        updatedTime = new Date();
 
         model = new CartesianChartModel();
 
         for (Property prop : widget.getProperties()) {
             ChartSeries series = new ChartSeries(prop.getDevice().getKey());
-            
-            // TODO buscar os valores atualizados da propriedade do device
-            Integer randomNum = new Random().nextInt((100 - 0) + 1) + 1;
-            
-            series.set(prop.getKey(), randomNum);
+
+            Double value = new Double(prop.getValue());
+            series.set(prop.getKey(), value);
             model.addSeries(series);
         }
 
@@ -68,33 +62,22 @@ public class UIAreaComponent implements WidgetComponent {
 
     @Override
     public void update() {
-        if (updatedTime != null) {
-            Date now = new Date();
-            long intervalMilis = now.getTime() - updatedTime.getTime();
-            if (intervalMilis >= (widget.getIntervals().get(0) * 1000)) {
-                for (ChartSeries series : model.getSeries()) {
-                    String deviceKey = series.getLabel();
-                    String propertyKey = (String) 
-                            series.getData().keySet().iterator().next();
-                    service.get(deviceKey, propertyKey);
-                    
-                    // TODO
-                    Integer randomNum = new Random().nextInt((100 - 0) + 1) + 1;
-                    
-                    series.set(propertyKey, randomNum);
-                }
-                
-                logger.debug("Updated area widget '" + widgetId + "' at " 
-                        + new Date());
-            }
+        for (ChartSeries series : model.getSeries()) {
+            String deviceKey = series.getLabel();
+            String propertyKey = (String) series.getData().keySet().iterator().next();
+            Property property = service.get(deviceKey, propertyKey);
 
+            Double value = new Double(property.getValue());
+            series.set(propertyKey, value);
         }
+        logger.debug("Updated area widget '" + widgetId + "' at "
+                + new Date());
     }
 
     @Override
     public String getType() {
         return WidgetType.AREA;
-    }    
+    }
 
     @Override
     public Widget getWidget() {
@@ -115,5 +98,5 @@ public class UIAreaComponent implements WidgetComponent {
     public String getWidgetId() {
         return widgetId;
     }
-    
+
 }

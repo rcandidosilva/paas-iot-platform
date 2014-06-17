@@ -22,7 +22,8 @@
                         <p:panel id="widgetPanel" header="#{widget.name}" style="align: center;">
                             <h:inputHidden id="widgetKey" value="#{widget.type}"/>
                             <p:graphicImage library="images" name="#{widget.type}.png" width="100" height="100"/>
-                            <p:draggable for="widgetPanel" revert="true" helper="clone"/>
+                            <p:draggable for="widgetPanel" revert="true" helper="clone" 
+                                disabled="#{widget.type == 'location' or widget.type == 'ohlc' or widget.type == 'pie'}"/>
                         </p:panel>
                     </p:dataGrid>
                 </p:fieldset>   
@@ -34,16 +35,16 @@
             <h:form id="dashboardForm">
                 <h:panelGrid columns="4">
                     <p:commandButton value="#{bundle['ide.save']}" oncomplete="PF('saveApplicationDialog').show();"/>
-                    <p:commandButton value="#{bundle['ide.preview']}" action="#{ideController.preview()}" />
-                    <p:commandButton value="#{bundle['ide.publish']}"/>
-                    <p:commandButton value="#{bundle['ide.delete']}" oncomplete="PF('deleteApplicationDialog').show();"/>
-
+                    <p:commandButton value="#{bundle['ide.preview']}" action="#{ideController.preview()}"
+                                     disabled="#{ideController.application.id == null}"/>
+                    <p:commandButton value="#{bundle['ide.publish']}"
+                                     disabled="#{ideController.application.id == null}"/>
+                    <p:commandButton value="#{bundle['ide.delete']}" oncomplete="PF('deleteApplicationDialog').show();"
+                                     disabled="#{ideController.application.id == null}"/>
                 </h:panelGrid>
 
                 <p:droppable for="dashboardArea" tolerance="touch" activeStyleClass="ui-state-highlight" 
-                             datasource=":form1:widgetsList" onDrop="handleDrop" >
-                    <p:ajax listener="#{ideController.dropWidget}" update="dropArea dashboard" />
-                </p:droppable>
+                             datasource=":form1:widgetsList" onDrop="handleDrop" />
 
                 <p:fieldset id="dashboardArea">
                     <p:outputPanel id="dropArea">

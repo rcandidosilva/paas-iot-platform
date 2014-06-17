@@ -31,7 +31,8 @@
     <h:body>
 
         <ui:include src="menu.xhtml"/>
-
+        
+        <p:growl id="growl" showDetail="true" sticky="true" /> 
         <p:ajaxStatus onstart="PF('statusDialog').show()" onsuccess="PF('statusDialog').hide()" />
 
         <p:dialog widgetVar="statusDialog" modal="true" draggable="false" closable="false" resizable="false" showHeader="false">

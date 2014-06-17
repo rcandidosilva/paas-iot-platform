@@ -1,4 +1,4 @@
-package platform.service;
+package platform.service.api;
 
 import java.util.ArrayList;
 import platform.api.Device;
@@ -21,6 +21,7 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import platform.api.PropertyTracking;
+import platform.service.PlatformException;
 
 /**
  *
@@ -39,7 +40,7 @@ public class PropertyService {
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     public void create(@PathParam("deviceKey") String deviceKey,
-            Property property) {      
+            Property property) {
         Device device = getDevice(deviceKey);
         List<Property> list = list(deviceKey);
         for (Property p : list) {
@@ -114,6 +115,15 @@ public class PropertyService {
             return result;
         }
         return new ArrayList<>();
+    }
+
+    public List<Property> listAll() {
+        CriteriaBuilder builder = manager.getCriteriaBuilder();
+        CriteriaQuery query = builder.createQuery();
+        Root<Property> root = query.from(Property.class);
+        query.select(root);
+        //query.where(builder.equal(root.get("device").get("id"), device));
+        return manager.createQuery(query).getResultList();
     }
 
     @GET

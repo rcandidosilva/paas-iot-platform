@@ -1,4 +1,4 @@
-package platform.service.test.client;
+package platform.client.delegate;
 
 import java.text.MessageFormat;
 import java.util.List;
@@ -21,14 +21,16 @@ public class PropertyServiceClient {
     private WebTarget webTarget;
     private Client client;
 
-    public PropertyServiceClient(String baseUri, String deviceKey) {
+    public PropertyServiceClient(String baseUri, String productKey, String deviceKey) {
         client = ClientBuilder.newClient();
-        String resourcePath = MessageFormat.format("device/{0}/property", new Object[]{deviceKey});
+        String resourcePath = MessageFormat.format("product/{0}/device/{1}/property",
+                new Object[]{productKey, deviceKey});
         webTarget = client.target(baseUri).path(resourcePath);
     }
 
-    public void setResourcePath(String baseUri, String deviceKey) {
-        String resourcePath = MessageFormat.format("device/{0}/property", new Object[]{deviceKey});
+    public void setResourcePath(String baseUri, String productKey, String deviceKey) {
+        String resourcePath = MessageFormat.format("product/{0}/device/{1}/property",
+                new Object[]{productKey, deviceKey});
         webTarget = client.target(baseUri).path(resourcePath);
     }
 
@@ -55,7 +57,8 @@ public class PropertyServiceClient {
     }
 
     public List<Property> list() throws ClientErrorException {
-        return webTarget.request().get(new GenericType<List<Property>>() {});
+        return webTarget.request().get(new GenericType<List<Property>>() {
+        });
     }
 
     public void delete(String key) throws ClientErrorException {

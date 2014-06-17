@@ -18,8 +18,8 @@ import platform.api.Device;
 import platform.api.Property;
 import platform.model.Widget;
 import platform.model.WidgetType;
-import platform.service.DeviceService;
-import platform.service.PropertyService;
+import platform.service.api.DeviceService;
+import platform.service.api.PropertyService;
 import platform.web.IDEController;
 
 /**

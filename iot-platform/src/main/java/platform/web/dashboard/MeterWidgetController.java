@@ -10,11 +10,14 @@ import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 import platform.api.Device;
+import platform.api.Product;
 import platform.api.Property;
 import platform.model.Widget;
 import platform.model.WidgetType;
-import platform.service.DeviceService;
-import platform.service.PropertyService;
+import platform.service.api.DeviceService;
+import platform.service.api.ProductDeviceService;
+import platform.service.api.ProductService;
+import platform.service.api.PropertyService;
 import platform.web.IDEController;
 import platform.web.widget.WidgetComponent;
 import platform.web.widget.WidgetComponentFactory;
@@ -33,8 +36,8 @@ public class MeterWidgetController implements Serializable {
     private Double interval;
     private String selectedDeviceKey;
     private String selectedPropertyKey;
+    private String selectedProductKey;
     
-    private List<Device> devices;
     private ListDataModel<Double> intervalsModel;
     
     @Inject
@@ -42,6 +45,12 @@ public class MeterWidgetController implements Serializable {
 
     @Inject
     private PropertyService propertyService;
+    
+    @Inject
+    private ProductService productService;
+    
+    @Inject
+    private ProductDeviceService productServiceService;
     
     @Inject
     private IDEController ide;
@@ -52,8 +61,7 @@ public class MeterWidgetController implements Serializable {
     @PostConstruct
     public void init() {
         widget = new Widget(WidgetType.METER);
-        intervalsModel = new ListDataModel<>(new ArrayList<Double>());
-        devices = deviceService.list();        
+        intervalsModel = new ListDataModel<>(new ArrayList<Double>());     
     }
 
     public Widget getWidget() {
@@ -91,9 +99,24 @@ public class MeterWidgetController implements Serializable {
     public void setSelectedPropertyKey(String selectedPropertyKey) {
         this.selectedPropertyKey = selectedPropertyKey;
     }
+
+    public String getSelectedProductKey() {
+        return selectedProductKey;
+    }
+
+    public void setSelectedProductKey(String selectedProductKey) {
+        this.selectedProductKey = selectedProductKey;
+    }
+    
+    public List<Product> getProducts() {
+        return productService.list();
+    }
     
     public List<Device> getDevices() {
-        return devices;
+        if (selectedProductKey != null && !"".equals(selectedProductKey)) {
+            return productServiceService.list(selectedProductKey);
+        }
+        return deviceService.list();
     }
 
     public List<Property> getProperties() {

@@ -28,10 +28,10 @@
                         </p:panel>
 
                         <div align="right">
-                            <p:commandButton value="#{bundle['global.save']}" action="#{widgetTypeController.save()}" ajax="false">
+                            <p:commandButton styleClass="btn-primary" value="#{bundle['global.save']}" action="#{widgetTypeController.save()}" ajax="false">
                                 <f:ajax execute="@all" render="form"/>
                             </p:commandButton> 
-                            <p:commandButton value="#{bundle['global.back']}" action="/pages/widgetType/list" immediate="true"/>
+                            <p:commandButton styleClass="btn-primary" value="#{bundle['global.back']}" action="/pages/widgetType/list" immediate="true"/>
                         </div>
                     </div>
                 </div>

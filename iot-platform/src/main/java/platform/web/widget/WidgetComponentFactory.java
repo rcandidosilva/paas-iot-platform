@@ -4,7 +4,7 @@ import java.io.Serializable;
 import javax.inject.Inject;
 import platform.model.Widget;
 import platform.model.WidgetType;
-import platform.service.PropertyService;
+import platform.service.api.PropertyService;
 
 /**
  *

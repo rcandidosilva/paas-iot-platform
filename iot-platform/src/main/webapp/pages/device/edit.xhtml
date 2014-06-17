@@ -12,23 +12,46 @@
         <ui:define name="content">
             <h:form>
                 <div align="center">
+                    <h1>#{bundle['device.form']}</h1>
+                </div>
+                <br/>
+                <div align="center">
                     <div style="width: 600px;">
-                        <p:panel header="#{bundle['device.form']}">
-                            <h:panelGrid>
+                        <p:panel>
+                            <h:panelGrid style="width:100%;">
+                                <br/>
+                                <p:outputLabel value="Product"/>
+                                <p:selectOneMenu value="#{deviceController.selectedProductKey}">
+                                    <f:selectItem itemLabel="-- Select --" itemValue=""/>
+                                    <f:selectItems value="#{deviceController.productList}" var="product" 
+                                                   itemLabel="#{product.name}" itemValue="#{product.key}"/>
+                                </p:selectOneMenu> 
+                                <br/>
+                                <p:outputLabel value="Parent Device"/>
+                                <p:selectOneMenu value="#{deviceController.selectedParentKey}">
+                                    <f:selectItem itemLabel="-- Select --" itemValue=""/>
+                                    <f:selectItems value="#{deviceController.deviceList}" var="parent" 
+                                                   itemLabel="#{parent.name}" itemValue="#{parent.key}"/>
+                                </p:selectOneMenu>                                 
+                                <br/>
                                 <p:outputLabel value="#{bundle['device.key']}"/>
-                                <p:inputText value="#{deviceController.device.key}"/>
-                                <p:outputLabel value="#{bundle['device.name']}"/>
-                                <p:inputText value="#{deviceController.device.name}"/>
+                                <p:inputText value="#{deviceController.device.key}" size="60" required="true"/>
+                                <br/>
+                                <p:outputLabel value="#{bundle['device.name']}" />
+                                <p:inputText value="#{deviceController.device.name}" size="60" required="true"/>
+                                <br/>
                                 <p:outputLabel value="#{bundle['device.description']}"/>
-                                <p:inputTextarea value="#{deviceController.device.description}"/>
+                                <p:inputTextarea value="#{deviceController.device.description}" style="width: 100%;"/>
+                                <br/>
                                 <p:outputLabel for="enabled" value="#{bundle['device.enabled']}"/>
                                 <p:selectBooleanCheckbox id="enabled" value="#{deviceController.device.enabled}"/>
+                                <br/>
                             </h:panelGrid>
                         </p:panel>
-
+                        <br/>
                         <div align="right">
-                            <p:commandButton value="#{bundle['global.save']}" action="#{deviceController.save()}"/>
-                            <p:commandButton value="#{bundle['global.back']}" action="list" immediate="true"/>
+                            <p:commandButton styleClass="btn-primary" value="#{bundle['global.save']}" action="#{deviceController.save()}"/>
+                            <p:commandButton styleClass="btn-primary" value="#{bundle['global.back']}" action="list" immediate="true"/>
                         </div>
                     </div>
                 </div>

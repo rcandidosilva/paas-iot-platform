@@ -4,8 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:h="http://java.sun.com/jsf/html"
-      xmlns:p="http://primefaces.org/ui"
-      xmlns:f="http://xmlns.jcp.org/jsf/core">
+      xmlns:p="http://primefaces.org/ui">
 
     <ui:composition template="./../../resources/templates/main.xhtml">
 
@@ -14,6 +13,7 @@
                 <div align="center">
                     <h1>#{bundle['application.list']}</h1>
                 </div>
+                <br/>
                 <div align="center"> 
                     <div  style="width: 80%;">
                         <p:dataTable value="#{applicationController.applications}" var="app" rows="5" paginator="true">
@@ -35,11 +35,12 @@
                                 <p:commandLink value="Delete" action="#{applicationController.delete(app)}"/>
                             </p:column>                   
                         </p:dataTable>    
-
+                        <br/>
                         <div align="right">
-                            <p:commandButton value="#{bundle['application.new']}" 
+                            <p:commandButton styleClass="btn-primary" value="#{bundle['application.new']}" 
                                              action="#{applicationController.newApplication()}"/>
-                            <p:commandButton value="#{bundle['application.workflow']}"/>
+                            <p:commandButton styleClass="btn-primary" value="#{bundle['application.workflow']}"
+                                             disabled="true"/>
                         </div>
                     </div>
                 </div>

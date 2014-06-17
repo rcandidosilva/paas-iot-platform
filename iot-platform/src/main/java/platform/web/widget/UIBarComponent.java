@@ -9,7 +9,7 @@ import org.primefaces.model.chart.ChartSeries;
 import platform.api.Property;
 import platform.model.Widget;
 import platform.model.WidgetType;
-import platform.service.PropertyService;
+import platform.service.api.PropertyService;
 
 /**
  *
@@ -21,13 +21,10 @@ public class UIBarComponent implements WidgetComponent {
 
     private String widgetId;
 
-    private BarChart chart;
+    private BarChart chart; 
     private CartesianChartModel model;
 
     private String title;
-    private Integer interval;
-
-    private Date updatedTime;
 
     private Widget widget;
 
@@ -40,14 +37,12 @@ public class UIBarComponent implements WidgetComponent {
 
     @Override
     public String getTitle() {
-        return title;
+        return widget.getTitle();
     }
 
     @Override
     public Object createComponent(String widgetId) {
         this.widgetId = widgetId;
-
-        updatedTime = new Date();
 
         model = new CartesianChartModel();
 
@@ -64,36 +59,29 @@ public class UIBarComponent implements WidgetComponent {
         chart = new BarChart();
 
         //chart.setOrientation("horizontal");
-        chart.setLegendPosition("ne");
+        //chart.setLegendPosition("ne");
         //chart.setYaxisAngle(90);
         chart.setValue(model);
-        chart.setStyle("height: 310px; width: 370px;");
+        //chart.setStyle("height: 100px; width: 100px;");
 
         return chart;
     }
 
     @Override
     public void update() {
-        if (updatedTime != null) {
-            Date now = new Date();
-            long intervalMilis = now.getTime() - updatedTime.getTime();
-            if (intervalMilis >= (interval * 1000)) {
-                for (ChartSeries series : model.getSeries()) {
-                    String deviceKey = series.getLabel();
-                    String propertyKey = (String) series.getData().keySet().iterator().next();
-                    service.get(deviceKey, propertyKey);
+        for (ChartSeries series : model.getSeries()) {
+            String deviceKey = series.getLabel();
+            String propertyKey = (String) series.getData().keySet().iterator().next();
+            service.get(deviceKey, propertyKey);
 
-                    // TODO
-                    Integer randomNum = new Random().nextInt((100 - 0) + 1) + 1;
+            // TODO
+            Integer randomNum = new Random().nextInt((100 - 0) + 1) + 1;
 
-                    series.set(propertyKey, randomNum);
-                }
-
-                logger.debug("Updated bar widget '" + widgetId + "' at "
-                        + new Date());
-            }
-
+            series.set(propertyKey, randomNum);
         }
+
+        logger.debug("Updated bar widget '" + widgetId + "' at "
+                + new Date());
     }
 
     @Override

@@ -14,39 +14,41 @@
                 <div align="center">
                     <h1>#{bundle['device.list']}</h1>
                 </div>
-
+                <br/>
                 <div align="center"> 
                     <div  style="width: 80%;">
                         <p:dataTable id="table" value="#{deviceController.deviceList}" var="device" 
                                      rows="10" paginator="true">
-                            <p:column headerText="#{bundle['device.key']}">
+                            <p:column headerText="#{bundle['device.key']}" style="width: 20%;">
                                 <h:outputText value="#{device.key}"/>
                             </p:column>
-                            <p:column headerText="#{bundle['device.name']}">
+                            <p:column headerText="#{bundle['device.name']}" style="width: 20%;">
                                 <h:outputText value="#{device.name}"/>
                             </p:column>
-                            <p:column headerText="#{bundle['device.createdAt']}">
-                                <h:outputText value="#{device.createdAt}">
-                                    <f:convertDateTime pattern="dd/MM/yyyy HH:mm:ss"/>
-                                </h:outputText>
-                            </p:column>
-                            <p:column headerText="#{bundle['device.updatedAt']}">
+                            <p:column headerText="Product" style="width: 10%;">
+                                <h:outputText value="#{device.product.name}" />
+                            </p:column>    
+                            <p:column headerText="Parent" style="width: 20%;">
+                                <h:outputText value="#{device.parent.name}"/>
+                            </p:column>                             
+                            <p:column headerText="#{bundle['device.updatedAt']}" width="160">
                                 <h:outputText value="#{device.updatedAt}">
                                     <f:convertDateTime pattern="dd/MM/yyyy HH:mm:ss"/>
                                 </h:outputText>
                             </p:column>
-                            <p:column headerText="#{bundle['device.enabled']}">
+                            <p:column headerText="#{bundle['device.enabled']}" width="100" style="text-align: center;">
                                 <h:outputText value="#{device.enabled}"/>
                             </p:column>
-                            <p:column style="width: 4%;">
+                            <p:column width="50" style="text-align: center;">
                                 <p:commandLink value="#{bundle['global.edit']}" action="#{deviceController.edit(device)}"/>
                             </p:column>
-                            <p:column style="width: 4%;">
-                                <p:commandLink value="#{bundle['global.delete']}" action="#{deviceController.delete(device)}"/>
+                            <p:column width="50" style="text-align: center;">
+                                <p:commandLink value="#{bundle['global.delete']}" action="#{deviceController.delete(device)}" update="table"/>
                             </p:column>                            
                         </p:dataTable>
+                        <br/>
                         <div align="right">
-                            <p:commandButton value="#{bundle['device.new']}" action="#{deviceController.createNew()}"/>
+                            <p:commandButton styleClass="btn-primary" value="#{bundle['device.new']}" action="#{deviceController.createNew()}"/>
                         </div>
                     </div>
                 </div>
