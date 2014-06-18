@@ -25,10 +25,10 @@
                             <p:column headerText="#{bundle['device.name']}" style="width: 20%;">
                                 <h:outputText value="#{device.name}"/>
                             </p:column>
-                            <p:column headerText="Product" style="width: 10%;">
+                            <p:column headerText="#{bundle['device.product']}" style="width: 10%;">
                                 <h:outputText value="#{device.product.name}" />
                             </p:column>    
-                            <p:column headerText="Parent" style="width: 20%;">
+                            <p:column headerText="#{bundle['device.parent']}" style="width: 20%;">
                                 <h:outputText value="#{device.parent.name}"/>
                             </p:column>                             
                             <p:column headerText="#{bundle['device.updatedAt']}" width="160">
@@ -48,7 +48,8 @@
                         </p:dataTable>
                         <br/>
                         <div align="right">
-                            <p:commandButton styleClass="btn-primary" value="#{bundle['device.new']}" action="#{deviceController.createNew()}"/>
+                            <p:commandButton styleClass="btn-primary" value="#{bundle['device.new']}" 
+                                             action="#{deviceController.createNew()}"/>
                         </div>
                     </div>
                 </div>

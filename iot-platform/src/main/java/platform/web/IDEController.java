@@ -1,7 +1,9 @@
 package platform.web;
 
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -11,6 +13,7 @@ import javax.enterprise.context.SessionScoped;
 import javax.faces.component.UIComponent;
 import javax.faces.component.html.HtmlOutputText;
 import javax.faces.component.html.HtmlPanelGroup;
+import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
 import org.apache.log4j.Logger;
@@ -18,7 +21,6 @@ import org.primefaces.component.commandlink.CommandLink;
 import org.primefaces.component.dashboard.Dashboard;
 import org.primefaces.component.menu.Menu;
 import org.primefaces.component.panel.Panel;
-import org.primefaces.event.DragDropEvent;
 import org.primefaces.model.DashboardColumn;
 import org.primefaces.model.DashboardModel;
 import org.primefaces.model.DefaultDashboardColumn;
@@ -30,8 +32,8 @@ import platform.model.ApplicationToWidget;
 import platform.model.Widget;
 import platform.model.WidgetType;
 import platform.service.WidgetTypeService;
-import platform.web.widget.WidgetComponent;
-import platform.web.widget.WidgetComponentFactory;
+import platform.web.widget.WidgetController;
+import platform.web.widget.ui.WidgetComponent;
 
 /**
  *
@@ -60,7 +62,7 @@ public class IDEController implements Serializable {
     private PreviewController previewController;
 
     @Inject
-    private WidgetComponentFactory factory;
+    private WidgetFactory factory;
 
     @PostConstruct
     public void init() {
@@ -75,9 +77,12 @@ public class IDEController implements Serializable {
         dashboard.setModel(model);
 
         widgets = new HashMap<>();
+        // Force reset
+        previewController.init(null);
     }
 
     private enum LinkType {
+
         LEFT, UP, DOWN, RIGHT
     };
 
@@ -87,7 +92,7 @@ public class IDEController implements Serializable {
         if (widgetId == null) {
             widgetId = "widget" + widgetCount;
             logger.debug("Generated a new widgetId: " + widgetId);
-        } 
+        }
 
         Object uiComponent = component.createComponent(widgetId);
 
@@ -97,8 +102,7 @@ public class IDEController implements Serializable {
         panel.setClosable(false);
         panel.setToggleable(false);
 
-        HtmlPanelGroup group = (HtmlPanelGroup) 
-                JSFHelper.createComponent(HtmlPanelGroup.COMPONENT_TYPE);
+        HtmlPanelGroup group = (HtmlPanelGroup) JSFHelper.createComponent(HtmlPanelGroup.COMPONENT_TYPE);
 
         group.getChildren().add(createLink(widgetId, LinkType.RIGHT));
         group.getChildren().add(createLink(widgetId, LinkType.UP));
@@ -115,16 +119,16 @@ public class IDEController implements Serializable {
         dashboard.getChildren().add(panel);
 
         Widget widget = component.getWidget();
-        int columnIndex = widget.getColumnIndex() != null ? 
-                widget.getColumnIndex() : 0;
-        int columnPosition = widget.getColumnPosition() != null ?
-                widget.getColumnPosition() : 0;
+        int columnIndex = widget.getColumnIndex() != null
+                ? widget.getColumnIndex() : 0;
+        int columnPosition = widget.getColumnPosition() != null
+                ? widget.getColumnPosition() : 0;
         DashboardColumn column = model.getColumn(columnIndex);
         column.addWidget(columnPosition, panel.getId());
 
         widgets.put(widgetId, component);
         widgetCount++;
-        
+
         logger.debug("Added a new widget '" + widgetId + "' to the dashboard");
     }
 
@@ -136,6 +140,7 @@ public class IDEController implements Serializable {
         editItem.setAjax(true);
         editItem.setImmediate(true);
         editItem.setOncomplete("PF('" + widgetType + "Dialog').show();");
+        editItem.setUpdate(":" + widgetType + "Form:" + widgetType + "Dialog");
         DefaultMenuItem deleteItem = new DefaultMenuItem("Delete");
         deleteItem.setCommand("#{ideController.deleteWidget('" + widgetId + "')}");
         deleteItem.setAjax(true);
@@ -207,7 +212,9 @@ public class IDEController implements Serializable {
 
     public void editWidget(String widgetId) {
         WidgetComponent component = widgets.get(widgetId);
-        // TODO
+        Widget widget = component.getWidget();
+        WidgetController controller = factory.getController(widget);
+        controller.setWidget(widget);
         logger.debug("Widget '" + widgetId + "' requested to edit at the dashboard");
     }
 
@@ -325,7 +332,7 @@ public class IDEController implements Serializable {
             if (appWidgets.contains(appWidget)) {
                 appWidget = appWidgets.remove(appWidgets.indexOf(appWidget));
             }
-            
+
             int columnIndex = getDashboardColumnIndex(widgetId);
             int columnPosition = getDashboardColumnPosition(columnIndex,
                     widgetId);
@@ -333,7 +340,7 @@ public class IDEController implements Serializable {
             widget.setColumnIndex(columnIndex);
             widget.setColumnPosition(columnPosition);
             appWidget.setWidget(widget);
-            
+
             appWidgets.add(appWidget);
         }
 
@@ -347,14 +354,33 @@ public class IDEController implements Serializable {
 
     public String preview() {
         this.previewController.init(widgets);
+        logger.debug("Application '" + getApplication().getId() + "' requested to preview");
         return "/pages/ide/preview";
     }
 
     public void publish() {
-        // TODO
+        Application application = getApplication();
+        application.setDeployed(true);
+        application.setDeployedAt(new Date());
+        String applicationUrl = JSFHelper.getBaseUrl()
+                + "/faces/pages/application/runtime.xhtml?uid="
+                + application.getId();
+        application.setUrl(applicationUrl);
+        appController.update(application);
+        logger.debug("Application '" + getApplication().getId() + "' requested to publish");
+        try {
+            JSFHelper.sendRedirect(applicationUrl);
+        } catch (IOException ex) {
+            logger.error("Error to send redirect the application to the url:" + 
+                    applicationUrl, ex);
+        }
+        FacesContext.getCurrentInstance().renderResponse();
+     
     }
 
-    public void delete() {
-        // TODO
+    public String delete() {
+        appController.delete(getApplication());
+        logger.debug("Application '" + getApplication().getId() + "' deleted");
+        return "/pages/application/list";
     }
 }

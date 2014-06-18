@@ -1,12 +1,12 @@
 package platform.web;
 
+import javax.inject.Named;
+import javax.enterprise.context.SessionScoped;
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
-import javax.enterprise.context.SessionScoped;
 import javax.faces.component.UIComponent;
 import javax.inject.Inject;
-import javax.inject.Named;
 import org.apache.log4j.Logger;
 import org.primefaces.component.dashboard.Dashboard;
 import org.primefaces.component.panel.Panel;
@@ -15,7 +15,9 @@ import org.primefaces.model.DashboardModel;
 import org.primefaces.model.DefaultDashboardColumn;
 import org.primefaces.model.DefaultDashboardModel;
 import platform.model.Application;
+import platform.model.ApplicationToWidget;
 import platform.model.Widget;
+import platform.service.ApplicationService;
 import platform.service.WidgetTypeService;
 import platform.web.widget.ui.WidgetComponent;
 
@@ -25,9 +27,12 @@ import platform.web.widget.ui.WidgetComponent;
  */
 @Named
 @SessionScoped
-public class PreviewController implements Serializable {
+public class RuntimeController implements Serializable {
 
-    private static final Logger logger = Logger.getLogger(PreviewController.class);
+    private static final Logger logger = Logger.getLogger(RuntimeController.class);
+
+    private String applicationId;
+    private Application application;
 
     private Dashboard dashboard;
     private DashboardModel model;
@@ -35,6 +40,9 @@ public class PreviewController implements Serializable {
     private Map<String, WidgetComponent> widgets;
 
     private int widgetCount;
+
+    @Inject
+    private ApplicationService applicationService;
 
     @Inject
     private WidgetTypeService widgetService;
@@ -45,7 +53,7 @@ public class PreviewController implements Serializable {
     @Inject
     private WidgetFactory factory;
 
-    public void init(Map<String, WidgetComponent> widgets) {
+    public void init() {
         this.model = new DefaultDashboardModel();
         this.model.addColumn(new DefaultDashboardColumn());
         this.model.addColumn(new DefaultDashboardColumn());
@@ -57,16 +65,16 @@ public class PreviewController implements Serializable {
 
         this.widgets = new HashMap<>();
         if (widgets != null) {
-            for (String widgetId : widgets.keySet()) {
-                WidgetComponent component = widgets.get(widgetId);
-                component = factory.createComponent(component.getWidget(), widgetId);
-                this.widgets.put(widgetId, component);
+            for (ApplicationToWidget widget : application.getWidgets()) {
+                WidgetComponent component = factory.createComponent(
+                        widget.getWidget(), widget.getWidgetId());
+                this.widgets.put(widget.getWidgetId(), component);
             }
         }
         initWidgets();
     }
 
-    public void initWidgets() {
+    private void initWidgets() {
         for (String widgetId : widgets.keySet()) {
             WidgetComponent component = widgets.get(widgetId);
             Object uiComponent = component.createComponent(widgetId);
@@ -96,8 +104,8 @@ public class PreviewController implements Serializable {
             WidgetComponent component = widgets.get(widgetId);
             component.update();
         }
-        logger.debug("Updated widgets at the application '" + 
-                getApplication().getName() + "' preview");
+        logger.debug("Updated widgets at the application '"
+                + getApplication().getName() + "' preview");
     }
 
     public Dashboard getDashboard() {
@@ -116,11 +124,22 @@ public class PreviewController implements Serializable {
         this.model = model;
     }
 
+    public String getApplicationId() {
+        return applicationId;
+    }
+
+    public void setApplicationId(String applicationId) {
+        this.applicationId = applicationId;
+        if (applicationId != null && !"".equals(applicationId)) {
+            this.application = applicationService.load(applicationId);
+        }
+    }
+
     public Application getApplication() {
-        return appController.getApplication();
+        return application;
     }
 
     public void setApplication(Application application) {
-        appController.setApplication(application);
+        this.application = application;
     }
 }

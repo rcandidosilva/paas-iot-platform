@@ -22,16 +22,18 @@ public class PropertyRandomProcessor implements Runnable {
     private double start;
     private double end;
     private long delay;
+    private boolean rounding;
 
     public PropertyRandomProcessor(String baseUri, String productKey,
             String deviceKey, String propertyKey, double start, double end,
-            long delay) {
+            long delay, boolean rounding) {
         this.productKey = productKey;
         this.deviceKey = deviceKey;
         this.propertyKey = propertyKey;
         this.start = start;
         this.end = end;
         this.delay = delay;
+        this.rounding = rounding;
         this.service = new PropertyServiceClient(baseUri, productKey, deviceKey);
         logger.debug("Property processor created for product product '"
                 + productKey + "', device '" + deviceKey + "', property '"
@@ -43,6 +45,9 @@ public class PropertyRandomProcessor implements Runnable {
         while (true) {
             Property property = service.get(propertyKey);
             double random = start + (end - start) * new Random().nextDouble();
+            if (rounding) {
+                random = Math.round(random);
+            }
             property.setValue(String.valueOf(random));
             service.update(property);
             logger.debug("Property updated for product '"

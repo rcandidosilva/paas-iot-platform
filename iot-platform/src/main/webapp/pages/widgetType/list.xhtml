@@ -4,23 +4,22 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:h="http://java.sun.com/jsf/html"
-      xmlns:p="http://primefaces.org/ui"
-      xmlns:f="http://xmlns.jcp.org/jsf/core">
+      xmlns:p="http://primefaces.org/ui">
 
     <ui:composition template="/resources/templates/main.xhtml">
 
-        
+
         <ui:define name="content">
             <h:form>
                 <div align="center">
-                    <h1>Widgets List</h1>
+                    <h1>#{bundle['widget.list']}</h1>
                 </div>
                 <br/>
                 <div align="center"> 
                     <div  style="width: 80%;">
                         <p:dataTable id="table" value="#{widgetTypeController.widgetTypeList}" var="type" 
                                      rows="10" paginator="true">
-                            <p:column headerText="Type">
+                            <p:column headerText="#{bundle['widget.type']}">
                                 <h:outputText value="#{type.type}"/>
                             </p:column>
                             <p:column headerText="#{bundle['widget.name']}">
@@ -30,15 +29,16 @@
                                 <h:outputText value="#{type.description}"/>
                             </p:column>
                             <p:column style="width: 4%;">
-                                <p:commandLink value="Edit" action="#{widgetTypeController.edit(type)}"/>
+                                <p:commandLink value="#{bundle['global.edit']}" action="#{widgetTypeController.edit(type)}"/>
                             </p:column>
                             <p:column style="width: 4%;">
-                                <p:commandLink value="Delete" action="#{widgetTypeController.delete(type)}"/>
+                                <p:commandLink value="#{bundle['global.delete']}" action="#{widgetTypeController.delete(type)}"/>
                             </p:column>                            
                         </p:dataTable>
                         <br/>
                         <div align="right">
-                            <p:commandButton styleClass="btn-primary" value="New Widget" action="#{widgetTypeController.createNew()}"/>
+                            <p:commandButton styleClass="btn-primary" value="#{bundle['widget.new']}" 
+                                             action="#{widgetTypeController.createNew()}"/>
                         </div>
                     </div>
                 </div>

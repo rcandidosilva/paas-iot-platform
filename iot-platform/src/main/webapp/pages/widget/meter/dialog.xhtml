@@ -8,58 +8,61 @@
       xmlns:f="http://xmlns.jcp.org/jsf/core">
 
     <ui:composition>
-        <h:form>
-            <p:dialog widgetVar="meterDialog" modal="true" header="Gauge Meter Widget" height="650" width="700" resizable="false">
+        <h:form id="meterForm">
+            <p:dialog id="meterDialog" position="top" widgetVar="meterDialog" modal="true" header="#{bundle['widget.meter.header']}" height="700" width="700" resizable="false">
                 <h:panelGrid style="width: 100%;">
-                    <p:outputLabel value="Title"/>
+                    <p:outputLabel value="#{bundle['widget.meter.title']}"/>
                     <p:inputText value="#{meterWidgetController.widget.title}" required="true" size="60"/>
                     <br/>
-                    <p:outputLabel value="Label"/>
+                    <p:outputLabel value="#{bundle['widget.meter.label']}"/>
                     <p:inputText value="#{meterWidgetController.widget.label}" required="true" size="60"/>
                     <br/>
-                    <p:outputLabel value="Product"/>
+                    <p:outputLabel value="#{bundle['widget.meter.product']}"/>
                     <p:selectOneMenu value="#{meterWidgetController.selectedProductKey}">
                         <f:ajax event="change" render="device"/>
-                        <f:selectItem itemLabel="-- Selecione --" itemValue=""/>
+                        <f:selectItem itemLabel="#{bundle['global.select']}" itemValue=""/>
                         <f:selectItems value="#{meterWidgetController.products}" var="product" 
                                        itemLabel="#{product.name}" itemValue="#{product.key}"/>
                     </p:selectOneMenu>                    
                     <br/>
-                    <p:outputLabel value="Device"/>
+                    <p:outputLabel value="#{bundle['widget.meter.device']}"/>
                     <p:selectOneMenu id="device" value="#{meterWidgetController.selectedDeviceKey}" required="true">
                         <f:ajax event="change" render="property"/>
-                        <f:selectItem itemLabel="-- Selecione --" itemValue=""/>
+                        <f:selectItem itemLabel="#{bundle['global.select']}" itemValue=""/>
                         <f:selectItems value="#{meterWidgetController.devices}" var="device" 
                                        itemLabel="#{device.name}" itemValue="#{device.key}"/>
                     </p:selectOneMenu>
                     <br/>
-                    <p:outputLabel value="Property"/>
+                    <p:outputLabel value="#{bundle['widget.meter.property']}"/>
                     <p:selectOneMenu id="property" value="#{meterWidgetController.selectedPropertyKey}" required="true">
-                        <f:selectItem itemLabel="-- Selecione --" itemValue=""/>
+                        <f:selectItem itemLabel="#{bundle['global.select']}" itemValue=""/>
                         <f:selectItems value="#{meterWidgetController.properties}" var="property" 
                                        itemLabel="#{property.name}" itemValue="#{property.key}"/>
                     </p:selectOneMenu>
                     <br/>
-                    <p:outputLabel value="New Interval"/>
+                    <p:outputLabel value="#{bundle['widget.meter.new.interval']}"/>
                     <h:panelGroup>
                         <p:inputText id="interval" value="#{meterWidgetController.interval}" />
                         <p:spacer width="20"/>
-                        <p:commandButton value="Add Interval" action="#{meterWidgetController.newInterval()}" update="dataTable" process="@this,interval" />
+                        <p:commandButton styleClass="btn-primary" value="#{bundle['widget.meter.add.interval']}" 
+                                         action="#{meterWidgetController.newInterval()}" 
+                                         update="dataTable" process="@this,interval" />
                     </h:panelGroup>
                 </h:panelGrid>
                 <br/>
                 <p:dataTable id="dataTable" value="#{meterWidgetController.intervalsModel}" var="interval" rows="2" paginator="true">
-                    <p:column headerText="Interval">
+                    <p:column headerText="#{bundle['widget.meter.interval']}">
                         <h:outputText value="#{interval}"/>
                     </p:column>
                     <p:column>
-                        <p:commandLink styleClass="btn-primary" value="Delete" action="#{meterWidgetController.deleteInterval()}" update="dataTable"/>
+                        <p:commandLink value="#{bundle['global.delete']}" action="#{meterWidgetController.deleteInterval()}" update="dataTable"/>
                     </p:column>
                 </p:dataTable>
                 <br/>
                 <div align="right">
-                    <p:commandButton styleClass="btn-primary" value="Add" action="#{meterWidgetController.addAction()}" oncomplete="PF('meterDialog').hide();" update=":dashboardForm"/> 
-                    <p:commandButton styleClass="btn-primary" value="Cancel" oncomplete="PF('meterDialog').hide();"/>
+                    <p:commandButton styleClass="btn-primary" value="#{bundle['global.add']}" action="#{meterWidgetController.addAction()}" 
+                                     oncomplete="PF('meterDialog').hide();" update=":dashboardForm"/> 
+                    <p:button styleClass="btn-primary" value="#{bundle['global.cancel']}" onclick="PF('meterDialog').hide();"/>
                 </div>
             </p:dialog>
         </h:form>

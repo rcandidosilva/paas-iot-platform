@@ -8,40 +8,40 @@
       xmlns:f="http://xmlns.jcp.org/jsf/core">
 
     <ui:composition>
-        <h:form>
-            <p:dialog widgetVar="lineDialog" modal="true" header="Line Chart Widget" height="350" width="700">
+        <h:form id="lineForm">
+            <p:dialog id="lineDialog" position="top" widgetVar="lineDialog" modal="true" header="#{bundle['widget.line.header']}" height="350" width="700">
                 <h:panelGrid style="width: 100%;"> 
-                    <p:outputLabel value="Title"/>
+                    <p:outputLabel value="#{bundle['widget.line.title']}"/>
                     <p:inputText value="#{lineWidgetController.widget.title}" required="true" size="60"/>
                     <br/>
-                    <p:outputLabel value="Product"/>
+                    <p:outputLabel value="#{bundle['widget.line.product']}"/>
                     <p:selectOneMenu value="#{lineWidgetController.selectedProductKey}">
                         <f:ajax event="change" render="device"/>
-                        <f:selectItem itemLabel="-- Selecione --" itemValue=""/>
+                        <f:selectItem itemLabel="#{bundle['global.select']}" itemValue=""/>
                         <f:selectItems value="#{lineWidgetController.products}" var="product" 
                                        itemLabel="#{product.name}" itemValue="#{product.key}"/>
                     </p:selectOneMenu>                    
                     <br/>
-                    <p:outputLabel value="Device"/>
+                    <p:outputLabel value="#{bundle['widget.line.device']}"/>
                     <p:selectOneMenu id="device" value="#{lineWidgetController.selectedDeviceKey}" required="true">
                         <f:ajax event="change" render="property"/>
-                        <f:selectItem itemLabel="-- Selecione --" itemValue=""/>
+                        <f:selectItem itemLabel="#{bundle['global.select']}" itemValue=""/>
                         <f:selectItems value="#{lineWidgetController.devices}" var="device" 
                                        itemLabel="#{device.name}" itemValue="#{device.key}"/>
                     </p:selectOneMenu>
                     <br/>
-                    <p:outputLabel value="Property"/>
+                    <p:outputLabel value="#{bundle['widget.line.property']}"/>
                     <p:selectOneMenu id="property" value="#{lineWidgetController.selectedPropertyKey}" required="true">
-                        <f:selectItem itemLabel="-- Selecione --" itemValue=""/>
+                        <f:selectItem itemLabel="#{bundle['global.select']}" itemValue=""/>
                         <f:selectItems value="#{lineWidgetController.properties}" var="property" 
                                        itemLabel="#{property.name}" itemValue="#{property.key}"/>
                     </p:selectOneMenu>
                 </h:panelGrid>
                 <br/>
                 <div align="right">
-                    <p:commandButton styleClass="btn-primary" value="Add" action="#{lineWidgetController.addAction()}" 
+                    <p:commandButton styleClass="btn-primary" value="#{bundle['global.add']}" action="#{lineWidgetController.addAction()}" 
                                      oncomplete="PF('lineDialog').hide();" update=":dashboardForm"/> 
-                    <p:commandButton styleClass="btn-primary" value="Cancel" oncomplete="PF('lineDialog').hide();"/>
+                    <p:button styleClass="btn-primary" value="#{bundle['global.cancel']}" onclick="PF('lineDialog').hide();"/>
                 </div>
             </p:dialog>
         </h:form>

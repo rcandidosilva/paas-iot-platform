@@ -30,10 +30,14 @@
 
     <h:body>
 
-        <ui:include src="menu.xhtml"/>
-        
-        <p:growl id="growl" showDetail="true" sticky="true" /> 
-        <p:ajaxStatus onstart="PF('statusDialog').show()" onsuccess="PF('statusDialog').hide()" />
+        <ui:insert name="menu">
+            <ui:include src="menu.xhtml"/>
+        </ui:insert>
+
+        <ui:insert name="status">
+            <p:growl id="growl" showDetail="true" sticky="true" /> 
+            <p:ajaxStatus onstart="PF('statusDialog').show()" onsuccess="PF('statusDialog').hide()" />
+        </ui:insert>
 
         <p:dialog widgetVar="statusDialog" modal="true" draggable="false" closable="false" resizable="false" showHeader="false">
             <p:graphicImage library="images" name="ajax_loading_bar.gif" />

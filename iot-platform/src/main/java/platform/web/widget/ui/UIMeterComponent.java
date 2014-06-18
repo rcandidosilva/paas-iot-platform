@@ -1,4 +1,4 @@
-package platform.web.widget;
+package platform.web.widget.ui;
 
 import java.util.List;
 import java.util.Random;
@@ -55,16 +55,20 @@ public class UIMeterComponent implements WidgetComponent {
 
     @Override
     public void update() {
-        //Integer randomNum = new Random().nextInt((100 - 0) + 1) + 1;
-
         if (widget.getProperties() != null
                 && !widget.getProperties().isEmpty()) {
-            
+
             Property property = widget.getProperties().get(0);
             property = service.get(property.getDevice().getKey(),
                     property.getKey());
 
-            Double value = new Double(property.getValue());
+            Double value = 0d;
+            try {
+                value = new Double(property.getValue());
+            } catch (Exception ex) {
+                logger.error("Error to get the updated value for the property '"
+                        + property.getKey() + "'", ex);
+            }
             meterModel.setValue(value);
 
             logger.debug("Updated meter at widget '" + widgetId

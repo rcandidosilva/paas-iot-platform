@@ -16,14 +16,14 @@
 
         <ui:define name="left">
             <h:form id="form1">
-                <p:fieldset legend="Widgets" toggleable="true">
+                <p:fieldset legend="#{bundle['ide.widgets']}" toggleable="true">
                     <p:dataGrid id="widgetsList" value="#{ideController.widgetList}" 
                                 var="widget" columns="1">                        
                         <p:panel id="widgetPanel" header="#{widget.name}" style="align: center;">
                             <h:inputHidden id="widgetKey" value="#{widget.type}"/>
                             <p:graphicImage library="images" name="#{widget.type}.png" width="100" height="100"/>
                             <p:draggable for="widgetPanel" revert="true" helper="clone" 
-                                disabled="#{widget.type == 'location' or widget.type == 'ohlc' or widget.type == 'pie'}"/>
+                                         disabled="#{widget.type == 'location' or widget.type == 'ohlc' or widget.type == 'pie'}"/>
                         </p:panel>
                     </p:dataGrid>
                 </p:fieldset>   
@@ -37,7 +37,7 @@
                     <p:commandButton value="#{bundle['ide.save']}" oncomplete="PF('saveApplicationDialog').show();"/>
                     <p:commandButton value="#{bundle['ide.preview']}" action="#{ideController.preview()}"
                                      disabled="#{ideController.application.id == null}"/>
-                    <p:commandButton value="#{bundle['ide.publish']}"
+                    <p:commandButton value="#{bundle['ide.publish']}" action="#{ideController.publish()}"
                                      disabled="#{ideController.application.id == null}"/>
                     <p:commandButton value="#{bundle['ide.delete']}" oncomplete="PF('deleteApplicationDialog').show();"
                                      disabled="#{ideController.application.id == null}"/>
@@ -54,28 +54,32 @@
                                  model="#{ideController.model}"/>
                 </p:fieldset>
 
-                <p:dialog widgetVar="saveApplicationDialog" modal="true" header="Save Application" height="300" width="600">
+                <p:dialog widgetVar="saveApplicationDialog" modal="true" header="#{bundle['ide.save.application']}" 
+                          height="300" width="600">
                     <h:panelGrid style="width: 100%;">
-                        <p:outputLabel value="Name"/>
+                        <p:outputLabel value="#{bundle['ide.application.name']}"/>
                         <p:inputText value="#{ideController.application.name}" required="true" style="width: 100%;"/>
                         <br/>
-                        <p:outputLabel value="Description"/>
+                        <p:outputLabel value="#{bundle['ide.application.description']}"/>
                         <p:inputTextarea value="#{ideController.application.description}" rows="5" style="width: 100%;"/>
                     </h:panelGrid>
                     <br/><br/>
                     <div align="right">
-                        <p:commandButton value="Save" action="#{ideController.save()}" oncomplete="PF('saveApplicationDialog').hide();" update=":dashboardForm"/> 
-                        <p:commandButton value="Cancel" oncomplete="PF('saveApplicationDialog').hide();"/>
+                        <p:commandButton value="#{bundle['global.save']}" action="#{ideController.save()}" 
+                                         oncomplete="PF('saveApplicationDialog').hide();" update=":dashboardForm"/> 
+                        <p:button value="#{bundle['global.cancel']}" onclick="PF('saveApplicationDialog').hide();"/>
                     </div>
                 </p:dialog> 
 
-                <p:dialog widgetVar="deleteApplicationDialog" modal="true" header="Delete Application" height="300" width="600">
+                <p:dialog widgetVar="deleteApplicationDialog" modal="true" header="#{bundle['ide.delete.application']}" 
+                          height="300" width="600">
                     <h:panelGrid style="width: 100%;">
-                        <h:outputText value="Are you sure?"/>
+                        <h:outputText value="#{bundle['ide.delete.text']}"/>
                     </h:panelGrid>
                     <div align="center">
-                        <p:commandButton value="Delete" action="#{ideController.delete()}" oncomplete="PF('deleteApplicationDialog').hide();" update=":dashboardForm"/> 
-                        <p:commandButton value="Cancel" oncomplete="PF('deleteApplicationDialog').hide();"/>
+                        <p:commandButton value="#{bundle['global.delete']}" action="#{ideController.delete()}" 
+                                         oncomplete="PF('deleteApplicationDialog').hide();" update=":dashboardForm"/> 
+                        <p:button value="#{bundle['global.cancel']}" onclick="PF('deleteApplicationDialog').hide();"/>
                     </div>
                 </p:dialog>
 

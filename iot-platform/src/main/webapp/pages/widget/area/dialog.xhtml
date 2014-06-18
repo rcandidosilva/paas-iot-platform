@@ -8,53 +8,56 @@
       xmlns:f="http://xmlns.jcp.org/jsf/core">
 
     <ui:composition>
-        <h:form>
-            <p:dialog widgetVar="areaDialog" modal="true" header="Area Widget" height="600" width="700">
+        <h:form id="areaForm">
+            <p:dialog id="areaDialog" position="top" widgetVar="areaDialog" modal="true" header="#{bundle['widget.area.header']}" height="600" width="700">
                 <h:panelGrid style="width: 100%;">
-                    <p:outputLabel value="Title"/>
+                    <p:outputLabel value="#{bundle['widget.area.title']}"/>
                     <p:inputText value="#{areaWidgetController.widget.title}" required="true" size="60"/>
                     <br/>
-                    <p:outputLabel value="Product"/>
+                    <p:outputLabel value="#{bundle['widget.area.product']}"/>
                     <p:selectOneMenu id="product" value="#{areaWidgetController.selectedProductKey}">
                         <f:ajax event="change" render="device"/>
-                        <f:selectItem itemLabel="-- Selecione --" itemValue=""/>
+                        <f:selectItem itemLabel="#{bundle['global.select']}" itemValue=""/>
                         <f:selectItems value="#{areaWidgetController.products}" var="product" 
                                        itemLabel="#{product.name}" itemValue="#{product.key}"/>
                     </p:selectOneMenu>                     
                     <br/>
-                    <p:outputLabel value="Device"/>
+                    <p:outputLabel value="#{bundle['widget.area.device']}"/>
                     <p:selectOneMenu id="device" value="#{areaWidgetController.selectedDeviceKey}" required="true">
                         <f:ajax event="change" render="property"/>
-                        <f:selectItem itemLabel="-- Selecione --" itemValue=""/>
+                        <f:selectItem itemLabel="#{bundle['global.select']}" itemValue=""/>
                         <f:selectItems value="#{areaWidgetController.devices}" var="device" 
                                        itemLabel="#{device.name}" itemValue="#{device.key}"/>
                     </p:selectOneMenu>
                     <br/>
-                    <p:outputLabel value="Property"/>
+                    <p:outputLabel value="#{bundle['widget.area.property']}"/>
                     <p:selectOneMenu id="property" value="#{areaWidgetController.selectedPropertyKey}" required="true">
-                        <f:selectItem itemLabel="-- Selecione --" itemValue=""/>
+                        <f:selectItem itemLabel="#{bundle['global.select']}" itemValue=""/>
                         <f:selectItems value="#{areaWidgetController.properties}" var="property" 
                                        itemLabel="#{property.name}" itemValue="#{property.key}"/>
                     </p:selectOneMenu>
                     <br/>
-                    <p:commandButton value="Add Property" action="#{areaWidgetController.newProperty()}" update="dataTable" process="@this,device,property" />                                        
+                    <p:commandButton styleClass="btn-primary" value="#{bundle['widget.area.add.property']}" 
+                                     action="#{areaWidgetController.newProperty()}" 
+                                     update="dataTable" process="@this,device,property" />                                        
                 </h:panelGrid>
                 <br/><br/>
                 <p:dataTable id="dataTable" value="#{areaWidgetController.propertiesModel}" var="prop" rows="5" paginator="true">
-                    <p:column headerText="Device">
-                        <h:outputText value="#{prop.device.key}"/>
+                    <p:column headerText="#{bundle['widget.area.device']}">
+                        <h:outputText value="#{prop.device.name}"/>
                     </p:column>
-                    <p:column headerText="Property">
-                        <h:outputText value="#{prop.key}"/>
+                    <p:column headerText="#{bundle['widget.area.property']}">
+                        <h:outputText value="#{prop.name}"/>
                     </p:column>                    
                     <p:column>
-                        <p:commandLink value="Delete" action="#{areaWidgetController.deleteProperty()}" update="dataTable"/>
+                        <p:commandLink value="#{bundle['global.delete']}" action="#{areaWidgetController.deleteProperty()}" update="dataTable"/>
                     </p:column>
                 </p:dataTable>                
                 <br/>
                 <div align="right">
-                    <p:commandButton value="Add" action="#{areaWidgetController.addAction()}" oncomplete="PF('areaDialog').hide();" update=":dashboardForm"/> 
-                    <p:commandButton value="Cancel" oncomplete="PF('areaDialog').hide();"/>
+                    <p:commandButton styleClass="btn-primary" value="#{bundle['global.add']}" action="#{areaWidgetController.addAction()}" 
+                                     oncomplete="PF('areaDialog').hide();" update=":dashboardForm"/> 
+                    <p:button styleClass="btn-primary" value="#{bundle['global.cancel']}" onclick="PF('areaDialog').hide();"/>
                 </div>
             </p:dialog>
         </h:form>

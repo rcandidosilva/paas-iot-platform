@@ -1,6 +1,5 @@
-package platform.web.dashboard;
+package platform.web.widget;
 
-import java.io.Serializable;
 import javax.annotation.PostConstruct;
 import javax.faces.view.ViewScoped;
 import javax.inject.Named;
@@ -13,19 +12,22 @@ import platform.model.WidgetType;
  */
 @Named
 @ViewScoped
-public class OhlcWidgetController implements Serializable {
+public class OhlcWidgetController implements WidgetController {
 
     private Widget widget;
 
     @PostConstruct
+    @Override
     public void init() {
         widget = new Widget(WidgetType.OHLC);
     }
 
+    @Override
     public Widget getWidget() {
         return widget;
     }
 
+    @Override
     public void setWidget(Widget widget) {
         this.widget = widget;
     }

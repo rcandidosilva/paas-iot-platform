@@ -3,17 +3,16 @@
     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-      xmlns:h="http://java.sun.com/jsf/html"
-      xmlns:p="http://primefaces.org/ui">
+      xmlns:h="http://xmlns.jcp.org/jsf/html">
 
     <ui:composition template="resources/templates/main.xhtml">
 
         <ui:define name="content">
             <div align="center" style="margin:auto; width:980px;">
                 <div class="jumbotron" >
-                    <h1>IoT Platform</h1>
-                    <p>Welcome to the IoT Platform</p>
-                    <p><a class="btn btn-primary btn-lg" role="button">Learn more</a></p>
+                    <h1>#{bundle['platform.title']}</h1>
+                    <p>#{bundle['platform.text']}</p>
+                    <p><a class="btn btn-primary btn-lg" role="button">#{bundle['global.learn.more']}</a></p>
                 </div>
 
                 <div>
@@ -21,31 +20,31 @@
                         <div class="col-md-4">
                             <div align="center">
                                 <div>
-                                    <h3>Tools</h3>
+                                    <h3>#{bundle['platform.cloud.title']}</h3>
                                 </div>
                                 <div>
-                                    <br/>XXXXX.<br/><br/>
-                                    <a target="_self" href="#" class="btn btn-sm btn-primary">More…</a></div>
+                                    <br/><h:outputText value="#{bundle['platform.cloud.text']}" escape="false"/><br/><br/>
+                                    <a target="_self" href="#" class="btn btn-sm btn-primary">#{bundle['global.more']}</a></div>
                             </div>
                         </div>
                         <p><!-- end of .col-lg-4 --></p>
                         <div class="col-md-4">
                             <div align="center">
                                 <div>
-                                    <h3>Tracking</h3>
+                                    <h3>#{bundle['platform.tracking.title']}</h3>
                                 </div>
-                                <div><br/>XXXXX.<br/><br/>
-                                    <a target="_self" href="#" class="btn btn-sm btn-primary">More…</a></div>
+                                <div><br/><h:outputText value="#{bundle['platform.tracking.text']}" escape="false"/><br/><br/>
+                                    <a target="_self" href="#" class="btn btn-sm btn-primary">#{bundle['global.more']}</a></div>
                             </div>
                         </div>
                         <p><!-- end of .col-lg-4 --></p>
                         <div class="col-md-4">
                             <div align="center">
                                 <div>
-                                    <h3>Cloud</h3>
+                                    <h3>#{bundle['platform.tools.title']}</h3>
                                 </div>
-                                <div><br/>XXXXXX.<br/><br/>
-                                    <a target="_self" href="#" class="btn btn-sm btn-primary">More…</a></div>
+                                <div><br/><h:outputText value="#{bundle['platform.tools.text']}" escape="false"/><br/><br/>
+                                    <a target="_self" href="#" class="btn btn-sm btn-primary">#{bundle['global.more']}</a></div>
                             </div>
                         </div>
                     </div>

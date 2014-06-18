@@ -1,10 +1,9 @@
-package platform.web.dashboard;
+package platform.web.widget;
 
-import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import javax.annotation.PostConstruct;
-import javax.faces.model.ListDataModel;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -18,52 +17,66 @@ import platform.service.api.ProductDeviceService;
 import platform.service.api.ProductService;
 import platform.service.api.PropertyService;
 import platform.web.IDEController;
-import platform.web.widget.UIAreaComponent;
+import platform.web.WidgetFactory;
+import platform.web.widget.ui.WidgetComponent;
 
 /**
- * 
+ *
  * @author rodrigo
  */
-@Named 
+@Named
 @ViewScoped
-public class AreaWidgetController implements Serializable {
-    
+public class LineWidgetController implements WidgetController {
+
     private String selectedDeviceKey;
     private String selectedPropertyKey;
     private String selectedProductKey;
 
-    private List<Property> properties;
-    private ListDataModel<Property> propertiesModel;
-          
     private Widget widget;
-    
+
     @Inject
     private DeviceService deviceService;
-    
+
     @Inject
-    private PropertyService propertyService;    
-        
+    private PropertyService propertyService;
+
     @Inject
     private ProductService productService;
-    
+
     @Inject
     private ProductDeviceService productDeviceService;
-    
+
+    @Inject
+    private WidgetFactory factory;
+
     @Inject
     private IDEController ide;
-    
+
     @PostConstruct
+    @Override
     public void init() {
-        widget = new Widget(WidgetType.AREA);
-        propertiesModel = new ListDataModel<>(new ArrayList<Property>());
+        widget = new Widget(WidgetType.LINE);
     }
 
+    @Override
     public Widget getWidget() {
         return widget;
     }
 
+    @Override
     public void setWidget(Widget widget) {
         this.widget = widget;
+        if (widget != null) {
+            if (widget.getProperties() != null
+                    && !widget.getProperties().isEmpty()) {
+                Property prop = widget.getProperties().get(0);
+                selectedPropertyKey = prop.getKey();
+                selectedDeviceKey = prop.getDevice().getKey();
+                if (prop.getDevice().getProduct() != null) {
+                    selectedProductKey = prop.getDevice().getProduct().getKey();
+                }
+            }
+        }
     }
 
     public String getSelectedDeviceKey() {
@@ -89,49 +102,31 @@ public class AreaWidgetController implements Serializable {
     public void setSelectedProductKey(String selectedProductKey) {
         this.selectedProductKey = selectedProductKey;
     }
-    
-    public ListDataModel<Property> getPropertiesModel() {
-        return propertiesModel;
-    }
 
-    public void setPropertiesModel(ListDataModel<Property> propertiesModel) {
-        this.propertiesModel = propertiesModel;
-    }
-    
     public List<Product> getProducts() {
         return productService.list();
     }
-           
+
     public List<Device> getDevices() {
         if (selectedProductKey != null && !"".equals(selectedProductKey)) {
             return productDeviceService.list(selectedProductKey);
         }
         return deviceService.list();
     }
-    
+
     public List<Property> getProperties() {
         if (selectedDeviceKey != null && !"".equals(selectedDeviceKey)) {
             return propertyService.list(selectedDeviceKey);
         }
         return new ArrayList<>();
     }
-    
-    public void newProperty() {
-        Property property = 
-                propertyService.get(selectedDeviceKey, selectedPropertyKey);        
-        ((List<Property>) propertiesModel.getWrappedData()).add(property);
-    }
-    
-    public void deleteProperty() {
-        ((List<Property>) propertiesModel.getWrappedData()).remove(
-            propertiesModel.getRowData());
-    }    
-    
+
     public void addAction() {
-        List<Property> properties = (List<Property>) 
-                propertiesModel.getWrappedData();
-        widget.setProperties(properties);
-        UIAreaComponent component = new UIAreaComponent(widget, propertyService);     
-        ide.addWidget(component);
+        Property property = propertyService.get(selectedDeviceKey, selectedPropertyKey);
+        widget.setProperties(Arrays.asList(new Property[]{property}));
+        if (widget.getId() == null) {
+            WidgetComponent component = factory.createComponent(widget);
+            ide.addWidget(component);
+        }
     }
 }

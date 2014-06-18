@@ -1,12 +1,5 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+package platform.web.widget;
 
-package platform.web.dashboard;
-
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.PostConstruct;
@@ -28,13 +21,10 @@ import platform.web.IDEController;
  */
 @Named
 @ViewScoped
-public class PieWidgetController implements Serializable {
+public class PieWidgetController implements WidgetController {
     
     private String selectedDeviceKey;
     private String selectedPropertyKey;
-    
-    private List<Device> devices;
-    private List<Property> properties;
     
     private ListDataModel<Property> propertiesModel;
     
@@ -45,19 +35,18 @@ public class PieWidgetController implements Serializable {
     @Inject
     private PropertyService propertyService;
     
-    @Inject
-    private IDEController ide;
-    
     @PostConstruct
+    @Override
     public void init() {
         widget = new Widget(WidgetType.PIE);
-        devices = deviceService.list();
     }
 
+    @Override
     public Widget getWidget() {
         return widget;
     }
 
+    @Override
     public void setWidget(Widget widget) {
         this.widget = widget;
     }
@@ -79,7 +68,7 @@ public class PieWidgetController implements Serializable {
     }
     
     public List<Device> getDevices() {
-        return devices;
+        return deviceService.list();
     }
     
     public List<Property> getProperties() {

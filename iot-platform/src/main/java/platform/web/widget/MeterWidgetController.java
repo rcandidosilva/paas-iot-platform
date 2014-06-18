@@ -1,10 +1,10 @@
-package platform.web.dashboard;
+package platform.web.widget;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import javax.annotation.PostConstruct;
+import javax.faces.model.ListDataModel;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -18,50 +18,88 @@ import platform.service.api.ProductDeviceService;
 import platform.service.api.ProductService;
 import platform.service.api.PropertyService;
 import platform.web.IDEController;
-import platform.web.widget.UILineComponent;
+import platform.web.widget.ui.WidgetComponent;
+import platform.web.WidgetFactory;
 
 /**
+ * GaugeMeter Widget controller
  *
  * @author rodrigo
  */
 @Named
 @ViewScoped
-public class LineWidgetController implements Serializable {
-   
+public class MeterWidgetController implements WidgetController {
+
+    private Widget widget;
+
+    private Double interval;
     private String selectedDeviceKey;
     private String selectedPropertyKey;
     private String selectedProductKey;
 
-    private List<Property> properties;
-        
-    private Widget widget;
-    
+    private ListDataModel<Double> intervalsModel;
+
     @Inject
     private DeviceService deviceService;
-    
+
     @Inject
     private PropertyService propertyService;
-    
+
     @Inject
     private ProductService productService;
-    
+
     @Inject
-    private ProductDeviceService productDeviceService;
-    
+    private ProductDeviceService productServiceService;
+
     @Inject
     private IDEController ide;
-    
+
+    @Inject
+    private WidgetFactory factory;
+
     @PostConstruct
+    @Override
     public void init() {
-        widget = new Widget(WidgetType.LINE);
+        widget = new Widget(WidgetType.METER);
+        intervalsModel = new ListDataModel<>(new ArrayList<Double>());
+        interval = null;
+        selectedDeviceKey = null;
+        selectedPropertyKey = null;
+        selectedProductKey = null;
     }
 
+    @Override
     public Widget getWidget() {
         return widget;
     }
 
+    @Override
     public void setWidget(Widget widget) {
         this.widget = widget;
+        if (widget != null) {
+            intervalsModel = new ListDataModel<>(widget.getIntervals());
+            if (widget.getProperties() != null
+                    && !widget.getProperties().isEmpty()) {
+                Property prop = widget.getProperties().get(0);
+                selectedPropertyKey = prop.getKey();
+                selectedDeviceKey = prop.getDevice().getKey();
+                if (prop.getDevice().getProduct() != null) {
+                    selectedProductKey = prop.getDevice().getProduct().getKey();
+                }
+            }
+        }
+    }
+
+    public Double getInterval() {
+        return interval;
+    }
+
+    public void setInterval(Double interval) {
+        this.interval = interval;
+    }
+
+    public ListDataModel<Double> getIntervalsModel() {
+        return intervalsModel;
     }
 
     public String getSelectedDeviceKey() {
@@ -87,29 +125,43 @@ public class LineWidgetController implements Serializable {
     public void setSelectedProductKey(String selectedProductKey) {
         this.selectedProductKey = selectedProductKey;
     }
-    
+
     public List<Product> getProducts() {
         return productService.list();
     }
-    
+
     public List<Device> getDevices() {
         if (selectedProductKey != null && !"".equals(selectedProductKey)) {
-            return productDeviceService.list(selectedProductKey);
+            return productServiceService.list(selectedProductKey);
         }
         return deviceService.list();
     }
-    
+
     public List<Property> getProperties() {
         if (selectedDeviceKey != null && !"".equals(selectedDeviceKey)) {
             return propertyService.list(selectedDeviceKey);
         }
         return new ArrayList<>();
     }
-    
-    public void addAction() {
-        Property property = propertyService.get(selectedDeviceKey, selectedPropertyKey);
-        widget.setProperties(Arrays.asList(new Property[] {property}));
-        UILineComponent component = new UILineComponent(widget, propertyService);     
-        ide.addWidget(component);
+
+    public void newInterval() {
+        ((List<Double>) intervalsModel.getWrappedData()).add(interval);
     }
+
+    public void deleteInterval() {
+        ((List<Double>) intervalsModel.getWrappedData()).remove(
+                intervalsModel.getRowData());
+    }
+
+    public void addAction() {
+        List<Double> intervals = (List) getIntervalsModel().getWrappedData();
+        Property property = propertyService.get(selectedDeviceKey, selectedPropertyKey);
+        widget.setIntervals(intervals);
+        widget.setProperties(Arrays.asList(new Property[]{property}));
+        if (widget.getId() == null) {
+            WidgetComponent component = factory.createComponent(widget);
+            ide.addWidget(component);
+        }
+    }
+
 }

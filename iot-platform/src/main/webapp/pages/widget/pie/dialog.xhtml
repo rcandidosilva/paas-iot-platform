@@ -8,29 +8,31 @@
       xmlns:f="http://xmlns.jcp.org/jsf/core">
 
     <ui:composition>
-        <h:form>
-            <p:dialog widgetVar="pieDialog" modal="true" header="Pie Chart Widget" height="400" width="550">
+        <h:form id="pieForm">
+            <p:dialog id="pieDialog" position="top" widgetVar="pieDialog" modal="true" header="Pie Chart Widget" height="400" width="550">
                 <h:panelGrid columns="2">
+                    <br/>
                     <p:outputLabel value="Title"/>
                     <p:inputText value="#{pieWidgetController.widget.title}" required="true"/>
-
+                    <br/>
                     <p:outputLabel value="Device"/>
                     <p:selectOneMenu value="#{pieWidgetController.selectedDeviceKey}" required="true">
                         <f:ajax event="change" render="property"/>
                         <f:selectItem itemLabel="-- Selecione --" itemValue=""/>
                         <f:selectItems value="#{pieWidgetController.devices}" var="device" itemLabel="#{device.key}" itemValue="#{device.key}"/>
                     </p:selectOneMenu>
-
+                    <br/>
                     <p:outputLabel value="Property"/>
                     <p:selectOneMenu id="property" value="#{pieWidgetController.selectedPropertyKey}" required="true">
                         <f:selectItem itemLabel="-- Selecione --" itemValue=""/>
                         <f:selectItems value="#{pieWidgetController.properties}" var="property" itemLabel="#{property.key}" itemValue="#{property.key}"/>
                     </p:selectOneMenu>
+                    <br/>
                 </h:panelGrid>
-
+                <br/>
                 <div align="right">
                     <p:commandButton value="Add" action="#{pieWidgetController.addAction()}" oncomplete="PF('pieDialog').hide();" update=":dashboardForm"/> 
-                    <p:commandButton value="Cancel" oncomplete="PF('pieDialog').hide();"/>
+                    <p:button value="Cancel" onclick="PF('pieDialog').hide();"/>
                 </div>
             </p:dialog>
         </h:form>

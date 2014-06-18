@@ -4,7 +4,8 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:h="http://java.sun.com/jsf/html"
-      xmlns:p="http://primefaces.org/ui">
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core">
 
     <ui:composition template="./../../resources/templates/main.xhtml">
 
@@ -16,23 +17,29 @@
                 <br/>
                 <div align="center"> 
                     <div  style="width: 80%;">
-                        <p:dataTable value="#{applicationController.applications}" var="app" rows="5" paginator="true">
+                        <p:dataTable id="table" value="#{applicationController.applications}" var="app" rows="10" paginator="true">
                             <p:column headerText="#{bundle['application.name']}" style="width: 20%;">
-                                <h:outputText value="#{app.name}"/>
+                                <h:outputText value="#{app.name}" style="width: 20%;"/>
                             </p:column>
-                            <p:column headerText="Description" width="30">
+                            <p:column headerText="#{bundle['application.description']}" style="width: 40%;">
                                 <h:outputText value="#{app.description}"/>
                             </p:column>
-                            <p:column headerText="Deployed" style="width: 10%;">
+                            <p:column headerText="#{bundle['application.deployed']}" style="width: 10%; text-align: center;">
                                 <h:outputText value="#{app.deployed}"/>
                             </p:column>
-                            <p:column headerText="Created At" style="width: 10%;">
+                            <p:column headerText="#{bundle['application.url']}" width="50" style="text-align: center;">
+                                <h:link value="Link" outcome="/pages/application/runtime" rendered="#{app.deployed}">
+                                    <f:param name="uid" value="#{app.id}"/>
+                                </h:link>
+                            </p:column>                              
+                            <p:column width="50" style="text-align: center;">
+                                <p:commandLink value="#{bundle['application.preview']}" action="#{applicationController.preview(app)}"/>
+                            </p:column>                           
+                            <p:column width="50" style="text-align: center;">
+                                <p:commandLink value="#{bundle['global.edit']}" action="#{applicationController.edit(app)}"/>
                             </p:column>
-                            <p:column style="width: 4%;">
-                                <p:commandLink value="Edit" action="#{applicationController.edit(app)}"/>
-                            </p:column>
-                            <p:column style="width: 4%;">
-                                <p:commandLink value="Delete" action="#{applicationController.delete(app)}"/>
+                            <p:column width="50" style="text-align: center;">
+                                <p:commandLink value="#{bundle['global.delete']}" action="#{applicationController.delete(app)}" update="table"/>
                             </p:column>                   
                         </p:dataTable>    
                         <br/>

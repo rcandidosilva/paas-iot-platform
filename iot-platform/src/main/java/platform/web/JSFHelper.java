@@ -1,11 +1,15 @@
 package platform.web;
 
+import java.io.IOException;
 import javax.el.ExpressionFactory;
 import javax.el.MethodExpression;
 import javax.faces.application.FacesMessage;
 import javax.faces.component.UIComponent;
 import javax.faces.component.behavior.Behavior;
+import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 /**
  *
@@ -40,6 +44,20 @@ public class JSFHelper {
         return factory.createMethodExpression(
                 context.getELContext(),
                 el, null, new Class[]{String.class});
+    }
+
+    public static String getBaseUrl() {
+        ExternalContext context = FacesContext.getCurrentInstance().getExternalContext();
+        HttpServletRequest request = (HttpServletRequest) context.getRequest();
+        StringBuilder baseUrl = new StringBuilder();
+        baseUrl.append(request.getScheme()).append("://").append(request.getServerName()).append(
+                ":").append(request.getServerPort()).append(request.getContextPath());
+        return baseUrl.toString();
+    }
+    
+    public static void sendRedirect(String url) throws IOException {
+        ExternalContext context = FacesContext.getCurrentInstance().getExternalContext();
+        context.redirect(url);
     }
 
 }

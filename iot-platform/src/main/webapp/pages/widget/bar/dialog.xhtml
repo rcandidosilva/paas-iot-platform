@@ -8,55 +8,57 @@
       xmlns:f="http://xmlns.jcp.org/jsf/core">
 
     <ui:composition>
-        <h:form>
-            <p:dialog widgetVar="barDialog" modal="true" header="Bar Widget" height="600" width="700">
+        <h:form id="barForm">
+            <p:dialog id="barDialog" position="top" widgetVar="barDialog" modal="true" header="#{bundle['widget.bar.header']}" height="600" width="700">
                 <h:panelGrid style="width: 100%;">
-                    <p:outputLabel value="Title"/>
+                    <p:outputLabel value="#{bundle['widget.bar.title']}"/>
                     <p:inputText value="#{barWidgetController.widget.title}" required="true" size="60"/>
                     <br/>
-                    <p:outputLabel value="Product"/>
+                    <p:outputLabel value="#{bundle['widget.bar.product']}"/>
                     <p:selectOneMenu id="product" value="#{barWidgetController.selectedProductKey}">
                         <f:ajax event="change" render="device"/>
-                        <f:selectItem itemLabel="-- Selecione --" itemValue=""/>
+                        <f:selectItem itemLabel="#{bundle['global.select']}" itemValue=""/>
                         <f:selectItems value="#{barWidgetController.products}" var="product" 
                                        itemLabel="#{product.name}" itemValue="#{product.key}"/>
                     </p:selectOneMenu>                    
                     <br/>
-                    <p:outputLabel value="Device"/>
+                    <p:outputLabel value="#{bundle['widget.bar.device']}"/>
                     <p:selectOneMenu id="device" value="#{barWidgetController.selectedDeviceKey}" required="true">
                         <f:ajax event="change" render="property"/>
-                        <f:selectItem itemLabel="-- Selecione --" itemValue=""/>
+                        <f:selectItem itemLabel="#{bundle['global.select']}" itemValue=""/>
                         <f:selectItems value="#{barWidgetController.devices}" var="device" 
                                        itemLabel="#{device.name}" itemValue="#{device.key}"/>
                     </p:selectOneMenu>
                     <br/>
-                    <p:outputLabel value="Property"/>
-                    <p:selectOneMenu id="property" value="#{barWidgetController.selectedPropertyKey}" required="true">
-                        <f:selectItem itemLabel="-- Selecione --" itemValue=""/>
-                        <f:selectItems value="#{barWidgetController.properties}" var="property" 
-                                       itemLabel="#{property.name}" itemValue="#{property.key}"/>
-                    </p:selectOneMenu>
+                    <p:outputLabel value="#{bundle['widget.bar.property']}"/>
+                    <h:panelGroup>
+                        <p:selectOneMenu id="property" value="#{barWidgetController.selectedPropertyKey}" required="true">
+                            <f:selectItem itemLabel="#{bundle['global.select']}" itemValue=""/>
+                            <f:selectItems value="#{barWidgetController.properties}" var="property" 
+                                           itemLabel="#{property.name}" itemValue="#{property.key}"/>
+                        </p:selectOneMenu>
+                    </h:panelGroup>
                     <br/>
-                    <p:commandButton value="Add Property" action="#{barWidgetController.newProperty()}" update="dataTable" process="@this,device,property" />                                        
+                    <p:commandButton styleClass="btn-primary" value="#{bundle['widget.bar.add.property']}" action="#{barWidgetController.newProperty()}" 
+                                     update="dataTable" process="@this,device,property" />
                 </h:panelGrid>
                 <br/><br/>
                 <p:dataTable id="dataTable" value="#{barWidgetController.propertiesModel}" var="prop" rows="3" paginator="true">
                     <p:column headerText="Device">
-                        <h:outputText value="#{prop.device.key}"/>
+                        <h:outputText value="#{prop.device.name}"/>
                     </p:column>
                     <p:column headerText="Property">
-                        <h:outputText value="#{prop.key}"/>
+                        <h:outputText value="#{prop.name}"/>
                     </p:column>                    
                     <p:column> 
-                        <p:commandLink styleClass="btn-primary" 
-                                       value="Delete" action="#{barWidgetController.deleteProperty()}" update="dataTable"/>
+                        <p:commandLink value="#{bundle['global.delete']}" action="#{barWidgetController.deleteProperty()}" update="dataTable"/>
                     </p:column>
                 </p:dataTable>                
                 <br/>
                 <div align="right">
-                    <p:commandButton styleClass="btn-primary" value="Add" action="#{barWidgetController.addAction()}" 
+                    <p:commandButton styleClass="btn-primary" value="#{bundle['global.add']}" action="#{barWidgetController.addAction()}" 
                                      oncomplete="PF('barDialog').hide();" update=":dashboardForm"/> 
-                    <p:commandButton styleClass="btn-primary" value="Cancel" oncomplete="PF('barDialog').hide();"/>
+                    <p:button styleClass="btn-primary" value="#{bundle['global.cancel']}" onclick="PF('barDialog').hide();"/>
                 </div>
             </p:dialog>
         </h:form>

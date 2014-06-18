@@ -12,26 +12,35 @@
         <ui:define name="content">
             <h:form id="form">
                 <div align="center">
+                    <h1>#{bundle['widget.form']}</h1>
+                </div>
+                <br/>                  
+                <div align="center">
                     <div style="width: 600px;">
-                        <p:panel header="Cadastro de Widget">
-                            <h:panelGrid>
-                                <p:outputLabel value="Type"/>
+                        <p:panel>
+                            <h:panelGrid style="width: 100%;">
+                                <br/>
+                                <p:outputLabel value="#{bundle['widget.type']}"/>
                                 <p:selectOneMenu value="#{widgetTypeController.widgetType.type}">
                                     <f:selectItems value="#{widgetTypeController.types}" var="type" itemLabel="#{type}" itemValue="#{type}"/>
                                 </p:selectOneMenu>
-                                <p:outputLabel value="Name"/>
+                                <br/>
+                                <p:outputLabel value="#{bundle['widget.name']}"/>
                                 <p:inputText value="#{widgetTypeController.widgetType.name}""/>
-                                <p:outputLabel value="Description"/>
+                                <br/>
+                                <p:outputLabel value="#{bundle['widget.description']}"/>
                                 <p:inputTextarea value="#{widgetTypeController.widgetType.description}"/>
+                                <br/>
                             </h:panelGrid>
-                            <p:growl id="messages" showDetail="true"/>
                         </p:panel>
-
+                        <br/>
                         <div align="right">
-                            <p:commandButton styleClass="btn-primary" value="#{bundle['global.save']}" action="#{widgetTypeController.save()}" ajax="false">
+                            <p:commandButton styleClass="btn-primary" value="#{bundle['global.save']}" 
+                                             action="#{widgetTypeController.save()}" ajax="false">
                                 <f:ajax execute="@all" render="form"/>
                             </p:commandButton> 
-                            <p:commandButton styleClass="btn-primary" value="#{bundle['global.back']}" action="/pages/widgetType/list" immediate="true"/>
+                            <p:commandButton styleClass="btn-primary" value="#{bundle['global.back']}" 
+                                             action="/pages/widgetType/list" immediate="true"/>
                         </div>
                     </div>
                 </div>

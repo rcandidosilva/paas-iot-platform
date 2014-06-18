@@ -1,6 +1,7 @@
 package platform.model;
 
 import java.io.Serializable;
+import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 import javax.persistence.CascadeType;
@@ -8,6 +9,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import org.eclipse.persistence.nosql.annotations.DataFormatType;
 import org.eclipse.persistence.nosql.annotations.Field;
 import org.eclipse.persistence.nosql.annotations.NoSql;
@@ -19,13 +22,17 @@ import org.eclipse.persistence.nosql.annotations.NoSql;
 @Entity
 @NoSql(dataFormat = DataFormatType.MAPPED)
 public class Application implements Serializable {
-    
-    @Id @GeneratedValue
+
+    @Id
+    @GeneratedValue
     @Field(name = "_id")
     private String id;
     private String name;
     private String description;
     private boolean deployed;
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date deployedAt;
+    private String url;
     @OneToMany(cascade = CascadeType.ALL)
     private List<ApplicationToWidget> widgets;
 
@@ -52,14 +59,14 @@ public class Application implements Serializable {
     public void setDescription(String description) {
         this.description = description;
     }
-    
+
     public boolean isDeployed() {
         return deployed;
     }
 
     public void setDeployed(boolean deployed) {
         this.deployed = deployed;
-    }   
+    }
 
     public List<ApplicationToWidget> getWidgets() {
         return widgets;
@@ -69,6 +76,22 @@ public class Application implements Serializable {
         this.widgets = widgets;
     }
 
+    public Date getDeployedAt() {
+        return deployedAt;
+    }
+
+    public void setDeployedAt(Date deployedAt) {
+        this.deployedAt = deployedAt;
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
+    }
+    
     @Override
     public int hashCode() {
         int hash = 3;
@@ -90,5 +113,5 @@ public class Application implements Serializable {
         }
         return true;
     }
-    
+
 }

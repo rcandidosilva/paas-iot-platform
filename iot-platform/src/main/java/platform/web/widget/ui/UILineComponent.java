@@ -1,4 +1,4 @@
-package platform.web.widget;
+package platform.web.widget.ui;
 
 import java.util.Map;
 import java.util.Random;
@@ -60,12 +60,10 @@ public class UILineComponent implements WidgetComponent {
 
     @Override
     public void update() {
-        //Integer randomNum = new Random().nextInt((100 - 0) + 1) + 1;
-
         if (widget.getProperties() != null
                 && !widget.getProperties().isEmpty()) {
             Property property = widget.getProperties().get(0);
-            property = service.get(property.getDevice().getKey(), 
+            property = service.get(property.getDevice().getKey(),
                     property.getKey());
 
             ChartSeries series1 = model.getSeries().get(0);
@@ -74,8 +72,14 @@ public class UILineComponent implements WidgetComponent {
                 Object key = data.keySet().iterator().next();
                 data.remove(key);
             }
-            
-            Double value = new Double(property.getValue());
+
+            Double value = 0d;
+            try {
+                value = new Double(property.getValue());
+            } catch (Exception ex) {
+                logger.error("Error to get the updated value for the property '"
+                        + property.getKey() + "'", ex);
+            }
             series1.set(++count, value);
             logger.debug("Updated line at widget '" + widgetId
                     + "' using value: " + value);

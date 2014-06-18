@@ -12,7 +12,7 @@
         <ui:define name="content">
             <h:form>
                 <div align="center">
-                    <h1>Property Form</h1>
+                    <h1>#{bundle['property.form']}</h1>
                 </div>
                 <br/>                
                 <div align="center">
@@ -20,27 +20,27 @@
                         <p:panel>
                             <h:panelGrid style="width: 100%;">
                                 <br/>
-                                <p:outputLabel value="Product"/>
+                                <p:outputLabel value="#{bundle['property.product']}"/>
                                 <p:selectOneMenu value="#{propertyController.selectedProductKey}">
                                     <f:ajax event="change" render="device"/>
-                                    <f:selectItem itemLabel="-- Select --" itemValue=""/>
+                                    <f:selectItem itemLabel="#{bundle['global.select']}" itemValue=""/>
                                     <f:selectItems value="#{propertyController.productList}" var="product" 
                                                    itemLabel="#{product.name}" itemValue="#{product.key}"/>
                                 </p:selectOneMenu>   
                                 <br/>
-                                <p:outputLabel value="Device"/>
+                                <p:outputLabel value="#{bundle['property.device']}"/>
                                 <p:selectOneMenu id="device" value="#{propertyController.selectedDeviceKey}" required="true">
                                     <f:selectItems value="#{propertyController.deviceList}" var="device" 
                                                    itemLabel="#{device.name}" itemValue="#{device.key}"/>
                                 </p:selectOneMenu>                                  
                                 <br/>
-                                <p:outputLabel value="Key"/>
+                                <p:outputLabel value="#{bundle['property.key']}"/>
                                 <p:inputText value="#{propertyController.property.key}" size="60" required="true"/>                              
                                 <br/>
-                                <p:outputLabel value="Name"/>
+                                <p:outputLabel value="#{bundle['property.name']}"/>
                                 <p:inputText value="#{propertyController.property.name}" size="60" required="true"/>                                     
                                 <br/>
-                                <p:outputLabel value="Description"/>
+                                <p:outputLabel value="#{bundle['property.description']}"/>
                                 <p:inputTextarea value="#{propertyController.property.description}" style="width: 100%;"/>
                                 <br/>
                             </h:panelGrid>

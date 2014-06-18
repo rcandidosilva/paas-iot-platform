@@ -12,28 +12,28 @@
         <ui:define name="content">
             <h:form>
                 <div align="center">
-                    <h1>Products List</h1>
+                    <h1>#{bundle['product.list']}</h1>
                 </div>
                 <br/>
                 <div align="center"> 
                     <div  style="width: 80%;">
                         <p:dataTable id="table" value="#{productController.productList}" var="product" 
                                      rows="10" paginator="true">
-                            <p:column headerText="Key" style="width: 10%;">
+                            <p:column headerText="#{bundle['product.key']}" style="width: 10%;">
                                 <h:outputText value="#{product.key}"/>
                             </p:column>
-                            <p:column headerText="Name" style="width: 10%;">
+                            <p:column headerText="#{bundle['product.name']}" style="width: 10%;">
                                 <h:outputText value="#{product.name}"/>
                             </p:column>
-                            <p:column headerText="Description" style="width: 40%;">
+                            <p:column headerText="#{bundle['product.description']}" style="width: 40%;">
                                 <h:outputText value="#{product.description}"/>
                             </p:column>                            
-                            <p:column width="160" headerText="Created At">
+                            <p:column width="160" headerText="#{bundle['product.created']}">
                                 <h:outputText value="#{product.createdAt}">
                                     <f:convertDateTime pattern="dd/MM/yyyy HH:mm:ss"/>
                                 </h:outputText>
                             </p:column>
-                            <p:column width="160" headerText="Updated At">
+                            <p:column width="160" headerText="#{bundle['product.updated']}">
                                 <h:outputText value="#{product.updatedAt}">
                                     <f:convertDateTime pattern="dd/MM/yyyy HH:mm:ss"/>
                                 </h:outputText>
@@ -47,7 +47,8 @@
                         </p:dataTable>
                         <br/>
                         <div align="right">
-                            <p:commandButton styleClass="btn-primary" value="New Product" action="#{productController.createNew()}"/>
+                            <p:commandButton styleClass="btn-primary" value="#{bundle['product.new']}" 
+                                             action="#{productController.createNew()}"/>
                         </div>
                     </div>
                 </div>

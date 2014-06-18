@@ -8,8 +8,8 @@
       xmlns:f="http://xmlns.jcp.org/jsf/core">
 
     <ui:composition>
-        <h:form>
-            <p:dialog widgetVar="locationDialog" modal="true" header="Geo Location Widget" height="400" width="550">
+        <h:form id="locationForm">
+            <p:dialog id="locationDialog" position="top" widgetVar="locationDialog" modal="true" header="Geo Location Widget" height="400" width="550">
                 <h:panelGrid columns="2">
                     <p:outputLabel value="Title"/>
                     <p:inputText value="#{locationWidgetController.widget.title}" required="true"/>
@@ -23,7 +23,7 @@
 
                 <div align="right">
                     <p:commandButton value="Add" action="#{locationWidgetController.addAction()}" oncomplete="PF('locationDialog').hide();" update=":dashboardForm"/> 
-                    <p:commandButton value="Cancel" oncomplete="PF('locationDialog').hide();"/>
+                    <p:button value="Cancel" onclick="PF('locationDialog').hide();"/>
                 </div>
             </p:dialog>
         </h:form>

@@ -12,26 +12,26 @@
         <ui:define name="content">
             <h:form>
                 <div align="center">
-                    <h1>Properties List</h1>
+                    <h1>#{bundle['property.list']}</h1>
                 </div>
                 <br/>
                 <div align="center"> 
                     <div  style="width: 80%;">
                         <p:dataTable id="table" value="#{propertyController.propertyList}" var="property" 
                                      rows="10" paginator="true">
-                            <p:column headerText="Key" style="width: 15%;">
+                            <p:column headerText="#{bundle['property.key']}" style="width: 15%;">
                                 <h:outputText value="#{property.key}"/>
                             </p:column>
-                            <p:column headerText="Description" style="width: 40%;">
+                            <p:column headerText="#{bundle['property.description']}" style="width: 40%;">
                                 <h:outputText value="#{property.description}"/>
                             </p:column>
-                            <p:column headerText="Device" style="width: 15%;">
+                            <p:column headerText="#{bundle['property.device']}" style="width: 15%;">
                                 <h:outputText value="#{property.device.name}"/>
                             </p:column>
-                            <p:column headerText="Product" style="width: 10%;">
+                            <p:column headerText="#{bundle['property.product']}" style="width: 10%;">
                                 <h:outputText value="#{property.device.product.name}"/>
                             </p:column>                            
-                            <p:column headerText="Updated At">
+                            <p:column headerText="#{bundle['property.updated']}">
                                 <h:outputText value="#{property.timestamp}">
                                     <f:convertDateTime pattern="dd/MM/yyyy HH:mm:ss"/>
                                 </h:outputText>
@@ -45,8 +45,8 @@
                         </p:dataTable>
                         <br/>
                         <div align="right">
-                            <p:commandButton styleClass="btn-primary" 
-                                             value="New Property" action="#{propertyController.createNew()}"/>
+                            <p:commandButton styleClass="btn-primary" value="#{bundle['property.new']}" 
+                                             action="#{propertyController.createNew()}"/>
                         </div>
                     </div>
                 </div>

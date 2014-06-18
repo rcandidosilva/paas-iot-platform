@@ -11,23 +11,16 @@
                 <div class="container-fluid">
                     <!-- Brand and toggle get grouped for better mobile display -->
                     <div class="navbar-header">
-                        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
-                            <span class="sr-only">Toggle navigation</span>
-                            <span class="icon-bar"></span>
-                            <span class="icon-bar"></span>
-                            <span class="icon-bar"></span>
-                        </button>
-                        <h:commandLink value="IoT Platform" styleClass="navbar-brand" action="/index?faces-redirect=true"/>
+                        <h:commandLink value="#{bundle['platform.title']}" styleClass="navbar-brand" action="/index?faces-redirect=true"/>
                     </div>
-
                     <!-- Collect the nav links, forms, and other content for toggling -->
                     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                         <ul class="nav navbar-nav">
-                            <li><h:commandLink value="Application" action="/pages/application/list?faces-redirect=true"/></li>
-                            <li><h:commandLink value="Widget" action="/pages/widgetType/list?faces-redirect=true"/></li>
-                            <li><h:commandLink value="Product" action="/pages/product/list?faces-redirect=true"/></li>
-                            <li><h:commandLink value="Device" action="/pages/device/list?faces-redirect=true"/></li>
-                            <li><h:commandLink value="Property" action="/pages/property/list?faces-redirect=true"/></li>                            
+                            <li><h:commandLink value="#{bundle['menu.aplication']}" action="/pages/application/list?faces-redirect=true"/></li>
+                            <li><h:commandLink value="#{bundle['menu.widget']}" action="/pages/widgetType/list?faces-redirect=true"/></li>
+                            <li><h:commandLink value="#{bundle['menu.product']}" action="/pages/product/list?faces-redirect=true"/></li>
+                            <li><h:commandLink value="#{bundle['menu.device']}" action="/pages/device/list?faces-redirect=true"/></li>
+                            <li><h:commandLink value="#{bundle['menu.property']}" action="/pages/property/list?faces-redirect=true"/></li>                            
                         </ul>
                     </div><!-- /.navbar-collapse -->
                 </div><!-- /.container-fluid -->

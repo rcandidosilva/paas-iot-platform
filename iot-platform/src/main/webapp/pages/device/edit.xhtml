@@ -20,16 +20,16 @@
                         <p:panel>
                             <h:panelGrid style="width:100%;">
                                 <br/>
-                                <p:outputLabel value="Product"/>
+                                <p:outputLabel value="#{bundle['device.product']}"/>
                                 <p:selectOneMenu value="#{deviceController.selectedProductKey}">
-                                    <f:selectItem itemLabel="-- Select --" itemValue=""/>
+                                    <f:selectItem itemLabel="#{bundle['global.select']}" itemValue=""/>
                                     <f:selectItems value="#{deviceController.productList}" var="product" 
                                                    itemLabel="#{product.name}" itemValue="#{product.key}"/>
                                 </p:selectOneMenu> 
                                 <br/>
-                                <p:outputLabel value="Parent Device"/>
+                                <p:outputLabel value="#{bundle['device.parent.device']}"/>
                                 <p:selectOneMenu value="#{deviceController.selectedParentKey}">
-                                    <f:selectItem itemLabel="-- Select --" itemValue=""/>
+                                    <f:selectItem itemLabel="#{bundle['global.select']}" itemValue=""/>
                                     <f:selectItems value="#{deviceController.deviceList}" var="parent" 
                                                    itemLabel="#{parent.name}" itemValue="#{parent.key}"/>
                                 </p:selectOneMenu>                                 
@@ -50,8 +50,10 @@
                         </p:panel>
                         <br/>
                         <div align="right">
-                            <p:commandButton styleClass="btn-primary" value="#{bundle['global.save']}" action="#{deviceController.save()}"/>
-                            <p:commandButton styleClass="btn-primary" value="#{bundle['global.back']}" action="list" immediate="true"/>
+                            <p:commandButton styleClass="btn-primary" value="#{bundle['global.save']}" 
+                                             action="#{deviceController.save()}"/>
+                            <p:commandButton styleClass="btn-primary" value="#{bundle['global.back']}" 
+                                             action="/pages/device/list" immediate="true"/>
                         </div>
                     </div>
                 </div>

@@ -1,6 +1,5 @@
-package platform.web.dashboard;
+package platform.web.widget;
 
-import java.io.Serializable;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.faces.view.ViewScoped;
@@ -12,38 +11,38 @@ import platform.model.Widget;
 import platform.model.WidgetType;
 import platform.service.api.DeviceService;
 import platform.web.IDEController;
-import platform.web.widget.UILocationComponent;
+import platform.web.widget.ui.UILocationComponent;
 
 /**
- * 
+ *
  * @author rodrigo
  */
 @Named
 @ViewScoped
-public class LocationWidgetController implements Serializable {
+public class LocationWidgetController implements WidgetController {
 
     private String selectedDeviceKey;
 
-    private List<Device> devices;
-
     private Widget widget;
-    
+
     @Inject
     private DeviceService deviceService;
-    
+
     @Inject
     private IDEController ide;
 
     @PostConstruct
+    @Override
     public void init() {
         widget = new Widget(WidgetType.LOCATION);
-        devices = deviceService.list();
     }
 
+    @Override
     public Widget getWidget() {
         return widget;
     }
 
+    @Override
     public void setWidget(Widget widget) {
         this.widget = widget;
     }
@@ -57,7 +56,7 @@ public class LocationWidgetController implements Serializable {
     }
 
     public List<Device> getDevices() {
-        return devices;
+        return deviceService.list();
     }
 
     public void addAction() {
@@ -65,10 +64,11 @@ public class LocationWidgetController implements Serializable {
         double lat = device.getLocation().getLatitude();
         double lng = device.getLocation().getLongitude();
         LatLng coord = new LatLng(lat, lng);
-        
-        UILocationComponent component
-                = new UILocationComponent(widget);
-        ide.addWidget(component);
+        if (widget.getId() == null) {
+            UILocationComponent component
+                    = new UILocationComponent(widget);
+            ide.addWidget(component);
+        }
     }
 
 }

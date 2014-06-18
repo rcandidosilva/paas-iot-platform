@@ -1,7 +1,7 @@
-package platform.web.widget;
+package platform.web.widget.ui;
 
-import org.primefaces.component.chart.ohlc.OhlcChart;
-import org.primefaces.model.chart.OhlcChartModel;
+import javax.enterprise.context.Dependent;
+import javax.inject.Named;
 import platform.model.Widget;
 import platform.model.WidgetType;
 
@@ -9,33 +9,31 @@ import platform.model.WidgetType;
  *
  * @author rodrigo
  */
-public class UIOhlcComponent implements WidgetComponent {
+@Named
+@Dependent
+public class UIPieComponent implements WidgetComponent {
 
-    private String title;
     private String widgetId;
 
-    private OhlcChart chart;
-    private OhlcChartModel model;
+    private String title;
 
     private Widget widget;
 
-    public UIOhlcComponent(Widget widget) {
+    public UIPieComponent(Widget widget) {
         this.widget = widget;
-    }
-
-    @Override
-    public String getTitle() {
-        return title;
     }
 
     @Override
     public Object createComponent(String widgetId) {
         this.widgetId = widgetId;
 
-        model = new OhlcChartModel();
-
-        //OhlcChartSeries series1 = new OhlcChartSeries
+        // TODO
         return null;
+    }
+
+    @Override
+    public String getTitle() {
+        return title;
     }
 
     @Override
@@ -45,7 +43,7 @@ public class UIOhlcComponent implements WidgetComponent {
 
     @Override
     public String getType() {
-        return WidgetType.OHLC;
+        return WidgetType.PIE;
     }
 
     @Override
