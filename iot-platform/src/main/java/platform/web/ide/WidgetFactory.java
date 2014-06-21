@@ -1,4 +1,4 @@
-package platform.web;
+package platform.web.ide;
 
 import java.io.Serializable;
 import javax.enterprise.inject.spi.Bean;
@@ -7,22 +7,22 @@ import javax.enterprise.inject.spi.CDI;
 import javax.inject.Inject;
 import platform.model.Widget;
 import platform.service.api.PropertyService;
-import static platform.web.WidgetTypeDefinition.AREA;
-import static platform.web.WidgetTypeDefinition.BAR;
-import static platform.web.WidgetTypeDefinition.LINE;
-import static platform.web.WidgetTypeDefinition.LOCATION;
-import static platform.web.WidgetTypeDefinition.METER;
-import static platform.web.WidgetTypeDefinition.OHLC;
-import static platform.web.WidgetTypeDefinition.PIE;
-import platform.web.widget.WidgetController;
-import platform.web.widget.ui.UIAreaComponent;
-import platform.web.widget.ui.UIBarComponent;
-import platform.web.widget.ui.UILineComponent;
-import platform.web.widget.ui.UILocationComponent;
-import platform.web.widget.ui.UIMeterComponent;
-import platform.web.widget.ui.UIOhlcComponent;
-import platform.web.widget.ui.UIPieComponent;
-import platform.web.widget.ui.WidgetComponent;
+import static platform.web.ide.WidgetTypeDefinition.AREA;
+import static platform.web.ide.WidgetTypeDefinition.BAR;
+import static platform.web.ide.WidgetTypeDefinition.LINE;
+import static platform.web.ide.WidgetTypeDefinition.LOCATION;
+import static platform.web.ide.WidgetTypeDefinition.METER;
+import static platform.web.ide.WidgetTypeDefinition.OHLC;
+import static platform.web.ide.WidgetTypeDefinition.PIE;
+import platform.web.ide.widget.WidgetController;
+import platform.web.ide.widget.ui.UIAreaComponent;
+import platform.web.ide.widget.ui.UIBarComponent;
+import platform.web.ide.widget.ui.UILineComponent;
+import platform.web.ide.widget.ui.UILocationComponent;
+import platform.web.ide.widget.ui.UIMeterComponent;
+import platform.web.ide.widget.ui.UIOhlcComponent;
+import platform.web.ide.widget.ui.UIPieComponent;
+import platform.web.ide.widget.ui.WidgetComponent;
 
 /**
  *

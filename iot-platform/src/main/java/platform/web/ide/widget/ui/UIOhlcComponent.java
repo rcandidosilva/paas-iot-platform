@@ -1,4 +1,4 @@
-package platform.web.widget.ui;
+package platform.web.ide.widget.ui;
 
 import org.primefaces.component.chart.ohlc.OhlcChart;
 import org.primefaces.model.chart.OhlcChartModel;

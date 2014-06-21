@@ -1,6 +1,6 @@
-package platform.web.widget.ui;
+package platform.web.ide.widget.ui;
 
-import java.util.Map;
+import java.util.Date;
 import java.util.Random;
 import org.apache.log4j.Logger;
 import org.primefaces.component.chart.line.LineChart;
@@ -15,22 +15,20 @@ import platform.service.api.PropertyService;
  *
  * @author rodrigo
  */
-public class UILineComponent implements WidgetComponent {
+public class UIAreaComponent implements WidgetComponent {
 
-    private static final Logger logger = Logger.getLogger(UILineComponent.class);
+    private static final Logger logger = Logger.getLogger(UIAreaComponent.class);
 
     private String widgetId;
 
     private LineChart chart;
     private CartesianChartModel model;
 
-    private int count;
-
     private Widget widget;
 
     private PropertyService service;
 
-    public UILineComponent(Widget widget, PropertyService service) {
+    public UIAreaComponent(Widget widget, PropertyService service) {
         this.widget = widget;
         this.service = service;
     }
@@ -46,13 +44,19 @@ public class UILineComponent implements WidgetComponent {
 
         model = new CartesianChartModel();
 
-        ChartSeries series1 = new ChartSeries(widget.getProperties().get(0).getKey());
-        // TODO buscar os valores atualizados da propriedade do device
-        Integer randomNum = new Random().nextInt((100 - 0) + 1) + 1;
-        series1.set(++count, randomNum);
-        model.addSeries(series1);
+        for (Property prop : widget.getProperties()) {
+            ChartSeries series = new ChartSeries(prop.getDevice().getKey());
+            Double value = 0d;
+            if (prop.getValue() != null && !"".equals(prop.getValue())) {
+                value = new Double(prop.getValue());
+            }
+            series.set(prop.getKey(), value);
+            model.addSeries(series);
+        }
 
         chart = new LineChart();
+        chart.setFill(true);
+        chart.setStacked(true);
         chart.setValue(model);
 
         return chart;
@@ -60,18 +64,10 @@ public class UILineComponent implements WidgetComponent {
 
     @Override
     public void update() {
-        if (widget.getProperties() != null
-                && !widget.getProperties().isEmpty()) {
-            Property property = widget.getProperties().get(0);
-            property = service.get(property.getDevice().getKey(),
-                    property.getKey());
-
-            ChartSeries series1 = model.getSeries().get(0);
-            Map<Object, Number> data = series1.getData();
-            if (data.size() == 20) {
-                Object key = data.keySet().iterator().next();
-                data.remove(key);
-            }
+        for (ChartSeries series : model.getSeries()) {
+            String deviceKey = series.getLabel();
+            String propertyKey = (String) series.getData().keySet().iterator().next();
+            Property property = service.get(deviceKey, propertyKey);
 
             Double value = 0d;
             try {
@@ -80,15 +76,15 @@ public class UILineComponent implements WidgetComponent {
                 logger.error("Error to get the updated value for the property '"
                         + property.getKey() + "'", ex);
             }
-            series1.set(++count, value);
-            logger.debug("Updated line at widget '" + widgetId
-                    + "' using value: " + value);
+            series.set(propertyKey, value);
         }
+        logger.debug("Updated area widget '" + widgetId + "' at "
+                + new Date());
     }
 
     @Override
     public String getType() {
-        return WidgetType.LINE;
+        return WidgetType.AREA;
     }
 
     @Override

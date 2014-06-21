@@ -1,4 +1,4 @@
-package platform.web.widget.ui;
+package platform.web.ide.widget.ui;
 
 import java.util.Date;
 import java.util.List;

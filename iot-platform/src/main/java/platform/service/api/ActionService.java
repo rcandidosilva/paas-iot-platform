@@ -75,7 +75,7 @@ public class ActionService {
                 return action;
             }
         }
-        return null;        
+        return null;
     }
 
     @DELETE
@@ -86,6 +86,23 @@ public class ActionService {
         if (action != null) {
             manager.remove(action);
         }
+    }
+
+    public void delete(String name) {
+        List<Action> actions = listAll();
+        for (Action action : actions) {
+            if (action.getName().equals(name)) {
+                manager.remove(action);
+            }
+        }
+    }
+
+    public List<Action> listAll() {
+        CriteriaBuilder builder = manager.getCriteriaBuilder();
+        CriteriaQuery query = builder.createQuery();
+        Root<Action> root = query.from(Action.class);
+        query.select(root);
+        return manager.createQuery(query).getResultList();
     }
 
     @GET
@@ -101,8 +118,10 @@ public class ActionService {
             List<Action> list = manager.createQuery(query).getResultList();
             List<Action> result = new ArrayList<>();
             for (Action action : list) {
-                if (action.getDevice().getKey().endsWith(deviceKey)) {
-                    result.add(action);
+                if (action.getDevice() != null) {
+                    if (action.getDevice().getKey().endsWith(deviceKey)) {
+                        result.add(action);
+                    }
                 }
             }
             return result;

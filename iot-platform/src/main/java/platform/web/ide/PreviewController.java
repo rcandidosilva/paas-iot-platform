@@ -1,4 +1,4 @@
-package platform.web;
+package platform.web.ide;
 
 import java.io.Serializable;
 import java.util.HashMap;
@@ -17,7 +17,9 @@ import org.primefaces.model.DefaultDashboardModel;
 import platform.model.Application;
 import platform.model.Widget;
 import platform.service.WidgetTypeService;
-import platform.web.widget.ui.WidgetComponent;
+import platform.web.ApplicationController;
+import platform.web.JSFHelper;
+import platform.web.ide.widget.ui.WidgetComponent;
 
 /**
  *

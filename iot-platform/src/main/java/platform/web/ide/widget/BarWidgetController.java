@@ -1,4 +1,4 @@
-package platform.web.widget;
+package platform.web.ide.widget;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,9 +16,9 @@ import platform.service.api.DeviceService;
 import platform.service.api.ProductDeviceService;
 import platform.service.api.ProductService;
 import platform.service.api.PropertyService;
-import platform.web.IDEController;
-import platform.web.WidgetFactory;
-import platform.web.widget.ui.WidgetComponent;
+import platform.web.ide.IDEController;
+import platform.web.ide.WidgetFactory;
+import platform.web.ide.widget.ui.WidgetComponent;
 
 /**
  *

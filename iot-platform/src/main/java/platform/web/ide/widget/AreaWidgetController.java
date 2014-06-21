@@ -1,9 +1,9 @@
-package platform.web.widget;
+package platform.web.ide.widget;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import javax.annotation.PostConstruct;
+import javax.faces.model.ListDataModel;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -16,9 +16,9 @@ import platform.service.api.DeviceService;
 import platform.service.api.ProductDeviceService;
 import platform.service.api.ProductService;
 import platform.service.api.PropertyService;
-import platform.web.IDEController;
-import platform.web.WidgetFactory;
-import platform.web.widget.ui.WidgetComponent;
+import platform.web.ide.IDEController;
+import platform.web.ide.WidgetFactory;
+import platform.web.ide.widget.ui.WidgetComponent;
 
 /**
  *
@@ -26,11 +26,13 @@ import platform.web.widget.ui.WidgetComponent;
  */
 @Named
 @ViewScoped
-public class LineWidgetController implements WidgetController {
+public class AreaWidgetController implements WidgetController {
 
     private String selectedDeviceKey;
     private String selectedPropertyKey;
     private String selectedProductKey;
+
+    private ListDataModel<Property> propertiesModel;
 
     private Widget widget;
 
@@ -47,15 +49,16 @@ public class LineWidgetController implements WidgetController {
     private ProductDeviceService productDeviceService;
 
     @Inject
-    private WidgetFactory factory;
-
-    @Inject
     private IDEController ide;
+    
+    @Inject
+    private WidgetFactory factory;
 
     @PostConstruct
     @Override
     public void init() {
-        widget = new Widget(WidgetType.LINE);
+        widget = new Widget(WidgetType.AREA);
+        propertiesModel = new ListDataModel<>(new ArrayList<Property>());
     }
 
     @Override
@@ -67,15 +70,7 @@ public class LineWidgetController implements WidgetController {
     public void setWidget(Widget widget) {
         this.widget = widget;
         if (widget != null) {
-            if (widget.getProperties() != null
-                    && !widget.getProperties().isEmpty()) {
-                Property prop = widget.getProperties().get(0);
-                selectedPropertyKey = prop.getKey();
-                selectedDeviceKey = prop.getDevice().getKey();
-                if (prop.getDevice().getProduct() != null) {
-                    selectedProductKey = prop.getDevice().getProduct().getKey();
-                }
-            }
+            propertiesModel = new ListDataModel<>(widget.getProperties());
         }
     }
 
@@ -103,6 +98,14 @@ public class LineWidgetController implements WidgetController {
         this.selectedProductKey = selectedProductKey;
     }
 
+    public ListDataModel<Property> getPropertiesModel() {
+        return propertiesModel;
+    }
+
+    public void setPropertiesModel(ListDataModel<Property> propertiesModel) {
+        this.propertiesModel = propertiesModel;
+    }
+
     public List<Product> getProducts() {
         return productService.list();
     }
@@ -121,9 +124,20 @@ public class LineWidgetController implements WidgetController {
         return new ArrayList<>();
     }
 
+    public void newProperty() {
+        Property property
+                = propertyService.get(selectedDeviceKey, selectedPropertyKey);
+        ((List<Property>) propertiesModel.getWrappedData()).add(property);
+    }
+
+    public void deleteProperty() {
+        ((List<Property>) propertiesModel.getWrappedData()).remove(
+                propertiesModel.getRowData());
+    }
+
     public void addAction() {
-        Property property = propertyService.get(selectedDeviceKey, selectedPropertyKey);
-        widget.setProperties(Arrays.asList(new Property[]{property}));
+        List<Property> properties = (List<Property>) propertiesModel.getWrappedData();
+        widget.setProperties(properties);
         if (widget.getId() == null) {
             WidgetComponent component = factory.createComponent(widget);
             ide.addWidget(component);

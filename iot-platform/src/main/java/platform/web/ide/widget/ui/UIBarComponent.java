@@ -1,9 +1,9 @@
-package platform.web.widget.ui;
+package platform.web.ide.widget.ui;
 
 import java.util.Date;
 import java.util.Random;
 import org.apache.log4j.Logger;
-import org.primefaces.component.chart.line.LineChart;
+import org.primefaces.component.chart.bar.BarChart;
 import org.primefaces.model.chart.CartesianChartModel;
 import org.primefaces.model.chart.ChartSeries;
 import platform.api.Property;
@@ -15,20 +15,22 @@ import platform.service.api.PropertyService;
  *
  * @author rodrigo
  */
-public class UIAreaComponent implements WidgetComponent {
+public class UIBarComponent implements WidgetComponent {
 
-    private static final Logger logger = Logger.getLogger(UIAreaComponent.class);
+    private static final Logger logger = Logger.getLogger(UIBarComponent.class);
 
     private String widgetId;
 
-    private LineChart chart;
+    private BarChart chart; 
     private CartesianChartModel model;
+
+    private String title;
 
     private Widget widget;
 
     private PropertyService service;
 
-    public UIAreaComponent(Widget widget, PropertyService service) {
+    public UIBarComponent(Widget widget, PropertyService service) {
         this.widget = widget;
         this.service = service;
     }
@@ -46,18 +48,21 @@ public class UIAreaComponent implements WidgetComponent {
 
         for (Property prop : widget.getProperties()) {
             ChartSeries series = new ChartSeries(prop.getDevice().getKey());
-            Double value = 0d;
-            if (prop.getValue() != null && !"".equals(prop.getValue())) {
-                value = new Double(prop.getValue());
-            }
-            series.set(prop.getKey(), value);
+
+            // TODO buscar os valores atualizados da propriedade do device
+            Integer randomNum = new Random().nextInt((100 - 0) + 1) + 1;
+
+            series.set(prop.getKey(), randomNum);
             model.addSeries(series);
         }
 
-        chart = new LineChart();
-        chart.setFill(true);
-        chart.setStacked(true);
+        chart = new BarChart();
+
+        //chart.setOrientation("horizontal");
+        //chart.setLegendPosition("ne");
+        //chart.setYaxisAngle(90);
         chart.setValue(model);
+        //chart.setStyle("height: 100px; width: 100px;");
 
         return chart;
     }
@@ -67,24 +72,21 @@ public class UIAreaComponent implements WidgetComponent {
         for (ChartSeries series : model.getSeries()) {
             String deviceKey = series.getLabel();
             String propertyKey = (String) series.getData().keySet().iterator().next();
-            Property property = service.get(deviceKey, propertyKey);
+            service.get(deviceKey, propertyKey);
 
-            Double value = 0d;
-            try {
-                value = new Double(property.getValue());
-            } catch (Exception ex) {
-                logger.error("Error to get the updated value for the property '"
-                        + property.getKey() + "'", ex);
-            }
-            series.set(propertyKey, value);
+            // TODO
+            Integer randomNum = new Random().nextInt((100 - 0) + 1) + 1;
+
+            series.set(propertyKey, randomNum);
         }
-        logger.debug("Updated area widget '" + widgetId + "' at "
+
+        logger.debug("Updated bar widget '" + widgetId + "' at "
                 + new Date());
     }
 
     @Override
     public String getType() {
-        return WidgetType.AREA;
+        return WidgetType.BAR;
     }
 
     @Override

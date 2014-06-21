@@ -1,4 +1,4 @@
-package platform.web;
+package platform.web.ide;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;

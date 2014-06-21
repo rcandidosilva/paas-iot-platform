@@ -1,0 +1,107 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:composition template="./../../resources/templates/main.xhtml">
+
+        <ui:define name="content">
+            <h:form>
+                <div align="center">
+                    <h1>#{bundle['action.form']}</h1>
+                </div>
+                <br/>                
+                <div align="center">
+                    <div style="width: 600px;">
+                        <p:panel>
+                            <h:panelGrid style="width: 100%;">
+                                <br/>
+                                <p:outputLabel value="#{bundle['action.product']}"/>
+                                <p:selectOneMenu value="#{actionController.selectedProductKey}">
+                                    <f:ajax event="change" render="device"/>
+                                    <f:selectItem itemLabel="#{bundle['global.select']}" itemValue=""/>
+                                    <f:selectItems value="#{actionController.productList}" var="product" 
+                                                   itemLabel="#{product.name}" itemValue="#{product.key}"/>
+                                </p:selectOneMenu>   
+                                <br/>
+                                <p:outputLabel value="#{bundle['action.device']}"/>
+                                <p:selectOneMenu id="device" value="#{actionController.selectedDeviceKey}" required="true">
+                                    <f:selectItems value="#{actionController.deviceList}" var="device" 
+                                                   itemLabel="#{device.name}" itemValue="#{device.key}"/>
+                                </p:selectOneMenu>                                  
+                                <br/>
+                                <p:outputLabel value="#{bundle['action.name']}"/>
+                                <p:inputText value="#{actionController.action.name}" size="60" required="true"/>                              
+                                <br/>
+                                <p:outputLabel value="#{bundle['action.description']}"/>
+                                <p:inputTextarea value="#{actionController.action.description}" style="width: 100%;"/>
+                                <br/>
+                                <p:outputLabel value="#{bundle['action.endpoint.uri']}"/>
+                                <p:inputText value="#{actionController.action.endpointUri}" size="60" required="true"/>    
+                                <br/>
+                                <p:outputLabel value="#{bundle['action.http.method']}"/>
+                                <p:selectOneMenu value="#{actionController.action.httpMethod}" required="true">
+                                    <f:selectItem itemLabel="GET" itemValue="GET"/>
+                                    <f:selectItem itemLabel="POST" itemValue="POST"/>
+                                    <f:selectItem itemLabel="PUT" itemValue="PUT"/>
+                                    <f:selectItem itemLabel="DELETE" itemValue="DELET"/>
+                                </p:selectOneMenu>
+                                <br/>
+                                <p:outputLabel value="#{bundle['action.path']}"/>
+                                <p:inputText value="#{actionController.action.path}" size="60" required="true"/>      
+                                <br/>
+                                <p:outputLabel value="#{bundle['action.parameter.name']}"/>
+                                <p:inputText id="parameterName" value="#{actionController.actionParameter.name}" size="60"/>                              
+                                <br/>
+                                <p:outputLabel value="#{bundle['action.parameter.description']}"/>
+                                <p:inputTextarea id="parameterDescription" value="#{actionController.actionParameter.description}" style="width: 100%;"/>    
+                                <br/>
+                                <p:outputLabel value="#{bundle['action.parameter.type']}"/>
+                                <p:selectOneMenu id="parameterType" value="#{actionController.actionParameter.type}">
+                                    <f:selectItem itemLabel="String" itemValue="java.lang.String"/>
+                                    <f:selectItem itemLabel="Double" itemValue="java.lang.Double"/>
+                                    <f:selectItem itemLabel="Integer" itemValue="java.lang.Integer"/>
+                                    <f:selectItem itemLabel="Boolean" itemValue="java.lang.Boolean"/>
+                                </p:selectOneMenu>                                
+                                <br/>
+                                <p:commandButton styleClass="btn-primary" value="#{bundle['action.parameter.add']}" 
+                                                 action="#{actionController.newParameter()}" 
+                                                 update="dataTable" process="@this,parameterName,parameterDescription,parameterType" />
+                                <br/>
+                                <p:outputLabel value="#{bundle['action.parameter.list']}"/>
+                                <p:dataTable id="dataTable" value="#{actionController.parametersModel}" var="parameter">
+                                    <p:column headerText="#{bundle['action.parameter.name']}">
+                                        <h:outputText value="#{parameter.name}"/>
+                                    </p:column>
+                                    <p:column headerText="#{bundle['action.parameter.description']}">
+                                        <h:outputText value="#{parameter.description}"/>
+                                    </p:column> 
+                                    <p:column headerText="#{bundle['action.parameter.type']}">
+                                        <h:outputText value="#{parameter.type}"/>
+                                    </p:column>                                     
+                                    <p:column> 
+                                        <p:commandLink value="#{bundle['global.delete']}" action="#{actionController.deleteParameter()}" update="dataTable"/>
+                                    </p:column>                                    
+                                </p:dataTable>
+                                <br/>
+                            </h:panelGrid>
+                        </p:panel>
+                        <br/>
+                        <div align="right">
+                            <p:commandButton styleClass="btn-primary" 
+                                             value="#{bundle['global.save']}" action="#{actionController.save()}"/>
+                            <p:commandButton styleClass="btn-primary" 
+                                             value="#{bundle['global.back']}" action="/pages/action/list" immediate="true"/>
+                        </div>
+                    </div>
+                </div>
+            </h:form>
+        </ui:define>
+
+    </ui:composition>
+
+</html>

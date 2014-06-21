@@ -1,4 +1,4 @@
-package platform.web;
+package platform.web.ide;
 
 import java.io.IOException;
 import java.io.Serializable;
@@ -32,8 +32,10 @@ import platform.model.ApplicationToWidget;
 import platform.model.Widget;
 import platform.model.WidgetType;
 import platform.service.WidgetTypeService;
-import platform.web.widget.WidgetController;
-import platform.web.widget.ui.WidgetComponent;
+import platform.web.ApplicationController;
+import platform.web.JSFHelper;
+import platform.web.ide.widget.WidgetController;
+import platform.web.ide.widget.ui.WidgetComponent;
 
 /**
  *

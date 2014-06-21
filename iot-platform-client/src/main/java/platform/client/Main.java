@@ -11,10 +11,10 @@ public class Main {
 
     public static void main(String[] args) {
         // /product/neocut/device/knife/property/vibration-speed
-//        PropertyRandomProcessor vibrationSpeed
-//                = new PropertyRandomProcessor(SERVICE_URL, "neocut",
-//                        "knife", "vibration-speed", 0, 9, 3000, false);
-//        new Thread(vibrationSpeed).start();
+        PropertyRandomProcessor vibrationSpeed
+                = new PropertyRandomProcessor(SERVICE_URL, "neocut",
+                        "knife", "vibration-speed", 0, 9, 3000, false);
+        new Thread(vibrationSpeed).start();
         // /product/neocut/device/knife/property/cut-angle
 //        PropertyRandomProcessor cutAngle
 //                = new PropertyRandomProcessor(SERVICE_URL, "neocut",
@@ -38,10 +38,10 @@ public class Main {
         new Thread(executionStatus).start();
         
         // /product/neocut/device/cutting-head/property/head-speed-percentage
-//        PropertyRandomProcessor headSpeedPercentage
-//                = new PropertyRandomProcessor(SERVICE_URL, "neocut",
-//                        "cutting-head", "head-speed-percentage", 1, 100, 5000, false);
-//        new Thread(headSpeedPercentage).start();
+        PropertyRandomProcessor headSpeedPercentage
+                = new PropertyRandomProcessor(SERVICE_URL, "neocut",
+                        "cutting-head", "head-speed-percentage", 1, 100, 5000, false);
+        new Thread(headSpeedPercentage).start();
         
         // /product/neocut/device/cutting-head/property/head-speed-percentage
         PropertyRandomProcessor moveVariance

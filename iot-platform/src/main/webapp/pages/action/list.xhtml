@@ -1,0 +1,59 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <ui:composition template="./../../resources/templates/main.xhtml">
+
+        <ui:define name="content">
+            <h:form>
+                <div align="center">
+                    <h1>#{bundle['action.list']}</h1>
+                </div>
+                <br/>
+                <div align="center"> 
+                    <div  style="width: 80%;">
+                        <p:dataTable id="table" value="#{actionController.actionList}" var="action" 
+                                     rows="10" paginator="true">
+                            <p:column headerText="#{bundle['action.name']}" style="width: 15%;">
+                                <h:outputText value="#{action.name}"/>
+                            </p:column> 
+                            <p:column headerText="#{bundle['action.endpoint.uri']}" style="width: 20%;">
+                                <h:outputText value="#{action.endpointUri}"/>
+                            </p:column>
+                            <p:column headerText="#{bundle['action.http.method']}" style="width: 5%;">
+                                <h:outputText value="#{action.httpMethod}"/>
+                            </p:column>                             
+                            <p:column headerText="#{bundle['action.path']}" style="width: 40%;">
+                                <h:outputText value="#{action.path}"/>
+                            </p:column>                                   
+                            <p:column headerText="#{bundle['action.device']}" style="width: 10%;">
+                                <h:outputText value="#{action.device.name}"/>
+                            </p:column>
+                            <p:column headerText="#{bundle['action.product']}" style="width: 10%;">
+                                <h:outputText value="#{action.device.product.name}"/>
+                            </p:column>                            
+                            <p:column width="40" style="text-align:  center;">
+                                <p:commandLink value="#{bundle['global.edit']}" action="#{actionController.edit(action)}"/>
+                            </p:column>
+                            <p:column width="40" style="text-align:  center;">
+                                <p:commandLink value="#{bundle['global.delete']}" action="#{actionController.delete(action)}" update="table"/>
+                            </p:column>                            
+                        </p:dataTable>
+                        <br/>
+                        <div align="right">
+                            <p:commandButton styleClass="btn-primary" value="#{bundle['action.new']}" 
+                                             action="#{actionController.createNew()}"/>
+                        </div>
+                    </div>
+                </div>
+            </h:form>
+        </ui:define>
+
+    </ui:composition>
+
+</html>

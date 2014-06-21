@@ -1,4 +1,4 @@
-package platform.web;
+package platform.web.api;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -9,6 +9,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import platform.api.Product;
 import platform.service.api.ProductService;
+import platform.web.JSFHelper;
 
 /**
  *

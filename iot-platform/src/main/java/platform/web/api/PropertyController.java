@@ -1,4 +1,4 @@
-package platform.web;
+package platform.web.api;
 
 import java.io.Serializable;
 import java.util.List;
@@ -13,6 +13,7 @@ import platform.service.api.DeviceService;
 import platform.service.api.ProductDeviceService;
 import platform.service.api.ProductService;
 import platform.service.api.PropertyService;
+import platform.web.JSFHelper;
 
 /**
  *

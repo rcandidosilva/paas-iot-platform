@@ -1,4 +1,4 @@
-package platform.web.widget;
+package platform.web.ide.widget;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,7 +13,7 @@ import platform.model.Widget;
 import platform.model.WidgetType;
 import platform.service.api.DeviceService;
 import platform.service.api.PropertyService;
-import platform.web.IDEController;
+import platform.web.ide.IDEController;
 
 /**
  *

@@ -1,4 +1,4 @@
-package platform.web.widget;
+package platform.web.ide.widget;
 
 import java.io.Serializable;
 import platform.model.Widget;

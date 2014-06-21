@@ -1,5 +1,6 @@
 package platform.web;
 
+import platform.web.ide.WidgetFactory;
 import javax.inject.Named;
 import javax.enterprise.context.SessionScoped;
 import java.io.Serializable;
@@ -19,7 +20,7 @@ import platform.model.ApplicationToWidget;
 import platform.model.Widget;
 import platform.service.ApplicationService;
 import platform.service.WidgetTypeService;
-import platform.web.widget.ui.WidgetComponent;
+import platform.web.ide.widget.ui.WidgetComponent;
 
 /**
  *

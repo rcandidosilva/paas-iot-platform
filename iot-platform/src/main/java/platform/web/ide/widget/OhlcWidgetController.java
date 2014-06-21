@@ -1,4 +1,4 @@
-package platform.web.widget;
+package platform.web.ide.widget;
 
 import javax.annotation.PostConstruct;
 import javax.faces.view.ViewScoped;

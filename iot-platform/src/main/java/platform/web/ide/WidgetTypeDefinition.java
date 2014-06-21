@@ -1,4 +1,4 @@
-package platform.web;
+package platform.web.ide;
 
 /**
  *

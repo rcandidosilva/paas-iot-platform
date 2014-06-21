@@ -1,6 +1,7 @@
-package platform.web.widget;
+package platform.web.ide.widget;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.faces.model.ListDataModel;
@@ -16,25 +17,27 @@ import platform.service.api.DeviceService;
 import platform.service.api.ProductDeviceService;
 import platform.service.api.ProductService;
 import platform.service.api.PropertyService;
-import platform.web.IDEController;
-import platform.web.WidgetFactory;
-import platform.web.widget.ui.WidgetComponent;
+import platform.web.ide.IDEController;
+import platform.web.ide.widget.ui.WidgetComponent;
+import platform.web.ide.WidgetFactory;
 
 /**
+ * GaugeMeter Widget controller
  *
  * @author rodrigo
  */
 @Named
 @ViewScoped
-public class AreaWidgetController implements WidgetController {
+public class MeterWidgetController implements WidgetController {
 
+    private Widget widget;
+
+    private Double interval;
     private String selectedDeviceKey;
     private String selectedPropertyKey;
     private String selectedProductKey;
 
-    private ListDataModel<Property> propertiesModel;
-
-    private Widget widget;
+    private ListDataModel<Double> intervalsModel;
 
     @Inject
     private DeviceService deviceService;
@@ -46,19 +49,23 @@ public class AreaWidgetController implements WidgetController {
     private ProductService productService;
 
     @Inject
-    private ProductDeviceService productDeviceService;
+    private ProductDeviceService productServiceService;
 
     @Inject
     private IDEController ide;
-    
+
     @Inject
     private WidgetFactory factory;
 
     @PostConstruct
     @Override
     public void init() {
-        widget = new Widget(WidgetType.AREA);
-        propertiesModel = new ListDataModel<>(new ArrayList<Property>());
+        widget = new Widget(WidgetType.METER);
+        intervalsModel = new ListDataModel<>(new ArrayList<Double>());
+        interval = null;
+        selectedDeviceKey = null;
+        selectedPropertyKey = null;
+        selectedProductKey = null;
     }
 
     @Override
@@ -70,8 +77,29 @@ public class AreaWidgetController implements WidgetController {
     public void setWidget(Widget widget) {
         this.widget = widget;
         if (widget != null) {
-            propertiesModel = new ListDataModel<>(widget.getProperties());
+            intervalsModel = new ListDataModel<>(widget.getIntervals());
+            if (widget.getProperties() != null
+                    && !widget.getProperties().isEmpty()) {
+                Property prop = widget.getProperties().get(0);
+                selectedPropertyKey = prop.getKey();
+                selectedDeviceKey = prop.getDevice().getKey();
+                if (prop.getDevice().getProduct() != null) {
+                    selectedProductKey = prop.getDevice().getProduct().getKey();
+                }
+            }
         }
+    }
+
+    public Double getInterval() {
+        return interval;
+    }
+
+    public void setInterval(Double interval) {
+        this.interval = interval;
+    }
+
+    public ListDataModel<Double> getIntervalsModel() {
+        return intervalsModel;
     }
 
     public String getSelectedDeviceKey() {
@@ -98,21 +126,13 @@ public class AreaWidgetController implements WidgetController {
         this.selectedProductKey = selectedProductKey;
     }
 
-    public ListDataModel<Property> getPropertiesModel() {
-        return propertiesModel;
-    }
-
-    public void setPropertiesModel(ListDataModel<Property> propertiesModel) {
-        this.propertiesModel = propertiesModel;
-    }
-
     public List<Product> getProducts() {
         return productService.list();
     }
 
     public List<Device> getDevices() {
         if (selectedProductKey != null && !"".equals(selectedProductKey)) {
-            return productDeviceService.list(selectedProductKey);
+            return productServiceService.list(selectedProductKey);
         }
         return deviceService.list();
     }
@@ -124,23 +144,24 @@ public class AreaWidgetController implements WidgetController {
         return new ArrayList<>();
     }
 
-    public void newProperty() {
-        Property property
-                = propertyService.get(selectedDeviceKey, selectedPropertyKey);
-        ((List<Property>) propertiesModel.getWrappedData()).add(property);
+    public void newInterval() {
+        ((List<Double>) intervalsModel.getWrappedData()).add(interval);
     }
 
-    public void deleteProperty() {
-        ((List<Property>) propertiesModel.getWrappedData()).remove(
-                propertiesModel.getRowData());
+    public void deleteInterval() {
+        ((List<Double>) intervalsModel.getWrappedData()).remove(
+                intervalsModel.getRowData());
     }
 
     public void addAction() {
-        List<Property> properties = (List<Property>) propertiesModel.getWrappedData();
-        widget.setProperties(properties);
+        List<Double> intervals = (List) getIntervalsModel().getWrappedData();
+        Property property = propertyService.get(selectedDeviceKey, selectedPropertyKey);
+        widget.setIntervals(intervals);
+        widget.setProperties(Arrays.asList(new Property[]{property}));
         if (widget.getId() == null) {
             WidgetComponent component = factory.createComponent(widget);
             ide.addWidget(component);
         }
     }
+
 }

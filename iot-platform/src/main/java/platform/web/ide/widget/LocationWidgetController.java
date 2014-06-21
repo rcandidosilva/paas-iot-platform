@@ -1,4 +1,4 @@
-package platform.web.widget;
+package platform.web.ide.widget;
 
 import java.util.List;
 import javax.annotation.PostConstruct;
@@ -10,8 +10,8 @@ import platform.api.Device;
 import platform.model.Widget;
 import platform.model.WidgetType;
 import platform.service.api.DeviceService;
-import platform.web.IDEController;
-import platform.web.widget.ui.UILocationComponent;
+import platform.web.ide.IDEController;
+import platform.web.ide.widget.ui.UILocationComponent;
 
 /**
  *

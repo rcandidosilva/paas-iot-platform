@@ -1,4 +1,4 @@
-package platform.web.widget.ui;
+package platform.web.ide.widget.ui;
 
 import javax.enterprise.context.Dependent;
 import javax.inject.Named;
