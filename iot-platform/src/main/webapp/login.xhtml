@@ -1,0 +1,57 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition template="/resources/templates/main.xhtml">
+
+        <ui:define name="top">
+            <div align="center" style="margin: 100px auto;"></div>
+            <div align="center" style="margin: auto; width: 600px;">
+                <h1>#{bundle['platform.title']}</h1>
+            </div>
+        </ui:define>    
+
+        <ui:define name="menu"></ui:define>
+
+        <ui:define name="status"></ui:define>
+
+        <ui:define name="content">
+
+            <h:form id="dashboardForm">
+                <div class="panel panel-default" style="margin: 0 auto; width: 400px;">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">#{bundle['login.title']}</h3>
+                    </div>
+                    <div class="panel-body">
+                        <br/>
+                        <h:outputLabel value="#{bundle['login.username']}"/>
+                        <h:inputText style="width: 100%"/>
+                        <br/><br/>
+                        <h:outputLabel value="#{bundle['login.password']}"/>
+                        <h:inputSecret style="width: 100%"/>
+                        <br/><br/>
+                        <p:commandButton styleClass="btn-primary" 
+                                         value="#{bundle['login.submit']}" style="width: 100%" />
+                        <br/>
+                        <div align="center">
+                            <br/>
+                            <p:commandLink value="#{bundle['login.new.user']}" style="width: 100%" />                            
+                            <br/><br/>
+                            <p:commandLink value="#{bundle['login.forgot.password']}" style="width: 100%" />
+                            <br/>
+                        </div>
+                        <br/>
+                    </div>
+                </div>
+            </h:form>
+
+        </ui:define>
+
+    </ui:composition>
+
+</html>
