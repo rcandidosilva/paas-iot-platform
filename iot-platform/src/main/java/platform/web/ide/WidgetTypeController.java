@@ -2,8 +2,6 @@ package platform.web.ide;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import javax.inject.Named;
-import javax.enterprise.context.SessionScoped;
 import java.io.Serializable;
 import java.util.Arrays;
 import java.util.List;
@@ -15,6 +13,8 @@ import org.primefaces.event.FileUploadEvent;
 import org.primefaces.model.DefaultStreamedContent;
 import org.primefaces.model.StreamedContent;
 import org.primefaces.model.UploadedFile;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Controller;
 import platform.model.WidgetType;
 import platform.service.WidgetTypeService;
 
@@ -22,8 +22,8 @@ import platform.service.WidgetTypeService;
  *
  * @author rodrigo
  */
-@Named
-@SessionScoped
+@Controller
+@Scope("session")
 public class WidgetTypeController implements Serializable {
 
     private static final Logger logger = Logger.getLogger(WidgetTypeController.class);

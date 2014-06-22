@@ -9,14 +9,14 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.PostConstruct;
-import javax.enterprise.context.SessionScoped;
-import javax.inject.Named;
 import org.primefaces.model.chart.CartesianChartModel;
 import org.primefaces.model.chart.ChartSeries;
 import org.primefaces.model.chart.MeterGaugeChartModel;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Controller;
 
-@Named
-@SessionScoped
+@Controller
+@Scope("session")
 public class SamplesController implements Serializable {
 
     private MeterGaugeChartModel gaugeChartModel;

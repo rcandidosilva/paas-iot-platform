@@ -5,9 +5,9 @@ import java.util.Arrays;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.faces.model.ListDataModel;
-import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
-import javax.inject.Named;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Controller;
 import platform.api.Device;
 import platform.api.Product;
 import platform.api.Property;
@@ -26,8 +26,8 @@ import platform.web.ide.WidgetFactory;
  *
  * @author rodrigo
  */
-@Named
-@ViewScoped
+@Controller
+@Scope("session")
 public class MeterWidgetController implements WidgetController {
 
     private Widget widget;

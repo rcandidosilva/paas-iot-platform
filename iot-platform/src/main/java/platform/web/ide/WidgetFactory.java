@@ -5,6 +5,7 @@ import javax.enterprise.inject.spi.Bean;
 import javax.enterprise.inject.spi.BeanManager;
 import javax.enterprise.inject.spi.CDI;
 import javax.inject.Inject;
+import org.springframework.stereotype.Component;
 import platform.model.Widget;
 import platform.service.api.PropertyService;
 import static platform.web.ide.WidgetTypeDefinition.AREA;
@@ -28,6 +29,7 @@ import platform.web.ide.widget.ui.WidgetComponent;
  *
  * @author rodrigo
  */
+@Component
 public class WidgetFactory implements Serializable {
 
     @Inject

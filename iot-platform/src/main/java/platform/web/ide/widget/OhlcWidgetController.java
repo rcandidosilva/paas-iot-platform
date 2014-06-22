@@ -1,8 +1,8 @@
 package platform.web.ide.widget;
 
 import javax.annotation.PostConstruct;
-import javax.faces.view.ViewScoped;
-import javax.inject.Named;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Controller;
 import platform.model.Widget;
 import platform.model.WidgetType;
 
@@ -10,8 +10,8 @@ import platform.model.WidgetType;
  *
  * @author rodrigo
  */
-@Named
-@ViewScoped
+@Controller
+@Scope("session")
 public class OhlcWidgetController implements WidgetController {
 
     private Widget widget;

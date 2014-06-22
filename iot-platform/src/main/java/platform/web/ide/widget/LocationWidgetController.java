@@ -2,10 +2,10 @@ package platform.web.ide.widget;
 
 import java.util.List;
 import javax.annotation.PostConstruct;
-import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
-import javax.inject.Named;
 import org.primefaces.model.map.LatLng;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Controller;
 import platform.api.Device;
 import platform.model.Widget;
 import platform.model.WidgetType;
@@ -17,8 +17,8 @@ import platform.web.ide.widget.ui.UILocationComponent;
  *
  * @author rodrigo
  */
-@Named
-@ViewScoped
+@Controller
+@Scope("session")
 public class LocationWidgetController implements WidgetController {
 
     private String selectedDeviceKey;

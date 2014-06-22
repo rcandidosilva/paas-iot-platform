@@ -4,23 +4,22 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.faces.model.ListDataModel;
-import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
-import javax.inject.Named;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Controller;
 import platform.api.Device;
 import platform.api.Property;
 import platform.model.Widget;
 import platform.model.WidgetType;
 import platform.service.api.DeviceService;
 import platform.service.api.PropertyService;
-import platform.web.ide.IDEController;
 
 /**
  *
  * @author rodrigo
  */
-@Named
-@ViewScoped
+@Controller
+@Scope("session")
 public class PieWidgetController implements WidgetController {
     
     private String selectedDeviceKey;

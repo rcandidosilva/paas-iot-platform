@@ -3,10 +3,8 @@ package platform.web.ide;
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
-import javax.enterprise.context.SessionScoped;
 import javax.faces.component.UIComponent;
 import javax.inject.Inject;
-import javax.inject.Named;
 import org.apache.log4j.Logger;
 import org.primefaces.component.dashboard.Dashboard;
 import org.primefaces.component.panel.Panel;
@@ -14,6 +12,8 @@ import org.primefaces.model.DashboardColumn;
 import org.primefaces.model.DashboardModel;
 import org.primefaces.model.DefaultDashboardColumn;
 import org.primefaces.model.DefaultDashboardModel;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Controller;
 import platform.model.Application;
 import platform.model.Widget;
 import platform.service.WidgetTypeService;
@@ -25,8 +25,8 @@ import platform.web.ide.widget.ui.WidgetComponent;
  *
  * @author rodrigo
  */
-@Named
-@SessionScoped
+@Controller
+@Scope("session")
 public class PreviewController implements Serializable {
 
     private static final Logger logger = Logger.getLogger(PreviewController.class);

@@ -1,8 +1,6 @@
 package platform.web;
 
 import platform.web.ide.WidgetFactory;
-import javax.inject.Named;
-import javax.enterprise.context.SessionScoped;
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
@@ -15,6 +13,8 @@ import org.primefaces.model.DashboardColumn;
 import org.primefaces.model.DashboardModel;
 import org.primefaces.model.DefaultDashboardColumn;
 import org.primefaces.model.DefaultDashboardModel;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Controller;
 import platform.model.Application;
 import platform.model.ApplicationToWidget;
 import platform.model.Widget;
@@ -26,8 +26,8 @@ import platform.web.ide.widget.ui.WidgetComponent;
  *
  * @author rodrigo
  */
-@Named
-@SessionScoped
+@Controller
+@Scope("session")
 public class RuntimeController implements Serializable {
 
     private static final Logger logger = Logger.getLogger(RuntimeController.class);

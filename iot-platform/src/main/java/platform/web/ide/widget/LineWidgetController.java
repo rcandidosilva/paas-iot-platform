@@ -4,9 +4,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import javax.annotation.PostConstruct;
-import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
-import javax.inject.Named;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Controller;
 import platform.api.Device;
 import platform.api.Product;
 import platform.api.Property;
@@ -24,8 +24,8 @@ import platform.web.ide.widget.ui.WidgetComponent;
  *
  * @author rodrigo
  */
-@Named
-@ViewScoped
+@Controller
+@Scope("session")
 public class LineWidgetController implements WidgetController {
 
     private String selectedDeviceKey;

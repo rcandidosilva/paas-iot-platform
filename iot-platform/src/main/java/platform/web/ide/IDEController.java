@@ -9,13 +9,11 @@ import java.util.List;
 import java.util.Map;
 import javax.annotation.PostConstruct;
 import javax.el.MethodExpression;
-import javax.enterprise.context.SessionScoped;
 import javax.faces.component.UIComponent;
 import javax.faces.component.html.HtmlOutputText;
 import javax.faces.component.html.HtmlPanelGroup;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
-import javax.inject.Named;
 import org.apache.log4j.Logger;
 import org.primefaces.component.commandlink.CommandLink;
 import org.primefaces.component.dashboard.Dashboard;
@@ -27,6 +25,8 @@ import org.primefaces.model.DefaultDashboardColumn;
 import org.primefaces.model.DefaultDashboardModel;
 import org.primefaces.model.menu.DefaultMenuItem;
 import org.primefaces.model.menu.DefaultMenuModel;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Controller;
 import platform.model.Application;
 import platform.model.ApplicationToWidget;
 import platform.model.Widget;
@@ -41,8 +41,8 @@ import platform.web.ide.widget.ui.WidgetComponent;
  *
  * @author rodrigo
  */
-@Named("ideController")
-@SessionScoped
+@Controller("ideController")
+@Scope("session")
 public class IDEController implements Serializable {
 
     private static final Logger logger = Logger.getLogger(IDEController.class);

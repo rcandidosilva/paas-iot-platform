@@ -1,13 +1,13 @@
 package platform.web;
 
 import platform.web.ide.IDEController;
-import javax.inject.Named;
 import java.io.Serializable;
 import java.util.List;
 import javax.annotation.PostConstruct;
-import javax.enterprise.context.SessionScoped;
 import javax.inject.Inject;
 import org.apache.log4j.Logger;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Controller;
 import platform.model.Application;
 import platform.service.ApplicationService;
 
@@ -15,8 +15,8 @@ import platform.service.ApplicationService;
  *
  * @author rodrigo
  */
-@Named
-@SessionScoped
+@Controller
+@Scope("session")
 public class ApplicationController implements Serializable {
 
     private static final Logger logger = Logger.getLogger(Application.class);
